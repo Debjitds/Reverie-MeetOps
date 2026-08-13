@@ -1,0 +1,306 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Space+Mono:wght@400;700&display=swap');
+
+/* stylelint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Neo-Brutalist Design System */
+
+@layer base {
+  :root {
+    --radius: 0rem;
+    
+    /* Checkerboard colors - sage green and warm cream */
+    --checker-light: 45 80% 88%; /* Warm cream/light yellow #FFF9C4 */
+    --checker-dark: 140 30% 85%; /* Soft sage/mint green #C8E6C9 */
+    
+    /* Base */
+    --background: 45 80% 88%;
+    --foreground: 0 0% 0%;
+    
+    /* Card */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    
+    /* Primary - Golden yellow */
+    --primary: 48 100% 62%;
+    --primary-foreground: 0 0% 0%;
+    
+    /* Secondary */
+    --secondary: 0 0% 100%;
+    --secondary-foreground: 0 0% 0%;
+    
+    /* Accent */
+    --accent: 45 100% 90%;
+    --accent-foreground: 0 0% 0%;
+    
+    /* Muted */
+    --muted: 45 20% 90%;
+    --muted-foreground: 0 0% 20%;
+    
+    /* Destructive */
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Border */
+    --border: 0 0% 0%;
+    --input: 45 100% 90%;
+    --ring: 0 0% 0%;
+    
+    /* Chart */
+    --chart-1: 48 100% 62%;
+    --chart-2: 0 0% 0%;
+    --chart-3: 45 100% 85%;
+    --chart-4: 0 0% 40%;
+    --chart-5: 0 0% 60%;
+    
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 48 100% 62%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 45 100% 90%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 0%;
+    --sidebar-ring: 0 0% 0%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Space Grotesk', 'Space Mono', monospace;
+    font-weight: 700;
+  }
+  
+  /* Checkerboard background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: 
+      linear-gradient(45deg, hsl(var(--checker-dark)) 25%, transparent 25%),
+      linear-gradient(-45deg, hsl(var(--checker-dark)) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, hsl(var(--checker-dark)) 75%),
+      linear-gradient(-45deg, transparent 75%, hsl(var(--checker-dark)) 75%);
+    background-size: 56px 56px;
+    background-position: 0 0, 0 28px, 28px -28px, -28px 0px;
+    background-color: hsl(var(--checker-light));
+  }
+}
+
+@layer utilities {
+  /* Hard shadow - neo-brutalist */
+  .hard-shadow {
+    box-shadow: 5px 5px 0px 0px #000000;
+  }
+  
+  .hard-shadow-sm {
+    box-shadow: 3px 3px 0px 0px #000000;
+  }
+  
+  .hard-shadow-lg {
+    box-shadow: 8px 8px 0px 0px #000000;
+  }
+  
+  /* Text shadow - neo-brutalist (matches button hard-shadow-sm) */
+  .text-hard-shadow {
+    text-shadow: 3px 3px 0px #000000;
+  }
+  
+  .text-hard-shadow-sm {
+    text-shadow: 2px 2px 0px #000000;
+  }
+  
+  /* Button press effect */
+  .btn-press:active {
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0px 0px #000000;
+  }
+  
+  /* Thick borders */
+  .border-thick {
+    border-width: 3px;
+  }
+  
+  .border-t-thick {
+    border-top-width: 3px;
+  }
+  
+  .border-r-thick {
+    border-right-width: 3px;
+  }
+  
+  .border-b-thick {
+    border-bottom-width: 3px;
+  }
+  
+  .border-l-thick {
+    border-left-width: 3px;
+  }
+  
+  /* Uppercase utility */
+  .uppercase-bold {
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* React Big Calendar - Neo-brutalist */
+.rbc-calendar {
+  font-family: 'Space Grotesk', monospace;
+  font-weight: 700;
+  background: white;
+  border: 3px solid black;
+  box-shadow: 5px 5px 0px 0px #000000;
+}
+
+.rbc-header {
+  padding: 12px 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 3px solid black;
+  background: hsl(48 100% 62%);
+  color: black;
+}
+
+.rbc-today {
+  background-color: hsl(48 100% 62%);
+}
+
+.rbc-event {
+  border-radius: 0;
+  padding: 2px 4px;
+  border: 2px solid black;
+  background: white;
+  color: black;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.rbc-event.rbc-selected {
+  background-color: hsl(48 100% 62%);
+}
+
+.rbc-day-bg {
+  border: 1px solid black;
+}
+
+.rbc-month-view, .rbc-time-view {
+  border: none;
+}
+
+.rbc-month-row {
+  border-top: 1px solid black;
+}
+
+.rbc-date-cell {
+  padding: 4px;
+  font-weight: 700;
+}
+
+.rbc-off-range-bg {
+  background: hsl(45 20% 90%);
+}
+
+.rbc-toolbar {
+  padding: 12px;
+  background: white;
+  border-bottom: 3px solid black;
+  margin-bottom: 0;
+}
+
+.rbc-toolbar button {
+  border: 2px solid black;
+  background: white;
+  color: black;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 0;
+  box-shadow: 3px 3px 0px 0px #000000;
+}
+
+.rbc-toolbar button:hover {
+  background: hsl(48 100% 62%);
+}
+
+.rbc-toolbar button.rbc-active {
+  background: hsl(48 100% 62%);
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+/* RTL Support for Arabic */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] .flex {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .space-x-2 > * + *,
+[dir="rtl"] .space-x-4 > * + * {
+  margin-left: 0;
+  margin-right: var(--tw-space-x-reverse, 0);
+}
+
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* Sidebar positioning for RTL */
+[dir="rtl"] .sidebar {
+  left: auto;
+  right: 0;
+}
+
+/* Border adjustments for RTL */
+[dir="rtl"] .border-l-thick {
+  border-left-width: 0;
+  border-right-width: 4px;
+}
+
+[dir="rtl"] .border-r {
+  border-right-width: 0;
+  border-left-width: 1px;
+}
+
+/* Padding adjustments for RTL */
+[dir="rtl"] .pl-4 {
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+[dir="rtl"] .pr-4 {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+/* Margin adjustments for RTL */
+[dir="rtl"] .ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
