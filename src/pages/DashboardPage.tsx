@@ -13,51 +13,63 @@ import { formatDateTime } from '@/lib/booking-utils';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
 
 export default function DashboardPage() {
-  const { profile } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
   const { t } = useAppTranslation();
   const [stats, setStats] = useState<BookingStats>({ total: 0, pending: 0, approved: 0, rejected: 0 });
   const [upcomingBookings, setUpcomingBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (profile) {
+    if (authLoading) return;
+
+    if (user && profile) {
       fetchDashboardData();
+    } else {
+      // No profile (e.g. fetch failed or row missing) — render the empty
+      // dashboard instead of spinning forever.
+      setLoading(false);
     }
-  }, [profile]);
+  }, [user, profile, authLoading]);
 
   const fetchDashboardData = async () => {
     if (!profile) return;
 
     setLoading(true);
 
-    let bookingsQuery = supabase
-      .from('bookings')
-      .select('*, resource:resources(name), user:profiles!bookings_user_id_fkey(name)');
+    try {
+      let bookingsQuery = supabase
+        .from('bookings')
+        .select('*, resource:resources(name), user:profiles!bookings_user_id_fkey(name)');
 
-    if (profile.role === 'user') {
-      bookingsQuery = bookingsQuery.eq('user_id', profile.id);
+      if (profile.role === 'user') {
+        bookingsQuery = bookingsQuery.eq('user_id', profile.id);
+      }
+
+      const { data: bookings, error } = await bookingsQuery;
+
+      if (error) {
+        console.error('[Dashboard] Failed to load bookings:', error.message);
+      } else if (bookings) {
+        const now = new Date();
+        const upcoming = bookings
+          .filter(b => new Date(b.start_time) > now && b.status === 'approved')
+          .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
+          .slice(0, 5);
+
+        setUpcomingBookings(upcoming);
+
+        setStats({
+          total: bookings.length,
+          pending: bookings.filter(b => b.status === 'pending').length,
+          approved: bookings.filter(b => b.status === 'approved').length,
+          rejected: bookings.filter(b => b.status === 'rejected').length,
+        });
+      }
+    } catch (err) {
+      console.error('[Dashboard] Unexpected error while loading dashboard data:', err);
+    } finally {
+      setLoading(false);
     }
-
-    const { data: bookings } = await bookingsQuery;
-
-    if (bookings) {
-      const now = new Date();
-      const upcoming = bookings
-        .filter(b => new Date(b.start_time) > now && b.status === 'approved')
-        .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
-        .slice(0, 5);
-
-      setUpcomingBookings(upcoming);
-
-      setStats({
-        total: bookings.length,
-        pending: bookings.filter(b => b.status === 'pending').length,
-        approved: bookings.filter(b => b.status === 'approved').length,
-        rejected: bookings.filter(b => b.status === 'rejected').length,
-      });
-    }
-
-    setLoading(false);
   };
 
   const getStatusBadge = (status: string) => {
