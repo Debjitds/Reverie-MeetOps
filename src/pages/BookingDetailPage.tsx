@@ -88,7 +88,7 @@ export default function BookingDetailPage() {
         .eq('booking_group_id', booking.booking_group_id);
 
       if (error) {
-        toast.error(`Failed to approve multi-day booking: ${error.message}`);
+        toast.error(t('toast.approveMultiDayFailed').replace('{error.message}', error.message));
       } else {
         await supabase.from('notifications').insert([{
           user_id: booking.user_id,
@@ -112,7 +112,7 @@ export default function BookingDetailPage() {
         .eq('id', booking.id);
 
       if (error) {
-        toast.error(`Failed to approve booking: ${error.message}`);
+        toast.error(t('toast.approveFailed').replace('{error.message}', error.message));
       } else {
         await supabase.from('notifications').insert([{
           user_id: booking.user_id,
@@ -172,7 +172,7 @@ export default function BookingDetailPage() {
         .eq('booking_group_id', booking.booking_group_id);
 
       if (error) {
-        toast.error(`Failed to reject multi-day booking: ${error.message}`);
+        toast.error(t('toast.rejectMultiDayFailed').replace('{error.message}', error.message));
       } else {
         const message = rejectReason 
           ? `Your multi-day booking for ${booking.resource?.name} has been rejected. Reason: ${rejectReason}`
@@ -200,7 +200,7 @@ export default function BookingDetailPage() {
         .eq('id', booking.id);
 
       if (error) {
-        toast.error(`Failed to reject booking: ${error.message}`);
+        toast.error(t('toast.rejectFailed').replace('{error.message}', error.message));
       } else {
         const message = rejectReason 
           ? `Your booking for ${booking.resource?.name} has been rejected. Reason: ${rejectReason}`
@@ -237,7 +237,7 @@ export default function BookingDetailPage() {
         .eq('booking_group_id', booking.booking_group_id);
 
       if (error) {
-        toast.error(`Failed to cancel multi-day booking: ${error.message}`);
+        toast.error(t('toast.cancelMultiDayFailed').replace('{error.message}', error.message));
       } else {
         const { data: managers } = await supabase
           .from('profiles')
@@ -266,7 +266,7 @@ export default function BookingDetailPage() {
         .eq('id', booking.id);
 
       if (error) {
-        toast.error(`Failed to cancel booking: ${error.message}`);
+        toast.error(t('toast.cancelFailed').replace('{error.message}', error.message));
       } else {
         const { data: managers } = await supabase
           .from('profiles')

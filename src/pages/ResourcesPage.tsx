@@ -92,7 +92,7 @@ export default function ResourcesPage() {
         .eq('id', selectedResource.id);
 
       if (error) {
-        toast.error(`Failed to update resource: ${error.message}`);
+        toast.error(t('toast.resourceUpdateFailed').replace('{error.message}', error.message));
       } else {
         toast.success(t('toast.resourceUpdated'));
         setDialogOpen(false);
@@ -104,7 +104,7 @@ export default function ResourcesPage() {
         .insert([resourceData]);
 
       if (error) {
-        toast.error(`Failed to create resource: ${error.message}`);
+        toast.error(t('toast.resourceCreateFailed').replace('{error.message}', error.message));
       } else {
         toast.success(t('toast.resourceCreated'));
         setDialogOpen(false);
@@ -134,7 +134,7 @@ export default function ResourcesPage() {
       .eq('id', selectedResource.id);
 
     if (error) {
-      toast.error(`Failed to delete resource: ${error.message}`);
+      toast.error(t('toast.resourceDeleteFailed').replace('{error.message}', error.message));
     } else {
       toast.success(t('toast.resourceDeleted'));
       setDeleteDialogOpen(false);

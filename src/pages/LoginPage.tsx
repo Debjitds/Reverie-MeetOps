@@ -42,7 +42,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (error) {
-      toast.error(`${t('login.loginFailed')}: ${error.message}`);
+      toast.error(t('login.loginFailed').replace('{error.message}', error.message));
     } else {
       toast.success(t('login.loginSuccess'));
       navigate(from, { replace: true });
@@ -89,7 +89,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (error) {
-      toast.error(`${t('login.registrationFailed')}: ${error.message}`);
+      toast.error(t('login.registrationFailed').replace('{error.message}', error.message));
     } else {
       toast.success(t('login.registrationSuccess'));
       setRegisterForm({ username: '', password: '', confirmPassword: '', name: '', agreedToTerms: false });

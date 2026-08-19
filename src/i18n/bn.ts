@@ -236,4 +236,90 @@ export const bn: Record<string, string> = {
   'auth.passwordLoginPlaceholder': 'পাসওয়ার্ড লিখুন',
   'auth.forgotPassword': 'পাসওয়ার্ড ভুলে গেছেন?',
   'auth.loginButton': 'লগইন',
+  'auth.fetchUserInfoFailed': 'ব্যবহারকারীর তথ্য আনতে ব্যর্থ হয়েছে: {error.message}',
+
+  // ===== LOGIN PAGE TOASTS =====
+  'login.enterUsernamePassword': 'ব্যবহারকারীর নাম এবং পাসওয়ার্ড লিখুন',
+  'login.usernameFormat': 'ব্যবহারকারীর নামে শুধুমাত্র অক্ষর, সংখ্যা এবং আন্ডারস্কোর থাকতে পারে',
+  'login.loginFailed': 'লগইন ব্যর্থ হয়েছে: {error.message}',
+  'login.loginSuccess': 'লগইন সফল হয়েছে',
+  'login.fillAllFields': 'অনুগ্রহ করে সমস্ত প্রয়োজনীয় ঘর পূরণ করুন',
+  'login.passwordMinLength': 'পাসওয়ার্ডে কমপক্ষে ৮টি অক্ষর থাকতে হবে',
+  'login.passwordRequirements': 'পাসওয়ার্ডে অক্ষর এবং সংখ্যা উভয়ই থাকতে হবে',
+  'login.passwordsDoNotMatch': 'পাসওয়ার্ড দুটি মিলছে না',
+  'login.agreeToTermsRequired': 'অনুগ্রহ করে ব্যবহারকারী চুক্তি এবং গোপনীয়তা নীতিতে সম্মতি দিন',
+  'login.registrationFailed': 'নিবন্ধন ব্যর্থ হয়েছে: {error.message}',
+  'login.registrationSuccess': 'নিবন্ধন সফল হয়েছে! এখন আপনি লগইন করতে পারেন।',
+
+  // ===== STANDALONE REGISTRATION PAGE TOASTS =====
+  'register.fillAllFields': 'অনুগ্রহ করে সমস্ত প্রয়োজনীয় ঘর পূরণ করুন',
+  'register.usernameFormat': 'ব্যবহারকারীর নামে শুধুমাত্র অক্ষর, সংখ্যা এবং আন্ডারস্কোর থাকতে পারে',
+  'register.passwordMinLength': 'পাসওয়ার্ডে কমপক্ষে ৮টি অক্ষর থাকতে হবে',
+  'register.passwordRequirements': 'পাসওয়ার্ডে অক্ষর এবং সংখ্যা উভয়ই থাকতে হবে',
+  'register.passwordsDoNotMatch': 'পাসওয়ার্ড দুটি মিলছে না',
+  'register.agreeToTermsRequired': 'অনুগ্রহ করে ব্যবহারকারী চুক্তি এবং গোপনীয়তা নীতিতে সম্মতি দিন',
+  'register.registrationFailed': 'নিবন্ধন ব্যর্থ হয়েছে: {error.message}',
+  'register.registrationSuccess': 'নিবন্ধন সফল হয়েছে! ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...',
+
+  // ===== PASSWORD RESET TOASTS =====
+  'resetPassword.usernameRequired': 'অনুগ্রহ করে আপনার ব্যবহারকারীর নাম লিখুন',
+  'resetPassword.usernameFormat': 'ব্যবহারকারীর নামে শুধুমাত্র অক্ষর, সংখ্যা এবং আন্ডারস্কোর থাকতে পারে',
+  'resetPassword.sendFailed': 'রিসেট লিংক পাঠাতে ব্যর্থ হয়েছে: {error.message}',
+  'resetPassword.sendSuccess': 'পাসওয়ার্ড রিসেট লিংক পাঠানো হয়েছে! অনুগ্রহ করে আপনার ইমেল দেখুন।',
+
+  // ===== NEW BOOKING TOASTS =====
+  'newBooking.purposeRequired': 'অনুগ্রহ করে একটি উদ্দেশ্য লিখুন',
+  'newBooking.resourceRequired': 'অনুগ্রহ করে একটি রিসোর্স নির্বাচন করুন',
+  'newBooking.dateRequired': 'অনুগ্রহ করে একটি তারিখ নির্বাচন করুন',
+  'newBooking.startTimeRequired': 'অনুগ্রহ করে শুরুর সময় নির্বাচন করুন',
+  'newBooking.invalidTimeRange': 'শেষ সময় অবশ্যই শুরু সময়ের পরে হতে হবে',
+  'newBooking.conflictDetected': 'এই সময়ের স্লটটি ইতিমধ্যে বুক করা হয়েছে',
+  'newBooking.createFailed': 'বুকিং তৈরি করতে ব্যর্থ হয়েছে: {bookingError.message}',
+  'newBooking.createSuccess': 'বুকিং সফলভাবে তৈরি হয়েছে!',
+  'newBooking.multiDayCreateFailed': 'বহু-দিনের বুকিং তৈরি করতে ব্যর্থ হয়েছে',
+  'newBooking.multiDayCreateSuccess': 'বহু-দিনের বুকিং সফলভাবে তৈরি হয়েছে! ({total_days} দিন)',
+  'newBooking.generalCreateFailed': 'বুকিং তৈরি করতে ব্যর্থ হয়েছে',
+
+  // ===== BOOKINGS / PDF EXPORT TOASTS =====
+  'bookings.exportDatesRequired': 'অনুগ্রহ করে রপ্তানির জন্য শুরু ও শেষ তারিখ নির্বাচন করুন',
+  'bookings.noBookingsForFilters': 'নির্বাচিত ফিল্টারগুলোর জন্য কোনো বুকিং পাওয়া যায়নি',
+  'bookings.exportSuccess': '{count}টি বুকিং পিডিএফ-এ রপ্তানি করা হয়েছে',
+
+  // ===== BOOKING APPROVAL / DETAILS TOASTS =====
+  'common.notFound': 'পাওয়া যায়নি',
+  'toast.approveMultiDayFailed': 'বহু-দিনের বুকিং অনুমোদন করতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.approveFailed': 'বুকিং অনুমোদন করতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.bookingApproved': 'বুকিং সফলভাবে অনুমোদিত হয়েছে',
+  'toast.rejectMultiDayFailed': 'বহু-দিনের বুকিং প্রত্যাখ্যান করতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.rejectFailed': 'বুকিং প্রত্যাখ্যান করতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.bookingRejected': 'বুকিং সফলভাবে প্রত্যাখ্যান করা হয়েছে',
+  'toast.cancelMultiDayFailed': 'বহু-দিনের বুকিং বাতিল করতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.cancelFailed': 'বুকিং বাতিল করতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.bookingCancelled': 'বুকিং সফলভাবে বাতিল করা হয়েছে',
+
+  // ===== RESOURCE MANAGEMENT TOASTS =====
+  'toast.requiredField': 'এই ঘরটি পূরণ করা আবশ্যক',
+  'toast.resourceUpdateFailed': 'রিসোর্স আপডেট করতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.resourceUpdated': 'রিসোর্স সফলভাবে আপডেট হয়েছে',
+  'toast.resourceCreateFailed': 'রিসোর্স তৈরি করতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.resourceCreated': 'রিসোর্স সফলভাবে তৈরি হয়েছে',
+  'resources.deleteWarning': 'সক্রিয় বুকিং থাকা রিসোর্স মুছে ফেলা যাবে না',
+  'toast.resourceDeleteFailed': 'রিসোর্স মুছে ফেলতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.resourceDeleted': 'রিসোর্স সফলভাবে মুছে ফেলা হয়েছে',
+
+  // ===== USER ROLE TOASTS =====
+  'toast.userRoleUpdateFailed': 'ভূমিকা আপডেট করতে ব্যর্থ হয়েছে: {error.message}',
+  'toast.userRoleChanged': 'ব্যবহারকারীর ভূমিকা সফলভাবে পরিবর্তন করা হয়েছে',
+
+  // ===== LANGUAGE SWITCHER TOASTS =====
+  'language.updateSuccess': 'ভাষা সফলভাবে আপডেট হয়েছে!',
+  'language.updateFailed': 'ভাষা আপডেট করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+  'language.changedTo': 'ভাষা {nativeName}-এ পরিবর্তন করা হয়েছে',
+  'language.changeFailed': 'ভাষা পরিবর্তন করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+
+  // ===== AI ASSISTANT / COMMON TOASTS =====
+  'chat.sendError': 'বার্তা পাঠাতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+  'common.somethingWentWrong': 'কিছু ভুল হয়েছে',
+  'toast.operationSuccess': 'কাজটি সফলভাবে সম্পন্ন হয়েছে',
+  'toast.operationFailed': 'কাজটি ব্যর্থ হয়েছে',
 };

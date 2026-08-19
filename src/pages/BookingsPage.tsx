@@ -159,7 +159,7 @@ export default function BookingsPage() {
 
   const handleExportPDF = () => {
     if (!exportFilters.startDate || !exportFilters.endDate) {
-      toast.error('Please select start and end dates for export');
+      toast.error(t('bookings.exportDatesRequired'));
       return;
     }
 
@@ -190,7 +190,7 @@ export default function BookingsPage() {
     }
 
     if (exportBookings.length === 0) {
-      toast.error('No bookings found for the selected filters');
+      toast.error(t('bookings.noBookingsForFilters'));
       return;
     }
 
@@ -205,7 +205,7 @@ export default function BookingsPage() {
     };
 
     exportBookingsToPDF(exportBookings, filterSummary, profile?.name || 'User');
-    toast.success(`Exported ${exportBookings.length} bookings to PDF`);
+    toast.success(t('bookings.exportSuccess').replace('{count}', String(exportBookings.length)));
     setExportDialogOpen(false);
   };
 

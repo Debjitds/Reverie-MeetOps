@@ -3,6 +3,8 @@ import { supabase } from '@/db/supabase';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import type { User } from '@/types/types';
 import { toast } from 'sonner';
+import { translateKey } from '@/i18n';
+import type { LanguageCode } from '@/lib/languages';
 
 export async function getProfile(userId: string): Promise<User | null> {
   const { data, error } = await supabase
@@ -56,7 +58,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch((error: Error) => {
-        toast.error(`Failed to fetch user info: ${error.message}`);
+        // AuthProvider sits above LanguageProvider, so resolve the dictionary directly
+        const lang = (document.documentElement.lang || 'en') as LanguageCode;
+        toast.error(
+          translateKey('auth.fetchUserInfoFailed', lang).replace('{error.message}', error.message)
+        );
       })
       .finally(() => {
         setLoading(false);

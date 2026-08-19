@@ -286,7 +286,7 @@ export default function NewBookingPage() {
           .single();
 
         if (bookingError) {
-          toast.error(`Failed to create booking: ${bookingError.message}`);
+          toast.error(t('newBooking.createFailed').replace('{bookingError.message}', bookingError.message));
           setLoading(false);
           return;
         }
@@ -323,7 +323,7 @@ export default function NewBookingPage() {
           }]);
         }
 
-        toast.success('Booking created successfully!');
+        toast.success(t('newBooking.createSuccess'));
         navigate('/bookings');
       } else {
         // Multi-day booking
@@ -351,18 +351,20 @@ export default function NewBookingPage() {
         if (error) {
           const errorMsg = await error?.context?.text();
           console.error('Multi-day booking error:', errorMsg || error?.message);
-          toast.error(errorMsg || 'Failed to create multi-day booking');
+          toast.error(errorMsg || t('newBooking.multiDayCreateFailed'));
           setLoading(false);
           return;
         }
 
         console.log('Multi-day booking created:', data);
-        toast.success(`Multi-day booking created successfully! (${data.total_days} days)`);
+        toast.success(
+          t('newBooking.multiDayCreateSuccess').replace('{total_days}', String(data.total_days))
+        );
         navigate('/bookings');
       }
     } catch (error) {
       console.error('Booking creation error:', error);
-      toast.error('Failed to create booking');
+      toast.error(t('newBooking.generalCreateFailed'));
     }
 
     setLoading(false);

@@ -76,7 +76,7 @@ export default function UsersPage() {
       .eq('id', selectedUser.id);
 
     if (error) {
-      toast.error(`Failed to update role: ${error.message}`);
+      toast.error(t('toast.userRoleUpdateFailed').replace('{error.message}', error.message));
     } else {
       toast.success(t('toast.userRoleChanged'));
       setDialogOpen(false);

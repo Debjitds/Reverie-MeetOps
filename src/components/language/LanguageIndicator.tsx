@@ -8,12 +8,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { getAllLanguages, getLanguageInfo, LanguageCode } from '@/lib/languages';
 import { IMPLEMENTED_LANGUAGES } from '@/i18n';
 import { toast } from 'sonner';
 
 export function LanguageIndicator() {
   const { currentLanguage, setLanguage } = useLanguage();
+  const { t } = useAppTranslation();
   const [loading, setLoading] = useState(false);
   const currentLangInfo = getLanguageInfo(currentLanguage);
   const allLanguages = getAllLanguages();
@@ -24,10 +26,12 @@ export function LanguageIndicator() {
     setLoading(true);
     try {
       await setLanguage(langCode);
-      toast.success(`Language changed to ${getLanguageInfo(langCode).nativeName}`);
+      toast.success(
+        t('language.changedTo').replace('{nativeName}', getLanguageInfo(langCode).nativeName)
+      );
     } catch (error) {
       console.error('Failed to change language:', error);
-      toast.error('Failed to change language. Please try again.');
+      toast.error(t('language.changeFailed'));
     } finally {
       setLoading(false);
     }

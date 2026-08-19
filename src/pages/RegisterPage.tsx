@@ -28,34 +28,34 @@ export default function RegisterPage() {
     e.preventDefault();
 
     if (!registerForm.username || !registerForm.password || !registerForm.name) {
-      toast.error('Please fill in all required fields');
+      toast.error(t('register.fillAllFields'));
       return;
     }
 
     // Validate username format
     if (!/^[a-zA-Z0-9_]+$/.test(registerForm.username)) {
-      toast.error('Username can only contain letters, numbers, and underscores');
+      toast.error(t('register.usernameFormat'));
       return;
     }
 
     // Validate password strength
     if (registerForm.password.length < 8) {
-      toast.error('Password must be at least 8 characters');
+      toast.error(t('register.passwordMinLength'));
       return;
     }
 
     if (!/(?=.*[a-zA-Z])(?=.*[0-9])/.test(registerForm.password)) {
-      toast.error('Password must contain both letters and numbers');
+      toast.error(t('register.passwordRequirements'));
       return;
     }
 
     if (registerForm.password !== registerForm.confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error(t('register.passwordsDoNotMatch'));
       return;
     }
 
     if (!registerForm.agreedToTerms) {
-      toast.error('Please agree to the User Agreement and Privacy Policy');
+      toast.error(t('register.agreeToTermsRequired'));
       return;
     }
 
@@ -64,9 +64,9 @@ export default function RegisterPage() {
     setLoading(false);
 
     if (error) {
-      toast.error(`Registration failed: ${error.message}`);
+      toast.error(t('register.registrationFailed').replace('{error.message}', error.message));
     } else {
-      toast.success('Registration successful! Redirecting to dashboard...');
+      toast.success(t('register.registrationSuccess'));
       navigate('/dashboard', { replace: true });
     }
   };

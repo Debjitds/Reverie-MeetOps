@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { getAllLanguages, LanguageCode } from '@/lib/languages';
 import { IMPLEMENTED_LANGUAGES } from '@/i18n';
 import { toast } from 'sonner';
 
 export function LanguageSelector() {
   const { currentLanguage, setLanguage } = useLanguage();
+  const { t } = useAppTranslation();
   const [loading, setLoading] = useState(false);
   const languages = getAllLanguages();
 
@@ -15,10 +17,10 @@ export function LanguageSelector() {
     setLoading(true);
     try {
       await setLanguage(value as LanguageCode);
-      toast.success('Language updated successfully!');
+      toast.success(t('language.updateSuccess'));
     } catch (error) {
       console.error('Failed to update language:', error);
-      toast.error('Failed to update language. Please try again.');
+      toast.error(t('language.updateFailed'));
     } finally {
       setLoading(false);
     }

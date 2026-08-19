@@ -97,6 +97,9 @@ export const TRANSLATION_KEYS = {
     noBookingsFound: 'No bookings found',
     noActiveBookings: 'No active bookings found',
     noPastBookings: 'No past bookings found',
+    exportDatesRequired: 'Please select start and end dates for export',
+    noBookingsForFilters: 'No bookings found for the selected filters',
+    exportSuccess: 'Exported {count} bookings to PDF',
     
     // Export dialog
     exportTitle: 'Export Bookings to PDF',
@@ -185,6 +188,11 @@ export const TRANSLATION_KEYS = {
     // Success/Error messages
     bookingCreated: 'Booking created successfully',
     bookingFailed: 'Failed to create booking',
+    createFailed: 'Failed to create booking: {bookingError.message}',
+    createSuccess: 'Booking created successfully!',
+    multiDayCreateFailed: 'Failed to create multi-day booking',
+    multiDayCreateSuccess: 'Multi-day booking created successfully! ({total_days} days)',
+    generalCreateFailed: 'Failed to create booking',
   },
 
   // ===== BOOKING DETAILS PAGE =====
@@ -470,6 +478,9 @@ export const TRANSLATION_KEYS = {
     passwordLoginPlaceholder: 'Enter password',
     forgotPassword: 'Forgot password?',
     loginButton: 'Login',
+
+    // Errors
+    fetchUserInfoFailed: 'Failed to fetch user info: {error.message}',
   },
 
   // ===== LOGIN PAGE =====
@@ -511,10 +522,22 @@ export const TRANSLATION_KEYS = {
     agreeToTermsRequired: 'Please agree to the User Agreement and Privacy Policy',
     
     // Success/Error messages
-    loginFailed: 'Login failed',
+    loginFailed: 'Login failed: {error.message}',
     loginSuccess: 'Login successful',
-    registrationFailed: 'Registration failed',
+    registrationFailed: 'Registration failed: {error.message}',
     registrationSuccess: 'Registration successful! You can now log in.',
+  },
+
+  // ===== STANDALONE REGISTRATION PAGE =====
+  register: {
+    fillAllFields: 'Please fill in all required fields',
+    usernameFormat: 'Username can only contain letters, numbers, and underscores',
+    passwordMinLength: 'Password must be at least 8 characters',
+    passwordRequirements: 'Password must contain both letters and numbers',
+    passwordsDoNotMatch: 'Passwords do not match',
+    agreeToTermsRequired: 'Please agree to the User Agreement and Privacy Policy',
+    registrationFailed: 'Registration failed: {error.message}',
+    registrationSuccess: 'Registration successful! Redirecting to dashboard...',
   },
 
   // ===== RESET PASSWORD PAGE =====
@@ -532,6 +555,10 @@ export const TRANSLATION_KEYS = {
     invalidEmail: 'Please enter a valid email',
     resetLinkSent: 'Password reset link sent to your email',
     resetFailed: 'Failed to send reset link',
+    usernameRequired: 'Please enter your username',
+    usernameFormat: 'Username can only contain letters, numbers, and underscores',
+    sendFailed: 'Failed to send reset link: {error.message}',
+    sendSuccess: 'Password reset link sent! Please check your email.',
   },
 
   // ===== LANDING PAGE =====
@@ -592,6 +619,24 @@ export const TRANSLATION_KEYS = {
     operationSuccess: 'Operation completed successfully',
     agendaGenerated: 'Agenda generated successfully',
     agendaFailed: 'Failed to generate agenda',
+    approveMultiDayFailed: 'Failed to approve multi-day booking: {error.message}',
+    approveFailed: 'Failed to approve booking: {error.message}',
+    rejectMultiDayFailed: 'Failed to reject multi-day booking: {error.message}',
+    rejectFailed: 'Failed to reject booking: {error.message}',
+    cancelMultiDayFailed: 'Failed to cancel multi-day booking: {error.message}',
+    cancelFailed: 'Failed to cancel booking: {error.message}',
+    userRoleUpdateFailed: 'Failed to update role: {error.message}',
+    resourceUpdateFailed: 'Failed to update resource: {error.message}',
+    resourceCreateFailed: 'Failed to create resource: {error.message}',
+    resourceDeleteFailed: 'Failed to delete resource: {error.message}',
+  },
+
+  // ===== LANGUAGE SWITCHER =====
+  language: {
+    updateSuccess: 'Language updated successfully!',
+    updateFailed: 'Failed to update language. Please try again.',
+    changedTo: 'Language changed to {nativeName}',
+    changeFailed: 'Failed to change language. Please try again.',
   },
 };
 

@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { toast } from 'sonner';
 
 export default function ResetPasswordPage() {
+  const { t } = useAppTranslation();
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -16,13 +18,13 @@ export default function ResetPasswordPage() {
     e.preventDefault();
 
     if (!username) {
-      toast.error('Please enter your username');
+      toast.error(t('resetPassword.usernameRequired'));
       return;
     }
 
     // Validate username format
     if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-      toast.error('Username can only contain letters, numbers, and underscores');
+      toast.error(t('resetPassword.usernameFormat'));
       return;
     }
 
@@ -34,10 +36,10 @@ export default function ResetPasswordPage() {
     setLoading(false);
 
     if (error) {
-      toast.error(`Failed to send reset link: ${error.message}`);
+      toast.error(t('resetPassword.sendFailed').replace('{error.message}', error.message));
     } else {
       setSent(true);
-      toast.success('Password reset link sent! Please check your email.');
+      toast.success(t('resetPassword.sendSuccess'));
     }
   };
 
