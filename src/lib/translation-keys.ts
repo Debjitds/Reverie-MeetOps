@@ -448,6 +448,30 @@ export const TRANSLATION_KEYS = {
     networkError: 'Network error',
   },
 
+  // ===== AUTHENTICATION =====
+  auth: {
+    appName: 'MeetOps',
+    subtitle: 'Resource Booking Management System',
+    welcome: 'Welcome',
+    loginOrRegister: 'Login or create a new account',
+    loginTab: 'Login',
+    registerTab: 'Register',
+    fullName: 'Full Name',
+    fullNamePlaceholder: 'Enter your full name',
+    username: 'Username',
+    usernameRegisterPlaceholder: 'Letters, numbers, and underscores only',
+    password: 'Password',
+    passwordRegisterPlaceholder: 'At least 8 characters with letters and numbers',
+    confirmPassword: 'Confirm Password',
+    confirmPasswordPlaceholder: 'Re-enter password',
+    termsAgreement: 'I agree to the User Agreement and Privacy Policy (Please modify these documents to comply with legal requirements)',
+    registerButton: 'Register',
+    usernameLoginPlaceholder: 'Enter username',
+    passwordLoginPlaceholder: 'Enter password',
+    forgotPassword: 'Forgot password?',
+    loginButton: 'Login',
+  },
+
   // ===== LOGIN PAGE =====
   login: {
     title: 'MeetOps',

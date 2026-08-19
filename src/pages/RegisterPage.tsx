@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { LanguageIndicator } from '@/components/language/LanguageIndicator';
 import { toast } from 'sonner';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { signUpWithUsername } = useAuth();
+  const { t } = useAppTranslation();
   
   const [registerForm, setRegisterForm] = useState({ 
     username: '', 
@@ -69,67 +72,70 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 py-12">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 py-12 relative">
+      <div className="absolute top-4 right-4">
+        <LanguageIndicator />
+      </div>
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/">
-            <h1 className="text-4xl font-bold mb-2 border-b-thick border-primary inline-block pb-2">MeetOps</h1>
+            <h1 className="text-4xl font-bold mb-2 border-b-thick border-primary inline-block pb-2">{t('auth.appName')}</h1>
           </Link>
-          <p className="text-muted-foreground mt-4">Create your account</p>
+          <p className="text-muted-foreground mt-4">{t('auth.subtitle')}</p>
         </div>
 
         <Card className="border-thick">
           <CardHeader>
-            <CardTitle>Register</CardTitle>
-            <CardDescription>Sign up to start managing your resources</CardDescription>
+            <CardTitle>{t('auth.registerTab')}</CardTitle>
+            <CardDescription>{t('auth.loginOrRegister')}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleRegister} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name *</Label>
+                <Label htmlFor="name">{t('auth.fullName')} *</Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder={t('auth.fullNamePlaceholder')}
                   value={registerForm.name}
                   onChange={(e) => setRegisterForm({ ...registerForm, name: e.target.value })}
                   disabled={loading}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="username">Username *</Label>
+                <Label htmlFor="username">{t('auth.username')} *</Label>
                 <Input
                   id="username"
                   type="text"
-                  placeholder="Choose a username"
+                  placeholder={t('auth.usernameRegisterPlaceholder')}
                   value={registerForm.username}
                   onChange={(e) => setRegisterForm({ ...registerForm, username: e.target.value })}
                   disabled={loading}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Only letters, numbers, and underscores allowed
+                  {t('auth.usernameRegisterPlaceholder')}
                 </p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password *</Label>
+                <Label htmlFor="password">{t('auth.password')} *</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Create a password"
+                  placeholder={t('auth.passwordRegisterPlaceholder')}
                   value={registerForm.password}
                   onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
                   disabled={loading}
                 />
                 <p className="text-xs text-muted-foreground">
-                  At least 8 characters with letters and numbers
+                  {t('auth.passwordRegisterPlaceholder')}
                 </p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirm Password *</Label>
+                <Label htmlFor="confirm-password">{t('auth.confirmPassword')} *</Label>
                 <Input
                   id="confirm-password"
                   type="password"
-                  placeholder="Confirm your password"
+                  placeholder={t('auth.confirmPasswordPlaceholder')}
                   value={registerForm.confirmPassword}
                   onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })}
                   disabled={loading}
@@ -145,11 +151,11 @@ export default function RegisterPage() {
                   disabled={loading}
                 />
                 <label htmlFor="terms" className="text-sm text-muted-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  I agree to the User Agreement and Privacy Policy
+                  {t('auth.termsAgreement')}
                 </label>
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Creating account...' : 'Create Account'}
+                {loading ? 'Creating account...' : t('auth.registerButton')}
               </Button>
             </form>
 
@@ -157,7 +163,7 @@ export default function RegisterPage() {
               <p className="text-sm text-muted-foreground">
                 Already have an account?{' '}
                 <Link to="/login" className="text-primary hover:underline font-medium">
-                  Login
+                  {t('auth.loginButton')}
                 </Link>
               </p>
             </div>

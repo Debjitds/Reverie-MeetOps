@@ -1,7 +1,5 @@
 # MeetOps Common Translation Specification
-
 ## English → Bengali Reference
-
 ### Pilot Language Set: English (`en`) + Bengali (`bn`)
 
 > **Purpose:** This document is the source of truth for implementing MeetOps static UI translations without runtime translation APIs.
@@ -15,9 +13,9 @@
 ## 1.1 Language Codes
 
 | Language | Code |
-| -------- | ---- |
-| English  | `en` |
-| Bengali  | `bn` |
+|---|---|
+| English | `en` |
+| Bengali | `bn` |
 
 ## 1.2 Core Rule
 
@@ -27,7 +25,7 @@ Example:
 
 ```text
 dashboard.title
-```
+````
 
 English:
 
@@ -41,7 +39,7 @@ Bengali:
 ড্যাশবোর্ড
 ```
 
-Do NOT create separate pages for each language.
+Do NOT create separate pages/routes/components for each language.
 
 The same React page/component must render different text according to the active locale.
 
@@ -268,7 +266,32 @@ remain dynamic numbers.
 
 ---
 
-# 12. Export Bookings PDF Dialog
+# 12. Booking Empty States
+
+| Key                         | English                  | Bengali                             |
+| --------------------------- | ------------------------ | ----------------------------------- |
+| `bookings.noActiveBookings` | No active bookings found | কোনো সক্রিয় বুকিং পাওয়া যায়নি    |
+| `bookings.noPastBookings`   | No past bookings found   | পূর্ববর্তী কোনো বুকিং পাওয়া যায়নি |
+
+These are static empty-state messages and MUST be translated through the local Bengali dictionary.
+
+Examples:
+
+```text
+ACTIVE BOOKINGS (0)
+→ সক্রিয় বুকিং (0)
+```
+
+```text
+PAST BOOKINGS (0)
+→ পূর্ববর্তী বুকিং (0)
+```
+
+The numeric value remains dynamic.
+
+---
+
+# 13. Export Bookings PDF Dialog
 
 | Key                                 | English                                  | Bengali                                         |
 | ----------------------------------- | ---------------------------------------- | ----------------------------------------------- |
@@ -281,7 +304,7 @@ remain dynamic numbers.
 
 ---
 
-# 13. New Booking — Global
+# 14. New Booking — Global
 
 | Key                      | English                       | Bengali                           |
 | ------------------------ | ----------------------------- | --------------------------------- |
@@ -290,7 +313,7 @@ remain dynamic numbers.
 
 ---
 
-# 14. New Booking — Step Indicator
+# 15. New Booking — Step Indicator
 
 | Key                | English | Bengali |
 | ------------------ | ------- | ------- |
@@ -302,7 +325,7 @@ Numbers remain unchanged.
 
 ---
 
-# 15. New Booking — Step 1
+# 16. New Booking — Step 1
 
 | Key                            | English                   | Bengali                                    |
 | ------------------------------ | ------------------------- | ------------------------------------------ |
@@ -336,7 +359,7 @@ are resource/database values and remain unchanged in the Bengali reference.
 
 ---
 
-# 16. New Booking — Step 2
+# 17. New Booking — Step 2
 
 | Key                            | English                              | Bengali                                   |
 | ------------------------------ | ------------------------------------ | ----------------------------------------- |
@@ -375,7 +398,7 @@ These should remain date/time/calendar-library values rather than being forced t
 
 ---
 
-# 17. New Booking — Step 3
+# 18. New Booking — Step 3
 
 | Key                               | English                                           | Bengali                                         |
 | --------------------------------- | ------------------------------------------------- | ----------------------------------------------- |
@@ -427,7 +450,7 @@ remain dynamic.
 
 ---
 
-# 18. Calendar Page
+# 19. Calendar Page
 
 | Key                    | English                    | Bengali                   |
 | ---------------------- | -------------------------- | ------------------------- |
@@ -480,7 +503,7 @@ remain dynamic/calendar data.
 
 ---
 
-# 19. Resources Page
+# 20. Resources Page
 
 | Key                     | English      | Bengali        |
 | ----------------------- | ------------ | -------------- |
@@ -494,7 +517,7 @@ remain dynamic/calendar data.
 
 ---
 
-# 20. Delete Resource Confirmation
+# 21. Delete Resource Confirmation
 
 | Key                        | English                                                                  | Bengali                                                                      |
 | -------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
@@ -513,7 +536,7 @@ remains dynamic.
 
 ---
 
-# 21. Edit Resource Dialog
+# 22. Edit Resource Dialog
 
 | Key                          | English                     | Bengali                    |
 | ---------------------------- | --------------------------- | -------------------------- |
@@ -528,7 +551,7 @@ remains dynamic.
 
 ---
 
-# 22. Add Resource Dialog
+# 23. Add Resource Dialog
 
 | Key                                | English                           | Bengali                                    |
 | ---------------------------------- | --------------------------------- | ------------------------------------------ |
@@ -538,15 +561,14 @@ remains dynamic.
 | `resources.namePlaceholder`        | Enter resource name               | রিসোর্সের নাম লিখুন                        |
 | `resources.descriptionLabel`       | Description                       | বর্ণনা                                     |
 | `resources.descriptionPlaceholder` | Enter description                 | বিবরণ লিখুন                                |
-| `resources.locationRequired`       | Location *                        | অবস্থান *                                  |
-| `resources.locationPlaceholder`    | Enter location                    | অবস্থান লিখুন                              |
+| `resources.locationRequired`       | Location *                        | অবস্থান লিখুন                              |
 | `resources.capacityRequired`       | Capacity *                        | ধারণক্ষমতা *                               |
 | `resources.add.cancel`             | Cancel                            | বাতিল করুন                                 |
 | `resources.add.create`             | Create                            | তৈরি করুন                                  |
 
 ---
 
-# 23. Users Page
+# 24. Users Page
 
 | Key                       | English         | Bengali                          |
 | ------------------------- | --------------- | -------------------------------- |
@@ -562,7 +584,7 @@ remains dynamic.
 
 ---
 
-# 24. Change User Role Dialog
+# 25. Change User Role Dialog
 
 | Key                            | English                         | Bengali                                 |
 | ------------------------------ | ------------------------------- | --------------------------------------- |
@@ -594,7 +616,7 @@ Therefore the implementation should construct the sentence from translation comp
 
 ---
 
-# 25. Common Actions
+# 26. Common Actions
 
 | Key                  | English      | Bengali         |
 | -------------------- | ------------ | --------------- |
@@ -615,7 +637,7 @@ Therefore the implementation should construct the sentence from translation comp
 
 ---
 
-# 26. Pagination
+# 27. Pagination
 
 | Key                   | English  | Bengali    |
 | --------------------- | -------- | ---------- |
@@ -642,7 +664,7 @@ rather than hardcoded.
 
 ---
 
-# 27. Search / Filters
+# 28. Search / Filters
 
 | Key                  | English      | Bengali         |
 | -------------------- | ------------ | --------------- |
@@ -654,19 +676,142 @@ rather than hardcoded.
 
 ---
 
-# 28. Common Empty States
+# 29. Common Empty States
 
-| Key                        | English              | Bengali              |
-| -------------------------- | -------------------- | -------------------- |
-| `empty.noUpcomingBookings` | No upcoming bookings | আসন্ন কোনো বুকিং নেই |
+| Key                         | English                  | Bengali                             |
+| --------------------------- | ------------------------ | ----------------------------------- |
+| `empty.noUpcomingBookings`  | No upcoming bookings     | আসন্ন কোনো বুকিং নেই                |
+| `bookings.noActiveBookings` | No active bookings found | কোনো সক্রিয় বুকিং পাওয়া যায়নি    |
+| `bookings.noPastBookings`   | No past bookings found   | পূর্ববর্তী কোনো বুকিং পাওয়া যায়নি |
 
-Only the empty-state strings visibly confirmed in the supplied screenshots should be used here.
-
-Do not invent additional empty-state translations that were not visible in the references.
+Do not invent additional empty-state translations that were not visible in the supplied references.
 
 ---
 
-# 29. Language Selector
+# 30. Authentication — Common
+
+| Key                    | English                            | Bengali                                       |
+| ---------------------- | ---------------------------------- | --------------------------------------------- |
+| `auth.appName`         | MeetOps                            | মিটঅপস                                        |
+| `auth.subtitle`        | Resource Booking Management System | রিসোর্স বুকিং ম্যানেজমেন্ট সিস্টেম            |
+| `auth.welcome`         | Welcome                            | স্বাগতম                                       |
+| `auth.loginOrRegister` | Login or create a new account      | লগইন করুন অথবা একটি নতুন অ্যাকাউন্ট তৈরি করুন |
+| `auth.loginTab`        | Login                              | লগইন                                          |
+| `auth.registerTab`     | Register                           | নিবন্ধন করুন                                  |
+
+---
+
+# 31. Authentication — Registration
+
+| Key                                | English                                                                                                            | Bengali                                                                                                                   |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `auth.fullName`                    | Full Name                                                                                                          | পুরো নাম                                                                                                                  |
+| `auth.fullNamePlaceholder`         | Enter your full name                                                                                               | আপনার পুরো নাম লিখুন                                                                                                      |
+| `auth.username`                    | Username                                                                                                           | ব্যবহারকারীর নাম                                                                                                          |
+| `auth.usernameRegisterPlaceholder` | Letters, numbers, and underscores only                                                                             | শুধুমাত্র অক্ষর, সংখ্যা এবং আন্ডারস্কোর                                                                                   |
+| `auth.password`                    | Password                                                                                                           | পাসওয়ার্ড                                                                                                                |
+| `auth.passwordRegisterPlaceholder` | At least 8 characters with letters and numbers                                                                     | কমপক্ষে ৮টি অক্ষর ও সংখ্যা                                                                                                |
+| `auth.confirmPassword`             | Confirm Password                                                                                                   | পাসওয়ার্ড নিশ্চিত করুন                                                                                                   |
+| `auth.confirmPasswordPlaceholder`  | Re-enter password                                                                                                  | পাসওয়ার্ড পুনরায় লিখুন                                                                                                  |
+| `auth.termsAgreement`              | I agree to the User Agreement and Privacy Policy (Please modify these documents to comply with legal requirements) | আমি ব্যবহারকারী চুক্তি এবং গোপনীয়তা নীতিতে সম্মত (অনুগ্রহ করে এই নথিগুলি আইনগত প্রয়োজনীয়তা মেনে চলার জন্য সংশোধন করুন) |
+| `auth.registerButton`              | Register                                                                                                           | নিবন্ধন করুন                                                                                                              |
+
+---
+
+# 32. Authentication — Login
+
+| Key                             | English          | Bengali                |
+| ------------------------------- | ---------------- | ---------------------- |
+| `auth.usernameLoginPlaceholder` | Enter username   | ব্যবহারকারীর নাম লিখুন |
+| `auth.passwordLoginPlaceholder` | Enter password   | পাসওয়ার্ড লিখুন       |
+| `auth.forgotPassword`           | Forgot password? | পাসওয়ার্ড ভুলে গেছেন? |
+| `auth.loginButton`              | Login            | লগইন                   |
+
+---
+
+# 33. Authentication — Bengali Reference Notes
+
+The Bengali authentication reference shows the following exact static structure:
+
+```text
+MeetOps
+→ মিটঅপস
+
+Resource Booking Management System
+→ রিসোর্স বুকিং ম্যানেজমেন্ট সিস্টেম
+
+Welcome
+→ স্বাগতম
+
+Login or create a new account
+→ লগইন করুন অথবা একটি নতুন অ্যাকাউন্ট তৈরি করুন
+
+Login
+→ লগইন
+
+Register
+→ নিবন্ধন করুন
+
+Full Name
+→ পুরো নাম
+
+Enter your full name
+→ আপনার পুরো নাম লিখুন
+
+Username
+→ ব্যবহারকারীর নাম
+
+Letters, numbers, and underscores only
+→ শুধুমাত্র অক্ষর, সংখ্যা এবং আন্ডারস্কোর
+
+Password
+→ পাসওয়ার্ড
+
+At least 8 characters with letters and numbers
+→ কমপক্ষে ৮টি অক্ষর ও সংখ্যা
+
+Confirm Password
+→ পাসওয়ার্ড নিশ্চিত করুন
+
+Re-enter password
+→ পাসওয়ার্ড পুনরায় লিখুন
+
+I agree to the User Agreement and Privacy Policy
+→ আমি ব্যবহারকারী চুক্তি এবং গোপনীয়তা নীতিতে সম্মত
+```
+
+The full legal-agreement text should remain:
+
+```text
+আমি ব্যবহারকারী চুক্তি এবং গোপনীয়তা নীতিতে সম্মত (অনুগ্রহ করে এই নথিগুলি আইনগত প্রয়োজনীয়তা মেনে চলার জন্য সংশোধন করুন)
+```
+
+---
+
+# 34. Authentication — Important Dynamic/Non-Translated Values
+
+The following must remain dynamic and must NOT become static translation entries:
+
+```text
+User names
+Email addresses
+Passwords
+Actual username values
+```
+
+Examples:
+
+```text
+Deb
+Admin
+RAJ
+```
+
+remain application/user data.
+
+---
+
+# 35. Language Selector
 
 The MeetOps language selector currently supports:
 
@@ -687,7 +832,7 @@ Only `en` and `bn` are being implemented in this pilot dictionary.
 
 ---
 
-# 30. Strings Observed as Unchanged in Bengali Reference
+# 36. Strings Observed as Unchanged in Bengali Reference
 
 The following strings/values were visibly kept in English in the supplied Bengali UI. Do not force them through the Bengali dictionary unless the product requirements are intentionally changed later.
 
@@ -745,15 +890,11 @@ Your booking request for Room 10 has been submitted
 
 in English.
 
-This is reference behavior and should not be silently changed during the first implementation.
-
 ---
 
-# 31. Important Translation Consistency Rules
+# 37. Important Translation Consistency Rules
 
 ## Pending
-
-Use the exact Bengali wording from the MeDo reference:
 
 ```text
 Pending → বিচারাধীন
@@ -785,15 +926,11 @@ Resource → সম্পদ
 
 ## Booking
 
-The reference uses:
-
 ```text
 Booking → বুকিং
 ```
 
 ## Users
-
-The reference uses:
 
 ```text
 Users → ব্যবহারকারীরা
@@ -801,25 +938,68 @@ Users → ব্যবহারকারীরা
 
 ## Actions
 
-The reference uses:
-
 ```text
 Actions → কর্ম
 ```
 
 ## Calendar Legend
 
-The reference uses:
-
 ```text
 Legend → কিংবদন্তি
 ```
 
-These wording choices should be preserved for consistency with the MeDo-hosted reference rather than replaced with alternative Bengali terminology during this pilot.
+These wording choices should be preserved for consistency with the MeDo-hosted reference.
 
 ---
 
-# 32. Recommended Translation-Key Architecture
+# 38. Empty-State Implementation Rule
+
+The following strings MUST use translation keys instead of hardcoded English:
+
+```text
+bookings.noActiveBookings
+bookings.noPastBookings
+```
+
+Expected behavior:
+
+English:
+
+```text
+No active bookings found
+No past bookings found
+```
+
+Bengali:
+
+```text
+কোনো সক্রিয় বুকিং পাওয়া যায়নি
+পূর্ববর্তী কোনো বুকিং পাওয়া যায়নি
+```
+
+No runtime Gemini/API translation should be performed for these strings.
+
+---
+
+# 39. Authentication Implementation Rule
+
+All authentication-page static text must also use the same static dictionary system.
+
+The implementation must NOT use Gemini or `translate-text` to translate:
+
+* Login page text
+* Register page text
+* Form labels
+* Placeholders
+* Buttons
+* Terms/Privacy text
+* Forgot-password text
+
+English and Bengali values should come directly from the local dictionaries.
+
+---
+
+# 40. Recommended Translation-Key Architecture
 
 The implementation should use grouped keys such as:
 
@@ -840,6 +1020,7 @@ status.*
 action.*
 filter.*
 pagination.*
+auth.*
 ```
 
 Avoid duplicate keys for identical strings.
@@ -867,7 +1048,7 @@ when the Bengali translation is the same:
 
 ---
 
-# 33. Pilot Acceptance Criteria
+# 41. Pilot Acceptance Criteria
 
 The English/Bengali implementation is considered successful only when:
 
@@ -878,28 +1059,33 @@ The English/Bengali implementation is considered successful only when:
 5. Sidebar translates correctly.
 6. Bookings page translates correctly.
 7. Booking filters translate correctly.
-8. New Booking Step 1 translates correctly.
-9. New Booking Step 2 translates correctly.
-10. New Booking Step 3 translates correctly.
-11. Calendar UI translates correctly.
-12. Calendar weekday/date localization continues working.
-13. Resources page translates correctly.
-14. Resource dialogs translate correctly.
-15. Users page translates correctly.
-16. User-role dialog translates correctly.
-17. Logout confirmation translates correctly.
-18. Notifications title translates correctly.
-19. AI Assistant UI labels/messages translate correctly.
-20. Dynamic names, rooms, dates, times, emails and user data remain dynamic.
-21. Switching Bengali → English restores the English UI.
-22. Switching English → Bengali does not invoke Gemini or another translation API for static UI strings.
-23. Browser refresh preserves the selected language.
-24. Navigation between pages preserves the selected language.
-25. No existing MeetOps functionality is broken by the localization implementation.
+8. Booking empty states translate correctly.
+9. New Booking Step 1 translates correctly.
+10. New Booking Step 2 translates correctly.
+11. New Booking Step 3 translates correctly.
+12. Calendar UI translates correctly.
+13. Calendar weekday/date localization continues working.
+14. Resources page translates correctly.
+15. Resource dialogs translate correctly.
+16. Users page translates correctly.
+17. User-role dialog translates correctly.
+18. Logout confirmation translates correctly.
+19. Notifications title translates correctly.
+20. AI Assistant UI labels/messages translate correctly.
+21. Login page translates correctly.
+22. Register page translates correctly.
+23. Authentication placeholders translate correctly.
+24. Authentication agreement text translates correctly.
+25. Dynamic names, rooms, dates, times, emails and user data remain dynamic.
+26. Switching Bengali → English restores the English UI.
+27. Switching English → Bengali does not invoke Gemini or another translation API for static UI strings.
+28. Browser refresh preserves the selected language.
+29. Navigation between pages preserves the selected language.
+30. No existing MeetOps functionality is broken by the localization implementation.
 
 ---
 
-# 34. Phase 1 Scope
+# 42. Phase 1 Scope
 
 This document currently contains the:
 
@@ -930,7 +1116,7 @@ must extend this dictionary rather than create a second translation architecture
 
 ---
 
-# 35. Final Implementation Principle
+# 43. Final Implementation Principle
 
 The target architecture is:
 
@@ -972,7 +1158,7 @@ Gemini may continue to be used for genuine AI features such as the MeetOps AI As
 
 ---
 
-# 36. Source-of-Truth Note
+# 44. Source-of-Truth Note
 
 This document is based on the English and Bengali screenshots supplied from the MeDo-hosted MeetOps application.
 
@@ -981,3 +1167,114 @@ Where screenshots show an item remaining in English inside the Bengali interface
 Where a string is dynamic, it is deliberately excluded from static translation.
 
 The objective is to reproduce the existing MeDo-hosted MeetOps language behavior in the standalone Vercel/Supabase application while eliminating runtime translation API quota consumption.
+
+---
+
+# 45. Update Log
+
+## Initial version
+
+Contained the original English → Bengali static UI translation inventory covering:
+
+* Dashboard
+* Notifications
+* Logout
+* AI Assistant
+* Bookings
+* Booking statuses
+* New Booking
+* Calendar
+* Resources
+* Users
+* Common actions
+* Pagination
+* Filters
+* Language selector
+
+## Update 1
+
+Added previously missed strings discovered from additional reference screenshots:
+
+### Bookings empty states
+
+```text
+No active bookings found
+→ কোনো সক্রিয় বুকিং পাওয়া যায়নি
+
+No past bookings found
+→ পূর্ববর্তী কোনো বুকিং পাওয়া যায়নি
+```
+
+### Authentication — Register
+
+```text
+MeetOps
+→ মিটঅপস
+
+Resource Booking Management System
+→ রিসোর্স বুকিং ম্যানেজমেন্ট সিস্টেম
+
+Welcome
+→ স্বাগতম
+
+Login or create a new account
+→ লগইন করুন অথবা একটি নতুন অ্যাকাউন্ট তৈরি করুন
+
+Login
+→ লগইন
+
+Register
+→ নিবন্ধন করুন
+
+Full Name
+→ পুরো নাম
+
+Enter your full name
+→ আপনার পুরো নাম লিখুন
+
+Username
+→ ব্যবহারকারীর নাম
+
+Letters, numbers, and underscores only
+→ শুধুমাত্র অক্ষর, সংখ্যা এবং আন্ডারস্কোর
+
+Password
+→ পাসওয়ার্ড
+
+At least 8 characters with letters and numbers
+→ কমপক্ষে ৮টি অক্ষর ও সংখ্যা
+
+Confirm Password
+→ পাসওয়ার্ড নিশ্চিত করুন
+
+Re-enter password
+→ পাসওয়ার্ড পুনরায় লিখুন
+
+I agree to the User Agreement and Privacy Policy (Please modify these documents to comply with legal requirements)
+→ আমি ব্যবহারকারী চুক্তি এবং গোপনীয়তা নীতিতে সম্মত (অনুগ্রহ করে এই নথিগুলি আইনগত প্রয়োজনীয়তা মেনে চলার জন্য সংশোধন করুন)
+
+Register
+→ নিবন্ধন করুন
+```
+
+### Authentication — Login
+
+```text
+Username
+→ ব্যবহারকারীর নাম
+
+Enter username
+→ ব্যবহারকারীর নাম লিখুন
+
+Password
+→ পাসওয়ার্ড
+
+Enter password
+→ পাসওয়ার্ড লিখুন
+
+Forgot password?
+→ পাসওয়ার্ড ভুলে গেছেন?
+
+Login
+→ লগইন
+```

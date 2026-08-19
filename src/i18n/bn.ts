@@ -85,6 +85,8 @@ export const bn: Record<string, string> = {
   'bookings.viewDetails': 'বিস্তারিত দেখুন',
   'bookings.multiDay': 'বহু-দিনের',
   'bookings.singleDay': 'একদিন',
+  'bookings.noActiveBookings': 'কোনো সক্রিয় বুকিং পাওয়া যায়নি',
+  'bookings.noPastBookings': 'পূর্ববর্তী কোনো বুকিং পাওয়া যায়নি',
 
   // ===== EXPORT PDF DIALOG =====
   'bookings.exportTitle': 'বুকিংগুলো পিডিএফ-এ রপ্তানি করুন',
@@ -211,4 +213,27 @@ export const bn: Record<string, string> = {
   'common.update': 'আপডেট',
   'common.actions': 'কর্ম',
   'common.status': 'অবস্থা',
+
+  // ===== AUTHENTICATION =====
+  'auth.appName': 'মিটঅপস',
+  'auth.subtitle': 'রিসোর্স বুকিং ম্যানেজমেন্ট সিস্টেম',
+  'auth.welcome': 'স্বাগতম',
+  'auth.loginOrRegister': 'লগইন করুন অথবা একটি নতুন অ্যাকাউন্ট তৈরি করুন',
+  'auth.loginTab': 'লগইন',
+  'auth.registerTab': 'নিবন্ধন করুন',
+  'auth.fullName': 'পুরো নাম',
+  'auth.fullNamePlaceholder': 'আপনার পুরো নাম লিখুন',
+  'auth.username': 'ব্যবহারকারীর নাম',
+  'auth.usernameRegisterPlaceholder': 'শুধুমাত্র অক্ষর, সংখ্যা এবং আন্ডারস্কোর',
+  'auth.password': 'পাসওয়ার্ড',
+  'auth.passwordRegisterPlaceholder': 'কমপক্ষে ৮টি অক্ষর ও সংখ্যা',
+  'auth.confirmPassword': 'পাসওয়ার্ড নিশ্চিত করুন',
+  'auth.confirmPasswordPlaceholder': 'পাসওয়ার্ড পুনরায় লিখুন',
+  'auth.termsAgreement':
+    'আমি ব্যবহারকারী চুক্তি এবং গোপনীয়তা নীতিতে সম্মত (অনুগ্রহ করে এই নথিগুলি আইনগত প্রয়োজনীয়তা মেনে চলার জন্য সংশোধন করুন)',
+  'auth.registerButton': 'নিবন্ধন করুন',
+  'auth.usernameLoginPlaceholder': 'ব্যবহারকারীর নাম লিখুন',
+  'auth.passwordLoginPlaceholder': 'পাসওয়ার্ড লিখুন',
+  'auth.forgotPassword': 'পাসওয়ার্ড ভুলে গেছেন?',
+  'auth.loginButton': 'লগইন',
 };

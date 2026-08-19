@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { LanguageIndicator } from '@/components/language/LanguageIndicator';
 import { toast } from 'sonner';
 
 export default function LoginPage() {
@@ -96,44 +97,47 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 py-12">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 py-12 relative">
+      <div className="absolute top-4 right-4">
+        <LanguageIndicator />
+      </div>
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 border-b-thick border-primary inline-block pb-2">{t('login.title')}</h1>
-          <p className="text-muted-foreground mt-4">{t('login.subtitle')}</p>
+          <h1 className="text-4xl font-bold mb-2 border-b-thick border-primary inline-block pb-2">{t('auth.appName')}</h1>
+          <p className="text-muted-foreground mt-4">{t('auth.subtitle')}</p>
         </div>
 
         <Card className="border-thick">
           <CardHeader>
-            <CardTitle>{t('login.welcomeTitle')}</CardTitle>
-            <CardDescription>{t('login.welcomeDescription')}</CardDescription>
+            <CardTitle>{t('auth.welcome')}</CardTitle>
+            <CardDescription>{t('auth.loginOrRegister')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">{t('login.loginTab')}</TabsTrigger>
-                <TabsTrigger value="register">{t('login.registerTab')}</TabsTrigger>
+                <TabsTrigger value="login">{t('auth.loginTab')}</TabsTrigger>
+                <TabsTrigger value="register">{t('auth.registerTab')}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="login-username">{t('login.username')}</Label>
+                    <Label htmlFor="login-username">{t('auth.username')}</Label>
                     <Input
                       id="login-username"
                       type="text"
-                      placeholder={t('login.enterUsername')}
+                      placeholder={t('auth.usernameLoginPlaceholder')}
                       value={loginForm.username}
                       onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
                       disabled={loading}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="login-password">{t('login.password')}</Label>
+                    <Label htmlFor="login-password">{t('auth.password')}</Label>
                     <Input
                       id="login-password"
                       type="password"
-                      placeholder={t('login.enterPassword')}
+                      placeholder={t('auth.passwordLoginPlaceholder')}
                       value={loginForm.password}
                       onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                       disabled={loading}
@@ -141,11 +145,11 @@ export default function LoginPage() {
                   </div>
                   <div className="flex justify-end">
                     <Link to="/reset-password" className="text-sm text-primary hover:underline">
-                      {t('login.forgotPassword')}
+                      {t('auth.forgotPassword')}
                     </Link>
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? t('login.loggingIn') : t('login.loginButton')}
+                    {loading ? t('login.loggingIn') : t('auth.loginButton')}
                   </Button>
                 </form>
               </TabsContent>
@@ -153,44 +157,44 @@ export default function LoginPage() {
               <TabsContent value="register">
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="register-name">{t('login.fullName')}</Label>
+                    <Label htmlFor="register-name">{t('auth.fullName')}</Label>
                     <Input
                       id="register-name"
                       type="text"
-                      placeholder={t('login.enterFullName')}
+                      placeholder={t('auth.fullNamePlaceholder')}
                       value={registerForm.name}
                       onChange={(e) => setRegisterForm({ ...registerForm, name: e.target.value })}
                       disabled={loading}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="register-username">{t('login.username')}</Label>
+                    <Label htmlFor="register-username">{t('auth.username')}</Label>
                     <Input
                       id="register-username"
                       type="text"
-                      placeholder={t('login.usernamePlaceholder')}
+                      placeholder={t('auth.usernameRegisterPlaceholder')}
                       value={registerForm.username}
                       onChange={(e) => setRegisterForm({ ...registerForm, username: e.target.value })}
                       disabled={loading}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="register-password">{t('login.password')}</Label>
+                    <Label htmlFor="register-password">{t('auth.password')}</Label>
                     <Input
                       id="register-password"
                       type="password"
-                      placeholder={t('login.passwordPlaceholder')}
+                      placeholder={t('auth.passwordRegisterPlaceholder')}
                       value={registerForm.password}
                       onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
                       disabled={loading}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="register-confirm-password">{t('login.confirmPassword')}</Label>
+                    <Label htmlFor="register-confirm-password">{t('auth.confirmPassword')}</Label>
                     <Input
                       id="register-confirm-password"
                       type="password"
-                      placeholder={t('login.reenterPassword')}
+                      placeholder={t('auth.confirmPasswordPlaceholder')}
                       value={registerForm.confirmPassword}
                       onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })}
                       disabled={loading}
@@ -204,11 +208,11 @@ export default function LoginPage() {
                       disabled={loading}
                     />
                     <label htmlFor="terms" className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      {t('login.agreeToTerms')}
+                      {t('auth.termsAgreement')}
                     </label>
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? t('login.registering') : t('login.registerButton')}
+                    {loading ? t('login.registering') : t('auth.registerButton')}
                   </Button>
                 </form>
               </TabsContent>
