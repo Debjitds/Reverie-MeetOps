@@ -320,6 +320,10 @@ export const TRANSLATION_KEYS = {
     
     // Change role dialog
     changeRoleTitle: 'Change User Role',
+    changeRoleDescription: 'Update the role for',
+    currentRole: 'Current Role',
+    newRole: 'New Role',
+    updateRole: 'Update Role',
     selectRole: 'Select Role',
     save: 'Save',
     cancel: 'Cancel',
@@ -370,10 +374,15 @@ export const TRANSLATION_KEYS = {
   // ===== AI CHAT ASSISTANT =====
   chat: {
     title: 'MeetOps AI Assistant',
+    greeting: "Hi! I'm MeetOps AI. I can help you book rooms, check availability, and manage your bookings.",
+    examplePrompt: 'Try: "Book me a room for 5 people tomorrow at 2PM"',
     placeholder: 'Type your message...',
     send: 'Send',
     loading: 'Thinking...',
     error: 'Failed to send message',
+    encounteredError: 'Sorry, I encountered an error. Please try again.',
+    sendError: 'Failed to send message. Please try again.',
+    noResponse: 'Sorry, I could not process your request.',
     minimize: 'Minimize',
     close: 'Close',
   },
@@ -419,6 +428,9 @@ export const TRANSLATION_KEYS = {
     no: 'No',
     ok: 'OK',
     people: 'people',
+    today: 'Today',
+    create: 'Create',
+    update: 'Update',
     
     // Time
     am: 'AM',

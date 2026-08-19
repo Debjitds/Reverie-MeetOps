@@ -176,16 +176,16 @@ export default function UsersPage() {
             <DialogHeader>
               <DialogTitle>{t('users.changeRoleTitle')}</DialogTitle>
               <DialogDescription>
-                Update the role for {selectedUser?.name}
+                {t('users.changeRoleDescription')} {selectedUser?.name}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Current Role</Label>
+                <Label>{t('users.currentRole')}</Label>
                 <p className="text-sm">{getRoleBadge(selectedUser?.role || 'user')}</p>
               </div>
               <div className="space-y-2">
-                <Label>New Role</Label>
+                <Label>{t('users.newRole')}</Label>
                 <Select value={newRole} onValueChange={(value) => setNewRole(value as UserRole)}>
                   <SelectTrigger>
                     <SelectValue />
@@ -199,10 +199,10 @@ export default function UsersPage() {
               </div>
               <div className="flex justify-end space-x-2">
                 <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
                 <Button onClick={handleUpdateRole}>
-                  Update Role
+                  {t('users.updateRole')}
                 </Button>
               </div>
             </div>

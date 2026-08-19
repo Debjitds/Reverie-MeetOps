@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { supabase } from '@/db/supabase';
 import { toast } from 'sonner';
 
@@ -21,46 +21,7 @@ export function ChatWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
-  const { translate } = useLanguage();
-
-  // Translated UI strings
-  const [uiStrings, setUiStrings] = useState({
-    header: 'MEETOPS AI ASSISTANT',
-    welcome: "Hi! I'm MeetOps AI. I can help you book rooms, check availability, and manage your bookings.",
-    try: 'Try: "Book me a room for 5 people tomorrow at 2PM"',
-    placeholder: 'Type your message...',
-    error: 'Sorry, I encountered an error. Please try again.',
-    sendError: 'Failed to send message. Please try again.',
-    noResponse: 'Sorry, I could not process your request.',
-  });
-
-  useEffect(() => {
-    const translateUi = async () => {
-      const translated = await Promise.all([
-        translate('MEETOPS AI ASSISTANT'),
-        translate("Hi! I'm MeetOps AI. I can help you book rooms, check availability, and manage your bookings."),
-        translate('Try: "Book me a room for 5 people tomorrow at 2PM"'),
-        translate('Type your message...'),
-        translate('Sorry, I encountered an error. Please try again.'),
-        translate('Failed to send message. Please try again.'),
-        translate('Sorry, I could not process your request.'),
-      ]);
-
-      setUiStrings({
-        header: translated[0],
-        welcome: translated[1],
-        try: translated[2],
-        placeholder: translated[3],
-        error: translated[4],
-        sendError: translated[5],
-        noResponse: translated[6],
-      });
-    };
-
-    if (isOpen) {
-      translateUi();
-    }
-  }, [isOpen, translate]);
+  const { t } = useAppTranslation();
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -98,7 +59,7 @@ export function ChatWidget() {
 
       if (error) {
         console.error('Chat function error:', error);
-        let assistantErrorText = uiStrings.error;
+        let assistantErrorText = t('chat.encounteredError');
         
         // Try to extract more detail from the error
         try {
@@ -106,7 +67,7 @@ export function ChatWidget() {
           if (contextText) {
             const parsed = JSON.parse(contextText);
             if (parsed.error) {
-              assistantErrorText = `${uiStrings.error}\n\nDetails: ${parsed.error}`;
+              assistantErrorText = `${t('chat.encounteredError')}\n\nDetails: ${parsed.error}`;
             }
           }
         } catch (e) {
@@ -124,7 +85,7 @@ export function ChatWidget() {
 
       const assistantMessage: Message = {
         role: 'assistant',
-        content: data.response || uiStrings.noResponse,
+        content: data.response || t('chat.noResponse'),
         timestamp: new Date(),
       };
 
@@ -140,11 +101,11 @@ export function ChatWidget() {
       }
     } catch (error) {
       console.error('Chat error:', error);
-      toast.error(uiStrings.sendError);
+      toast.error(t('chat.sendError'));
       
       const errorMessage: Message = {
         role: 'assistant',
-        content: uiStrings.error,
+        content: t('chat.encounteredError'),
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -181,7 +142,7 @@ export function ChatWidget() {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b-3 border-black bg-primary">
             <h3 className="font-bold uppercase tracking-wide text-foreground">
-              {uiStrings.header}
+              {t('chat.title')}
             </h3>
             <button
               onClick={() => setIsOpen(false)}
@@ -198,10 +159,10 @@ export function ChatWidget() {
               <div className="text-center text-muted-foreground py-8">
                 <MessageCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p className="text-sm">
-                  {uiStrings.welcome}
+                  {t('chat.greeting')}
                 </p>
                 <p className="text-xs mt-2">
-                  {uiStrings.try}
+                  {t('chat.examplePrompt')}
                 </p>
               </div>
             )}
@@ -248,7 +209,7 @@ export function ChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={uiStrings.placeholder}
+                placeholder={t('chat.placeholder')}
                 disabled={isLoading}
                 className="flex-1 border-2 border-black"
               />

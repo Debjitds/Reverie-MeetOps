@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getAllLanguages, getLanguageInfo, LanguageCode } from '@/lib/languages';
+import { IMPLEMENTED_LANGUAGES } from '@/i18n';
 import { toast } from 'sonner';
 
 export function LanguageIndicator() {
@@ -50,23 +51,27 @@ export function LanguageIndicator() {
         align="end"
         className="border-3 border-black w-64"
       >
-        {allLanguages.map((lang) => (
-          <DropdownMenuItem
-            key={lang.code}
-            onClick={() => handleLanguageChange(lang.code)}
-            className={`cursor-pointer ${
-              lang.code === currentLanguage ? 'bg-primary/10 font-bold' : ''
-            }`}
-          >
-            <span className="flex items-center gap-2 w-full">
-              <span className="text-lg">{lang.flag}</span>
-              <span className="flex-1">{lang.nativeName}</span>
-              <span className="text-xs text-muted-foreground uppercase">
-                {lang.code}
+        {allLanguages.map((lang) => {
+          const implemented = IMPLEMENTED_LANGUAGES.includes(lang.code);
+          return (
+            <DropdownMenuItem
+              key={lang.code}
+              onClick={() => implemented && handleLanguageChange(lang.code)}
+              disabled={!implemented}
+              className={`cursor-pointer ${
+                lang.code === currentLanguage ? 'bg-primary/10 font-bold' : ''
+              } ${!implemented ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <span className="flex items-center gap-2 w-full">
+                <span className="text-lg">{lang.flag}</span>
+                <span className="flex-1">{lang.nativeName}</span>
+                <span className="text-xs text-muted-foreground uppercase">
+                  {lang.code}
+                </span>
               </span>
-            </span>
-          </DropdownMenuItem>
-        ))}
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

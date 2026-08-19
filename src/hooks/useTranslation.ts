@@ -1,55 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { translateKey } from '@/i18n';
 
+/**
+ * Thin wrapper kept for compatibility. All lookups resolve synchronously
+ * from the local static dictionary — no network calls.
+ */
 export function useTranslation() {
-  const { currentLanguage, translate, translateBatch, isRTL } = useLanguage();
-  const [translations, setTranslations] = useState<Map<string, string>>(new Map());
+  const { currentLanguage, isRTL } = useLanguage();
 
-  // Clear translations when language changes
-  useEffect(() => {
-    setTranslations(new Map());
-  }, [currentLanguage]);
+  const t = useCallback(
+    (text: string): string => translateKey(text, currentLanguage),
+    [currentLanguage]
+  );
 
-  // Translate a single text
-  const t = async (text: string, sourceLang: string = 'en'): Promise<string> => {
-    // Check local cache first
-    const cacheKey = `${text}_${currentLanguage}`;
-    if (translations.has(cacheKey)) {
-      return translations.get(cacheKey)!;
-    }
-
-    const translated = await translate(text, sourceLang);
-    
-    // Update local cache
-    setTranslations((prev) => new Map(prev).set(cacheKey, translated));
-    
-    return translated;
-  };
-
-  // Synchronous translation (returns original if not cached)
-  const tSync = (text: string): string => {
-    if (currentLanguage === 'en') return text;
-    
-    const cacheKey = `${text}_${currentLanguage}`;
-    return translations.get(cacheKey) || text;
-  };
-
-  // Translate multiple texts
-  const tBatch = async (texts: string[], sourceLang: string = 'en'): Promise<string[]> => {
-    const translated = await translateBatch(texts, sourceLang);
-    
-    // Update local cache
-    texts.forEach((text, index) => {
-      const cacheKey = `${text}_${currentLanguage}`;
-      setTranslations((prev) => new Map(prev).set(cacheKey, translated[index]));
-    });
-    
-    return translated;
-  };
+  const tBatch = useCallback(
+    (texts: string[]): string[] => texts.map((text) => translateKey(text, currentLanguage)),
+    [currentLanguage]
+  );
 
   return {
     t,
-    tSync,
+    tSync: t,
     tBatch,
     currentLanguage,
     isRTL,

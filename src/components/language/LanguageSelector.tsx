@@ -3,6 +3,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getAllLanguages, LanguageCode } from '@/lib/languages';
+import { IMPLEMENTED_LANGUAGES } from '@/i18n';
 import { toast } from 'sonner';
 
 export function LanguageSelector() {
@@ -41,7 +42,11 @@ export function LanguageSelector() {
         </SelectTrigger>
         <SelectContent className="border-3 border-black">
           {languages.map((lang) => (
-            <SelectItem key={lang.code} value={lang.code}>
+            <SelectItem
+              key={lang.code}
+              value={lang.code}
+              disabled={!IMPLEMENTED_LANGUAGES.includes(lang.code)}
+            >
               <span className="flex items-center gap-2">
                 <span>{lang.flag}</span>
                 <span>{lang.nativeName}</span>

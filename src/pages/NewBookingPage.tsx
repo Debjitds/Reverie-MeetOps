@@ -19,7 +19,7 @@ import { checkBookingConflict, combineDateAndTime, formatDate, formatDateOnly, f
 export default function NewBookingPage() {
   const navigate = useNavigate();
   const { profile } = useAuth();
-  const { t, tDynamic } = useAppTranslation();
+  const { t } = useAppTranslation();
   const [step, setStep] = useState(1);
   const [resources, setResources] = useState<Resource[]>([]);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
