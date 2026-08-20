@@ -348,6 +348,7 @@ export const TRANSLATION_KEYS = {
   notifications: {
     title: 'Notifications',
     markAllRead: 'Mark All as Read',
+    markAllAsRead: 'Mark All as Read',
     today: 'Today',
     yesterday: 'Yesterday',
     

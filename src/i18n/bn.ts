@@ -49,6 +49,7 @@ export const bn: Record<string, string> = {
 
   // ===== NOTIFICATIONS (title only per reference; bodies remain English) =====
   'notifications.title': 'বিজ্ঞপ্তি',
+  'notifications.markAllAsRead': 'সবগুলো পঠিত হিসেবে চিহ্নিত করুন',
 
   // ===== AI ASSISTANT UI =====
   'chat.title': 'মিটঅপস এআই অ্যাসিস্ট্যান্ট',

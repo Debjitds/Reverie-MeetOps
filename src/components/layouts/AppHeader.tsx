@@ -194,7 +194,7 @@ export function AppHeader() {
                 <h3 className="font-semibold">{t('notifications.title')}</h3>
                 {unreadCount > 0 && (
                   <Button variant="ghost" size="sm" onClick={markAllAsRead}>
-                    {t('notifications.markAllRead')}
+                    {t('notifications.markAllAsRead')}
                   </Button>
                 )}
               </div>
