@@ -11,6 +11,7 @@
 import type { LanguageCode } from '@/lib/languages';
 import { TRANSLATION_KEYS } from '@/lib/translation-keys';
 import { bn } from './bn';
+import { hi } from './hi';
 
 function flattenKeys(obj: Record<string, unknown>, prefix = ''): Record<string, string> {
   const flat: Record<string, string> = {};
@@ -30,10 +31,11 @@ const en: Record<string, string> = flattenKeys(TRANSLATION_KEYS);
 export const DICTIONARIES: Partial<Record<LanguageCode, Record<string, string>>> = {
   en,
   bn,
+  hi,
 };
 
 /** Languages that have a static dictionary implemented so far. */
-export const IMPLEMENTED_LANGUAGES: LanguageCode[] = ['en', 'bn'];
+export const IMPLEMENTED_LANGUAGES: LanguageCode[] = ['en', 'bn', 'hi'];
 
 /**
  * Resolve a dot-notation translation key for a language.
