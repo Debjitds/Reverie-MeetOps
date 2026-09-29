@@ -22,7 +22,7 @@ export function AppSidebar() {
   );
 
   return (
-    <aside className="w-64 border-r-3 border-black bg-white shrink-0 hidden lg:block">
+    <aside className="w-64 border-r-3 border-black bg-white shrink-0 hidden lg:block sticky top-0 self-start h-screen">
       <div className="h-full flex flex-col">
         <div className="p-6 border-b-3 border-black">
           <Link to="/" className="flex items-center space-x-3">
@@ -35,7 +35,7 @@ export function AppSidebar() {
           </Link>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 min-h-0 p-4 space-y-1 overflow-y-auto">
           {visibleItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);

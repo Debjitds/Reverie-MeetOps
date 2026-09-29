@@ -32,3 +32,23 @@
 **Verification:** Full `npx tsc -p tsconfig.app.json --noEmit` reports ZERO errors for `CalendarPage.tsx`. Note: pre-existing unrelated errors remain in other files (`ChatWidget.tsx`, `qrcodedataurl.tsx`, `video.tsx`, `pdf-export.ts`, `BookingsPage.tsx`, `NewBookingPage.tsx`) — intentionally NOT touched in this task.
 
 ---
+
+## 2026-09-30 — Sidebar independent scroll fix
+
+**Instruction:** Scrolling the main page/body content moved the sidebar vertically. Fix so the sidebar stays fixed/sticky in place while page content scrolls, gets its own internal scrolling only when its content exceeds viewport height, works responsively, and without breaking navigation, active states, or the mobile drawer. Prefer a CSS/layout root-cause fix over JavaScript scroll listeners.
+
+**Problem identified (root cause):** In `AppLayout`, the wrapper is `flex min-h-screen`. On long pages the flex container grows to the full document height, and the `<aside>` sidebar (default `align-items: stretch`) stretched to that full height instead of the viewport — so the logo scrolled out of view and the user-info footer sat at the bottom of the *document*, making the sidebar appear to scroll with the page. The inner `h-full` didn't constrain to the viewport because the parent had no fixed height.
+
+**Files modified:** `src/components/layouts/AppSidebar.tsx` only (2 className changes; `AppLayout.tsx` needed no change).
+1. `<aside>`: added `sticky top-0 self-start h-screen` — `self-start` stops the flex stretch, `h-screen` constrains the sidebar to the viewport, `sticky top-0` keeps it in place during page scroll. Pure CSS, no JS scroll listeners.
+2. `<nav>`: added `min-h-0 overflow-y-auto` (alongside existing `flex-1`) — when menu items exceed available height, only the nav area scrolls internally; the logo header and user footer remain fixed. `min-h-0` is required so the flex child can shrink below content size and actually scroll.
+
+**Unchanged:** Mobile navigation (separate `Sheet` drawer in `AppHeader.tsx`), active-link states, role-based menu filtering, borders/design system, main content scroll behavior. Sidebar remains `hidden lg:block` (desktop-only) exactly as before.
+
+**Verification:**
+- `npx tsc -p tsconfig.app.json --noEmit`: zero errors in layout files.
+- `git diff`: exactly the two className changes above, nothing else.
+- Checked `src/index.css` — no `html`/`body`/`#root` height/overflow rules that would break `position: sticky`.
+- No horizontal overflow introduced: sidebar width (`w-64 shrink-0`) and main column (`min-w-0` with `overflow-x-hidden` in `AppLayout`) untouched.
+
+---
