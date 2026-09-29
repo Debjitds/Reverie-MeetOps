@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { supabase } from '@/db/supabase';
@@ -40,7 +39,6 @@ interface CalendarEvent {
 }
 
 export default function CalendarPage() {
-  const { profile } = useAuth();
   const { currentLanguage } = useLanguage();
   const { t } = useAppTranslation();
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -262,7 +260,7 @@ export default function CalendarPage() {
           <CardContent>
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-primary border-2 border-primary" />
+                <div className="w-4 h-4 bg-[#3b82f6] border-2 border-[#2563eb]" />
                 <span className="text-sm">{t('bookings.approved')}</span>
               </div>
               <div className="flex items-center space-x-2">

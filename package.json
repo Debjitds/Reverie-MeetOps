@@ -79,9 +79,11 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.5",
     "@tailwindcss/container-queries": "^0.1.1",
+    "@testsprite/testsprite-mcp": "^0.0.43",
     "@types/bmapgl": "^0.0.7",
     "@types/lodash": "^4.17.24",
     "@types/react": "^19.2.2",
+    "@types/react-big-calendar": "^1.16.3",
     "@types/react-dom": "^19.2.2",
     "@types/video-react": "^0.15.8",
     "@typescript/native-preview": "7.0.0-dev.20260303.1",
