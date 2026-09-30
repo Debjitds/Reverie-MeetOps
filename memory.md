@@ -98,3 +98,23 @@
 - Admin/Manager visibility unchanged (their full-profile policies were not modified). Refresh/reopen persists (server-side data, no client-only patch).
 
 ---
+
+## 2026-10-01 — Language switching failure fix (RLS policy recursion)
+
+**Instruction:** Changing the app language failed with "Failed to change language. Please try again." Fix the real root cause across selector → LanguageContext → Supabase profiles update; keep fallback/RTL/translation architecture intact; do not fake success or weaken RLS.
+
+**Root cause (backend RLS, NOT frontend):** Full flow inspected: `LanguageIndicator`/`LanguageSelector` → `LanguageContext.setLanguage()` → `supabase.from('profiles').update({ language_preference })` → `refreshProfile()`. The frontend and translation files are correct; `setLanguage` threw because the UPDATE on `profiles` failed with Postgres error `42P17 infinite recursion detected in policy for relation "profiles"`. The `profiles` UPDATE policy "Users can update their own profile except role" has a WITH CHECK subquery that SELECTs `profiles` under the caller role. The SELECT policies added in migrations 00009 & 00010 read the `bookings` table INLINE (EXISTS subqueries); the `bookings` SELECT policy calls `can_manage_bookings()` which reads `profiles`. During the UPDATE's WITH CHECK this formed a `profiles → bookings → profiles` policy cycle → recursion error → every language change failed. (Confirmed empirically: dropping the two SELECT policies made UPDATE succeed again.)
+
+**Changes:**
+1. New migration `supabase/migrations/00011_fix_language_update_rls_recursion.sql`, applied to live MeetOps project (`cazqwpknzkqyytokotny`) via `apply_migration`. Introduces two `SECURITY DEFINER` helpers `profile_is_booker(target uuid)` and `profile_reviewed_my_booking(target uuid)` that compute the SAME predicates as 00009/00010, and redefines those two SELECT policies to call the functions. Inside a SECURITY DEFINER function the `bookings` read runs as the owner and does not re-apply caller RLS, breaking the cycle. UPDATE/INSERT/DELETE policies and admin/manager policies untouched.
+2. No frontend code changed — `LanguageContext`, `LanguageIndicator`, `LanguageSelector`, translation files, RTL handling and IMPLEMENTED_LANGUAGES fallback all left intact and were already correct; they simply received a DB error.
+
+**Error-handling note:** The UI never reported false success — `LanguageIndicator.handleLanguageChange` only shows success after `setLanguage()` resolves (post real DB commit), and shows the failure toast + preserves prior language on throw. With the backend fixed, genuine switches now succeed; genuine failures still surface correctly.
+
+**Languages tested / verification (simulated `authenticated` role + JWT claims on production data, in rolled-back transactions so no data mutated):**
+- Normal user Ash: `UPDATE language_preference='ja'` previously ERRORED (recursion); now SUCCEEDS. Also set `'ar'` (RTL) → persists as 'ar' ✓
+- Manager Raj: `UPDATE language_preference='de'` → succeeds ✓
+- Regression — prior fixes preserved: owner still sees reviewer "Raj" (00009 ✓); calendar bookers "ABC, Ash" still visible (00010 ✓); non-booker "Debjit Sarkar" still INVISIBLE (no scope widening) ✓
+- All 10 CHECK-allowed codes (en, hi, bn, ta, es, fr, ar, zh, ja, de) are valid column values; the update path is value-independent, so all supported languages persist and the UI re-renders via LanguageContext state + document direction.
+
+---
