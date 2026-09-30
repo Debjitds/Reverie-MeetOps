@@ -52,3 +52,27 @@
 - No horizontal overflow introduced: sidebar width (`w-64 shrink-0`) and main column (`min-w-0` with `overflow-x-hidden` in `AppLayout`) untouched.
 
 ---
+
+## 2026-09-30 — Booking-details approver/requester visibility fix (end-to-end)
+
+**Instruction:** Users couldn't see WHO approved their booking; managers couldn't see WHO originally booked the room (admin saw both fine). Fix end-to-end with real persisted identity data, no hardcoding, preserving RBAC and not weakening security beyond what the feature legitimately requires.
+
+**Root cause found (NOT a frontend bug):** The data layer and UI were already correct — `bookings.reviewed_by`/`reviewed_at` are persisted by the approve/reject handlers in `BookingDetailPage.tsx`, and the page already renders "Booked by" + "Reviewed by/Reviewed at" from `user:profiles!bookings_user_id_fkey` / `reviewer:profiles!bookings_reviewed_by_fkey` embeds. The failure was **RLS on `public.profiles`** (from migration 00001): only admins could SELECT all profiles and users only their own row. PostgREST embeds execute under the caller's RLS, so the joined profile resolved to null for non-admins → reviewer name blank for booking owners, requester name blank for managers.
+
+**Changes:**
+1. New migration `supabase/migrations/00009_fix_profile_visibility_for_booking_details.sql`, applied to the live MeetOps Supabase project (`cazqwpknzkqyytokotny`) via `apply_migration`. Adds two narrow SELECT policies:
+   - "Managers and admins can view all profiles" — `USING (can_manage_bookings(auth.uid()))` (reuses existing SECURITY DEFINER helper from migration 00003).
+   - "Users can view profiles that reviewed their bookings" — `USING (EXISTS (SELECT 1 FROM bookings b WHERE b.user_id = auth.uid() AND b.reviewed_by = profiles.id))` (identity scoped strictly to reviewers of the caller's own bookings).
+2. No frontend code changed — existing UI, types (`Booking.reviewer`), translations, and queries already handled both fields; they simply received nulls.
+
+**Security posture:** Existing policies untouched (admin full access, own-row select, own update). No INSERT/UPDATE/DELETE policies relaxed; bookings policies unchanged.
+
+**Verification (simulated real roles via `SET ROLE authenticated` + JWT claims against production data):**
+- Booking owner Rohan_QC can now see reviewer "Raj" (manager-approved booking) ✓
+- Manager Raj can now see requester "Ash" (user-created booking) ✓
+- Negative test: owner still CANNOT see unrelated profiles → "INVISIBLE (correct)" ✓ (no over-exposure)
+- Confirmed real persisted data exists for approved (manager + admin reviewers) and rejected bookings; admin behavior unchanged (its own policy was not modified).
+- Pending/Cancelled: `reviewed_by` stays null (users cancel directly; no human reviewer), so the Reviewed-by block correctly stays hidden.
+- Note: AI chat-assistant auto-approved bookings have `reviewed_by = null` by design (no human approver) — existing behavior, untouched.
+
+---
