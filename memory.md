@@ -118,3 +118,23 @@
 - All 10 CHECK-allowed codes (en, hi, bn, ta, es, fr, ar, zh, ja, de) are valid column values; the update path is value-independent, so all supported languages persist and the UI re-renders via LanguageContext state + document direction.
 
 ---
+
+## 2026-10-01 — Language-change toast shown in PREVIOUS language (stale `t` closure)
+
+**Problem:** After a successful language switch (e.g. English → Bengali), the success toast rendered in the OLD language instead of the newly selected one.
+
+**Root cause (frontend timing, not translations):** In `LanguageIndicator.tsx` and `LanguageSelector.tsx`, `handleLanguageChange` awaited `setLanguage(langCode)` and then built the toast message via `t(...)`. `t` comes from `useAppTranslation` → `useCallback([currentLanguage])`, so within the running handler it is a closure bound to the PREVIOUS `currentLanguage` (React hasn't re-rendered yet and the existing closure can't change). The dictionaries themselves were correct and complete.
+
+**Files changed (frontend only; no DB/RLS touched):**
+1. `src/components/language/LanguageIndicator.tsx` — success toast now uses `translateKey('language.changedTo', langCode)` (imported from `@/i18n`) with the NEWLY selected language; `.replace('{nativeName}', …)` placeholder logic kept. Failure toast intentionally still uses `t` (on failure the language is unchanged, so the old language is correct).
+2. `src/components/language/LanguageSelector.tsx` — same fix for `language.updateSuccess` success toast; failure toast unchanged.
+
+**Implementation notes:** Reuses the app's existing synchronous dictionary lookup `translateKey(key, language)` from `src/i18n/index.ts` (same function `useAppTranslation` wraps) — no hardcoded per-language messages, no new translation system, no mocks. `setLanguage` already awaits the DB persistence and applies local state + RTL document direction BEFORE the handler resolves, so the toast is only shown post-success and in the applied language.
+
+**Verification:**
+- `grep` confirmed BOTH toast keys (`language.changedTo`, `language.updateSuccess`, plus failure keys) exist in ALL 9 non-English dictionaries (bn, hi, zh, ja, ta, es, fr, de, ar) with `{nativeName}` placeholders intact → no English-fallback for any supported language (e.g. bn → "ভাষা {nativeName}-এ পরিবর্তন করা হয়েছে", en→bn toast will be Bengali; bn→en uses flattened `TRANSLATION_KEYS` English).
+- `npx tsc -p tsconfig.app.json --noEmit`: no errors in the changed files; `git diff` limited to the two language components (10 insertions, 5 deletions).
+- Logic check en→bn: `translateKey('language.changedTo','bn')` resolves the bn dictionary → Bengali toast; bn→en resolves via `en` dictionary → English toast. RTL (ar): `setLanguage` sets `document.dir='rtl'` before the toast call, so the Arabic toast renders in an RTL context.
+- Rest-of-UI translation flow untouched (LanguageContext/useAppTranslation unchanged); language-switching fix from the earlier 2026-10-01 RLS entry unaffected.
+
+---

@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { getAllLanguages, LanguageCode } from '@/lib/languages';
-import { IMPLEMENTED_LANGUAGES } from '@/i18n';
+import { IMPLEMENTED_LANGUAGES, translateKey } from '@/i18n';
 import { toast } from 'sonner';
 
 export function LanguageSelector() {
@@ -16,8 +16,11 @@ export function LanguageSelector() {
   const handleLanguageChange = async (value: string) => {
     setLoading(true);
     try {
-      await setLanguage(value as LanguageCode);
-      toast.success(t('language.updateSuccess'));
+      const langCode = value as LanguageCode;
+      await setLanguage(langCode);
+      // Translate against the NEWLY selected language: the `t` closure here is
+      // still bound to the previous language until the next re-render.
+      toast.success(translateKey('language.updateSuccess', langCode));
     } catch (error) {
       console.error('Failed to update language:', error);
       toast.error(t('language.updateFailed'));

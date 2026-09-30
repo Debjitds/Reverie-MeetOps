@@ -10,7 +10,7 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { getAllLanguages, getLanguageInfo, LanguageCode } from '@/lib/languages';
-import { IMPLEMENTED_LANGUAGES } from '@/i18n';
+import { IMPLEMENTED_LANGUAGES, translateKey } from '@/i18n';
 import { toast } from 'sonner';
 
 export function LanguageIndicator() {
@@ -26,8 +26,10 @@ export function LanguageIndicator() {
     setLoading(true);
     try {
       await setLanguage(langCode);
+      // Translate against the NEWLY selected language: the `t` closure here is
+      // still bound to the previous language until the next re-render.
       toast.success(
-        t('language.changedTo').replace('{nativeName}', getLanguageInfo(langCode).nativeName)
+        translateKey('language.changedTo', langCode).replace('{nativeName}', getLanguageInfo(langCode).nativeName)
       );
     } catch (error) {
       console.error('Failed to change language:', error);
