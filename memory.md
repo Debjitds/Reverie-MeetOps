@@ -76,3 +76,25 @@
 - Note: AI chat-assistant auto-approved bookings have `reviewed_by = null` by design (no human approver) — existing behavior, untouched.
 
 ---
+
+## 2026-10-01 — Calendar booker name "undefined" / empty "Booked By" fix (normal users)
+
+**Instruction:** On the Calendar, normal users saw other users' bookings labeled with booker name "undefined", and the click-through Booking Details modal showed an empty "Booked By". Fix the real data/permission cause (no frontend placeholder), keep Admin/Manager behavior identical, don't weaken RLS, and handle any genuinely unresolvable user gracefully.
+
+**Root cause (RLS, not frontend):** Data flow inspected: `CalendarPage.fetchBookings()` queries ALL bookings (`bookings` SELECT RLS is `USING (true)` from migration 00005, needed for conflict + calendar visibility) with embed `user:profiles!bookings_user_id_fkey(name, email)`; the event title is `` `${resource?.name} - ${user?.name}` `` and the modal shows `selectedBooking.user?.name`. Profiles RLS (migrations 00001 + 00009) only let a normal user read their OWN profile and the reviewers OF their own bookings — never OTHER bookers' profiles. So the embed resolved to null for anyone else's booking → "undefined"/blank. (Admins/Managers were unaffected because their policies already grant full profile reads.)
+
+**Changes:**
+1. New migration `supabase/migrations/00010_fix_booker_visibility_for_calendar.sql`, applied to the live MeetOps Supabase project (`cazqwpknzkqyytokotny`) via `apply_migration`. Adds ONE narrow SELECT policy:
+   - "Authenticated users can view booker profiles" — `USING (EXISTS (SELECT 1 FROM bookings b WHERE b.user_id = profiles.id))`. Only exposes identities ALREADY surfaced through bookings the caller can view; scoped strictly to people who have made bookings.
+2. No frontend code changed — existing query, mapping, title, and modal already resolve `user.name`; they were simply receiving nulls. UI design left untouched.
+
+**Security posture:** Existing policies untouched (admin full access, own-row, manager/admin all-profiles, reviewer-of-own-booking). No INSERT/UPDATE/DELETE or bookings policies relaxed. Non-booker users remain invisible to normal users, so no unrelated private profiles are exposed.
+
+**Verification (simulated `authenticated` role + JWT claims against production data):**
+- Before: normal user Ash saw other bookers as "INVISIBLE" (bug reproduced).
+- After: Ash resolves "ABC, Rohan_QC" ✓
+- All 6 bookings: `with_booker_id = 6`, `booker_name_resolved = 6` (no remaining nulls → no "undefined") ✓
+- Scope check: a user with NO bookings ("Debjit Sarkar") remains "INVISIBLE (correctly non-exposed)" to Ash ✓
+- Admin/Manager visibility unchanged (their full-profile policies were not modified). Refresh/reopen persists (server-side data, no client-only patch).
+
+---
