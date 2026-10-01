@@ -138,3 +138,22 @@
 - Rest-of-UI translation flow untouched (LanguageContext/useAppTranslation unchanged); language-switching fix from the earlier 2026-10-01 RLS entry unaffected.
 
 ---
+
+## 2026-10-01 — Refresh/direct-navigation 404 on Vercel (missing SPA rewrite fallback)
+
+**Problem identified:** Authenticated users refreshing (or opening directly in a new tab) any client-side route (`/dashboard`, `/bookings`, `/calendar`, `/resources`, `/users`, booking-detail routes) got Vercel's native `404: NOT_FOUND` page instead of the app. In-app navigation always worked; only refresh/direct URL loading failed.
+
+**Root cause (deployment config, not app code):** The app is a standard Vite SPA using React Router `BrowserRouter` (history API, see `src/App.tsx`). The build output (`dist/`) contains only static files; `/dashboard` etc. are not real files. The project had **no `vercel.json`** (or equivalent rewrite config), so Vercel returned its static-hosting 404 for any path without a matching file. Localhost dev was unaffected because the Vite dev server has history fallback built in.
+
+**Files/configuration changed:**
+1. Created `vercel.json` (project root): `{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }` — Vercel's documented SPA fallback. Rewrites are evaluated AFTER filesystem matching, so real static assets (`/assets/*.js|css`, favicon, images) still serve directly; only non-matching paths get the `index.html` shell and React Router resolves the route client-side.
+2. No routing, auth, or component code changed. Verified `RouteGuard` + `AuthContext` initialization is already race-safe: guard renders a spinner until `getSession()` completes, protected routes redirect to `/login` with `state.from` preserved (return-to-intended-route behavior intact), and role-based authorization inside pages/sidebar is untouched — so the fallback does not weaken auth (shell HTML contains no data; RLS still gates everything).
+
+**Routes/environments tested:**
+- Production build: `npm run build` (tsc + vite) succeeded → `dist/index.html` + assets.
+- Simulated Vercel afterFiles-rewrite semantics with a temporary local static server over `dist/` (removed after test): `/dashboard`, `/bookings`, `/calendar`, `/resources`, `/users`, `/profile`, dynamic `/bookings/<uuid>`, and unknown `/some-unknown-route` → all `200 text/html` (SPA shell); real asset `/assets/index-*.js` → `200 text/javascript` (not swallowed by the fallback).
+- Unknown routes still handled by the existing client-side catch-all `<Route path="*"> → /` (unchanged behavior; no blanket dashboard redirect — valid routes render themselves).
+- Dev (`vite`/`vite.config.ts`) unchanged and correct.
+- Real Vercel deployment verification requires publishing (redeploy needed to pick up `vercel.json`); logic verified via the faithful local simulation above.
+
+---
