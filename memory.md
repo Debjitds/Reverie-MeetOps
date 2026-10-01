@@ -157,3 +157,21 @@
 - Real Vercel deployment verification requires publishing (redeploy needed to pick up `vercel.json`); logic verified via the faithful local simulation above.
 
 ---
+
+## 2026-10-01 — vite.config.ts type error (miaoda-sc-plugin missing declarations)
+
+**Problem identified:** `vite.config.ts` reported TS7016: "Could not find a declaration file for module 'miaoda-sc-plugin' ... implicitly has an 'any' type."
+
+**Root cause found:** The installed package `miaoda-sc-plugin@1.0.63` declares `"types": "dist/index.d.ts"` in its `package.json`, but the published `dist/` folder actually ships only `index.js`, `index.mjs` and two chunk files — **the declared `index.d.ts` is missing from the package itself** (upstream packaging bug). There is no `@types/miaoda-sc-plugin` on the public registry (private platform package), so the correct fix is a local ambient declaration supplying the missing type info rather than any code suppression or `any` escape hatch.
+
+**Files/configuration changed:**
+1. Created `types/miaoda-sc-plugin.d.ts` — ambient module declaration typing the plugin's public export as `miaodaDevPlugin(): PluginOption` (imported type from `vite`, so it type-checks inside the `plugins: [...]` array).
+2. `tsconfig.node.json` — `include` extended from `["vite.config.ts"]` to `["vite.config.ts", "types/**/*.d.ts"]` so the declaration is part of the config file's compilation program.
+3. `vite.config.ts` itself NOT modified — its code was always correct; only the missing type info was supplied.
+
+**Verification:**
+- `npx tsc -p tsconfig.node.json --noEmit` → zero errors (previously TS7016).
+- `npm run build` (`tsc && vite build`) → full production build succeeds, all chunks emitted.
+- No runtime/dev-behavior change: purely compile-time typings.
+
+---
