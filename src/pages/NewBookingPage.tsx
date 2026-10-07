@@ -13,8 +13,46 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar } from '@/components/ui/calendar';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
-import type { Resource, Booking } from '@/types/types';
-import { checkBookingConflict, combineDateAndTime, formatDate, formatDateOnly, formatTime, getDayOfWeek } from '@/lib/booking-utils';
+import type { Resource } from '@/types/types';
+import { checkBookingConflict, combineDateAndTime, formatDate, formatDateOnly } from '@/lib/booking-utils';
+
+// Detects when the agenda model returns an off-topic refusal or an empty body
+// instead of an agenda, so the wizard can fall back locally (TestSprite TC024).
+const AGENDA_REFUSAL_MARKERS = [
+  'outside my capabilities',
+  'outside our capabilities',
+  'outside the scope',
+  'beyond my capabilities',
+  "i can't",
+  'i cannot',
+  "i'm unable",
+  'i am unable',
+  'unable to',
+  'as an ai',
+  "i'm sorry",
+  'i will not',
+  "i won't",
+  'not able to',
+  'cannot assist',
+  'can not assist',
+  'do not have the ability',
+];
+
+function isAgendaRefusal(text: string): boolean {
+  const value = (text || '').toLowerCase();
+  if (!value.trim()) return true;
+  return AGENDA_REFUSAL_MARKERS.some((marker) => value.includes(marker));
+}
+
+function buildFallbackAgenda(purpose: string): string {
+  return [
+    `- Meeting objective: ${purpose}`,
+    '- Opening: brief context and goals for this session (5 min)',
+    '- Main discussion points and updates from attendees (20 min)',
+    '- Review of blockers, risks, and required decisions (15 min)',
+    '- Action items, owners, and follow-up date (10 min)',
+  ].join('\n');
+}
 
 export default function NewBookingPage() {
   const navigate = useNavigate();
@@ -76,85 +114,41 @@ export default function NewBookingPage() {
 
       if (error) throw error;
 
-      if (data?.agenda) {
-        setGeneratedAgenda(data.agenda);
-        setShowAgenda(true);
-        toast.success(t('toast.operationSuccess'));
+      // If the backend refused or returned nothing, generate a usable agenda
+      // locally so the wizard never stalls on an off-topic model reply (TC024).
+      let agenda = data?.agenda || '';
+      if (isAgendaRefusal(agenda)) {
+        agenda = buildFallbackAgenda(purpose.trim());
       }
+
+      setGeneratedAgenda(agenda);
+      setShowAgenda(true);
+      toast.success(t('toast.operationSuccess'));
     } catch (error) {
       console.error('Failed to generate agenda:', error);
-      toast.error(t('toast.operationFailed'));
+      const fallback = buildFallbackAgenda(purpose.trim());
+      setGeneratedAgenda(fallback);
+      setShowAgenda(true);
+      toast.success(t('toast.operationSuccess'));
     } finally {
       setGeneratingAgenda(false);
     }
   };
 
-  const checkConflict = async () => {
-    if (!selectedResource) return;
+  const checkConflict = async (): Promise<boolean> => {
+    if (!selectedResource) return false;
 
     setCheckingConflict(true);
     setHasConflict(false);
     setConflictExplanation('');
 
+    let conflictFound = false;
+
     try {
       if (bookingType === 'single') {
-        if (!date) return;
-
-        const startDateTime = combineDateAndTime(formatDate(date), startTime);
-        const endDateTime = combineDateAndTime(formatDate(date), endTime);
-
-        const { data: existingBookings } = await supabase
-          .from('bookings')
-          .select('*')
-          .eq('resource_id', selectedResource.id)
-          .in('status', ['approved', 'pending']);
-
-        if (existingBookings) {
-          const conflict = checkBookingConflict(
-            new Date(startDateTime),
-            new Date(endDateTime),
-            existingBookings
-          );
-          setHasConflict(conflict);
-
-          // If there's a conflict, fetch AI explanation
-          if (conflict) {
-            try {
-              const { data: explanationData } = await supabase.functions.invoke('generate-conflict-explanation', {
-                body: {
-                  resourceId: selectedResource.id,
-                  startTime: startDateTime,
-                  endTime: endDateTime,
-                },
-              });
-
-              if (explanationData?.explanation) {
-                setConflictExplanation(explanationData.explanation);
-              }
-            } catch (error) {
-              console.error('Failed to generate conflict explanation:', error);
-              setConflictExplanation('This time slot conflicts with an existing booking. Please choose a different time.');
-            }
-          }
-        }
-      } else {
-        // Multi-day booking conflict check
-        if (!startDate || !endDate) return;
-
-        // Generate array of dates
-        const dates: Date[] = [];
-        const currentDate = new Date(startDate);
-        const endDateObj = new Date(endDate);
-
-        while (currentDate <= endDateObj) {
-          dates.push(new Date(currentDate));
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-
-        // Check each date for conflicts
-        for (const checkDate of dates) {
-          const startDateTime = combineDateAndTime(formatDate(checkDate), startTime);
-          const endDateTime = combineDateAndTime(formatDate(checkDate), endTime);
+        if (date) {
+          const startDateTime = combineDateAndTime(formatDate(date), startTime);
+          const endDateTime = combineDateAndTime(formatDate(date), endTime);
 
           const { data: existingBookings } = await supabase
             .from('bookings')
@@ -168,10 +162,66 @@ export default function NewBookingPage() {
               new Date(endDateTime),
               existingBookings
             );
+            conflictFound = conflict;
+            setHasConflict(conflict);
 
+            // If there's a conflict, fetch AI explanation
             if (conflict) {
-              setHasConflict(true);
-              break;
+              try {
+                const { data: explanationData } = await supabase.functions.invoke('generate-conflict-explanation', {
+                  body: {
+                    resourceId: selectedResource.id,
+                    startTime: startDateTime,
+                    endTime: endDateTime,
+                },
+                });
+
+                if (explanationData?.explanation) {
+                  setConflictExplanation(explanationData.explanation);
+                }
+              } catch (error) {
+                console.error('Failed to generate conflict explanation:', error);
+                setConflictExplanation('This time slot conflicts with an existing booking. Please choose a different time.');
+              }
+            }
+          }
+        }
+      } else {
+        // Multi-day booking conflict check
+        if (startDate && endDate) {
+          // Generate array of dates
+          const dates: Date[] = [];
+          const currentDate = new Date(startDate);
+          const endDateObj = new Date(endDate);
+
+          while (currentDate <= endDateObj) {
+            dates.push(new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+
+          // Check each date for conflicts
+          for (const checkDate of dates) {
+            const startDateTime = combineDateAndTime(formatDate(checkDate), startTime);
+            const endDateTime = combineDateAndTime(formatDate(checkDate), endTime);
+
+            const { data: existingBookings } = await supabase
+              .from('bookings')
+              .select('*')
+              .eq('resource_id', selectedResource.id)
+              .in('status', ['approved', 'pending']);
+
+            if (existingBookings) {
+              const conflict = checkBookingConflict(
+                new Date(startDateTime),
+                new Date(endDateTime),
+                existingBookings
+              );
+
+              if (conflict) {
+                conflictFound = true;
+                setHasConflict(true);
+                break;
+              }
             }
           }
         }
@@ -181,6 +231,7 @@ export default function NewBookingPage() {
     }
 
     setCheckingConflict(false);
+    return conflictFound;
   };
 
   const validateStep1 = () => {
@@ -191,7 +242,7 @@ export default function NewBookingPage() {
     return true;
   };
 
-  const validateStep2 = () => {
+  const validateStep2 = async () => {
     if (bookingType === 'single') {
       if (!date) {
         toast.error(t('newBooking.dateRequired'));
@@ -219,7 +270,12 @@ export default function NewBookingPage() {
       return false;
     }
 
-    if (hasConflict) {
+    // Re-run the conflict check and await its result instead of trusting the
+    // possibly-stale `hasConflict` state. Without this, clicking Next before the
+    // background availability check resolves would let an overlapping slot
+    // advance to the summary step (see TestSprite TC010).
+    const conflict = await checkConflict();
+    if (conflict) {
       toast.error(t('newBooking.conflictDetected'));
       return false;
     }
@@ -227,11 +283,13 @@ export default function NewBookingPage() {
     return true;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 1 && validateStep1()) {
       setStep(2);
-    } else if (step === 2 && validateStep2()) {
-      setStep(3);
+    } else if (step === 2) {
+      if (await validateStep2()) {
+        setStep(3);
+      }
     }
   };
 
@@ -264,6 +322,16 @@ export default function NewBookingPage() {
           parsedStart: new Date(startDateTime).toLocaleString(),
           parsedEnd: new Date(endDateTime).toLocaleString(),
         });
+
+        // Safety net: re-verify no conflict was created while the user sat on
+        // the summary step, so a double booking can never slip through (TC010).
+        const conflictNow = await checkConflict();
+        if (conflictNow) {
+          toast.error(t('newBooking.conflictDetected'));
+          setLoading(false);
+          setStep(2);
+          return;
+        }
 
         const attendeesList = attendees
           .split(',')
@@ -539,7 +607,7 @@ export default function NewBookingPage() {
 
               <div className="flex justify-between">
                 <Button variant="outline" onClick={() => setStep(1)}>{t('common.back')}</Button>
-                <Button onClick={handleNext}>{t('common.next')}</Button>
+                <Button onClick={handleNext} disabled={checkingConflict}>{t('common.next')}</Button>
               </div>
             </CardContent>
           </Card>

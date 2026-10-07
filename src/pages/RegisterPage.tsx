@@ -23,6 +23,7 @@ export default function RegisterPage() {
     agreedToTerms: false 
   });
   const [loading, setLoading] = useState(false);
+  const [termsError, setTermsError] = useState('');
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,9 +56,14 @@ export default function RegisterPage() {
     }
 
     if (!registerForm.agreedToTerms) {
-      toast.error(t('register.agreeToTermsRequired'));
+      // Persist an inline error next to the checkbox in addition to the toast so
+      // the reason for the blocked submit stays visible in the DOM (TC030).
+      const message = t('register.agreeToTermsRequired');
+      setTermsError(message);
+      toast.error(message);
       return;
     }
+    setTermsError('');
 
     setLoading(true);
     const { error } = await signUpWithUsername(registerForm.username, registerForm.password, registerForm.name);
@@ -145,15 +151,21 @@ export default function RegisterPage() {
                 <Checkbox
                   id="terms"
                   checked={registerForm.agreedToTerms}
-                  onCheckedChange={(checked) => 
-                    setRegisterForm({ ...registerForm, agreedToTerms: checked as boolean })
-                  }
+                  onCheckedChange={(checked) => {
+                    setRegisterForm({ ...registerForm, agreedToTerms: checked as boolean });
+                    if (checked) setTermsError('');
+                  }}
                   disabled={loading}
                 />
                 <label htmlFor="terms" className="text-sm text-muted-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   {t('auth.termsAgreement')}
                 </label>
               </div>
+              {termsError && (
+                <p className="text-sm text-destructive font-medium -mt-2" role="alert">
+                  {termsError}
+                </p>
+              )}
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? 'Creating account...' : t('auth.registerButton')}
               </Button>

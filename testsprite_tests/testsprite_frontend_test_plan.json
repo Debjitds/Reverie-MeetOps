@@ -1,0 +1,2088 @@
+[
+  {
+    "id": "TC001",
+    "title": "Access a protected page from the public site",
+    "description": "This verifies that an anonymous visitor trying to open a protected page is redirected to login and can return to the requested page after signing in.",
+    "category": "Authentication and Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login page is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Create a single-day booking request",
+    "description": "This verifies that a member can complete the single-day booking flow and submit a new booking request successfully.",
+    "category": "New Booking Wizard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings/new"
+      },
+      {
+        "type": "action",
+        "description": "Select a resource"
+      },
+      {
+        "type": "action",
+        "description": "Choose the single-day booking option"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid start time"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid end time"
+      },
+      {
+        "type": "action",
+        "description": "Enter the booking purpose"
+      },
+      {
+        "type": "action",
+        "description": "Enter attendees"
+      },
+      {
+        "type": "action",
+        "description": "Submit the booking request"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a booking confirmation is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new booking is created"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Log in with valid credentials",
+    "description": "A user can sign in with valid username and password and reach the protected destination.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill username input field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill password input field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the dashboard"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Register a new account",
+    "description": "This verifies that an anonymous visitor can complete the registration form and reach the authenticated app after creating an account.",
+    "category": "Authentication and Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the name field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field"
+      },
+      {
+        "type": "action",
+        "description": "Accept the terms and conditions"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the authenticated app is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Approve a pending booking from its detail page",
+    "description": "This test verifies that an authorized reviewer can open a pending booking, approve it, and see the booking status update to approved.",
+    "category": "Booking Approval Actions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open a pending booking from the bookings list"
+      },
+      {
+        "type": "action",
+        "description": "Approve the booking"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking status is updated to approved"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a success confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Remember the requested protected page after signing in",
+    "description": "This test verifies that an anonymous visitor is redirected to sign in and then returned to the originally requested protected page after authentication.",
+    "category": "User Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /users"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the originally requested protected page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Create a multi-day booking request",
+    "description": "This verifies that a member can complete the multi-day booking flow and submit a new booking request successfully.",
+    "category": "New Booking Wizard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings/new"
+      },
+      {
+        "type": "action",
+        "description": "Select a resource"
+      },
+      {
+        "type": "action",
+        "description": "Choose the multi-day booking option"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid date range into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid daily start time"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid daily end time"
+      },
+      {
+        "type": "action",
+        "description": "Enter the booking purpose"
+      },
+      {
+        "type": "action",
+        "description": "Enter attendees"
+      },
+      {
+        "type": "action",
+        "description": "Submit the booking request"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a booking confirmation is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new multi-day booking is created"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Reset a password request",
+    "description": "This verifies that an anonymous visitor can submit the password reset form and see a confirmation that the request was sent.",
+    "category": "Authentication and Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reset-password"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the password reset request"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a reset confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Reject a pending booking with a reason",
+    "description": "This test verifies that an authorized reviewer can reject a pending booking, provide a reason, and see the booking status update to rejected.",
+    "category": "Booking Approval Actions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open a pending booking from the bookings list"
+      },
+      {
+        "type": "action",
+        "description": "Reject the booking"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the rejection reason field with a valid reason"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the rejection"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking status is updated to rejected"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a rejection confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Resolve a booking conflict before submitting",
+    "description": "This verifies that a member sees a conflict warning for an overlapping time and can adjust the booking to continue to submission.",
+    "category": "New Booking Wizard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings/new"
+      },
+      {
+        "type": "action",
+        "description": "Select a resource"
+      },
+      {
+        "type": "action",
+        "description": "Choose a time range that overlaps an approved booking"
+      },
+      {
+        "type": "action",
+        "description": "Fill the booking date and time fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a conflict warning is visible"
+      },
+      {
+        "type": "action",
+        "description": "Adjust the booking time to a non-conflicting slot"
+      },
+      {
+        "type": "action",
+        "description": "Submit the booking request"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking request can be submitted"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Review dashboard booking summaries",
+    "description": "This verifies that a signed-in user can open the dashboard and see the booking summary cards and upcoming bookings needed to continue working.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify booking summary content is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify upcoming bookings are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Open a booking from the bookings list",
+    "description": "This verifies that a signed-in user can open a booking detail page from the bookings list.",
+    "category": "Bookings List and Export",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings"
+      },
+      {
+        "type": "action",
+        "description": "Open a booking from the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking detail view is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Open a booking from the dashboard",
+    "description": "This verifies that a signed-in user can open a booking from the dashboard upcoming list and reach the booking detail view.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Open a booking from the upcoming bookings list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking detail view is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Cancel a booking from its detail page",
+    "description": "This test verifies that a permitted user can cancel an existing booking and see the booking status update to cancelled.",
+    "category": "Booking Approval Actions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open a booking that can be cancelled from the bookings list"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the booking"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the cancellation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking status is updated to cancelled"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a cancellation confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Browse and filter bookings",
+    "description": "This verifies that a signed-in user can open the bookings list, apply a filter or search, and view the matching bookings.",
+    "category": "Bookings List and Export",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings"
+      },
+      {
+        "type": "action",
+        "description": "Apply a status filter"
+      },
+      {
+        "type": "action",
+        "description": "Apply a search term"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching bookings are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Start a new booking from the dashboard",
+    "description": "This verifies that a signed-in user can use the dashboard quick action to begin creating a new booking request.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Click the quick action to create a new booking"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking creation flow is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Switch calendar views and review bookings",
+    "description": "This test verifies that a logged-in user can switch between calendar views and see bookings displayed in each view.",
+    "category": "Shared Calendar",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /calendar"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the week view"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the day view"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the agenda view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify bookings are displayed in the calendar views"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify each selected calendar view is shown"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "View all bookings from the dashboard",
+    "description": "This verifies that a signed-in user can move from the dashboard to the bookings list to review all bookings.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Click the quick action to view all bookings"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the bookings list is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "Export booking history for a date range",
+    "description": "This verifies that a signed-in user can open the export dialog, choose a date range, and export visible booking history to PDF.",
+    "category": "Bookings List and Export",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings"
+      },
+      {
+        "type": "action",
+        "description": "Open the export dialog"
+      },
+      {
+        "type": "action",
+        "description": "Select a start date for the export range"
+      },
+      {
+        "type": "action",
+        "description": "Select an end date for the export range"
+      },
+      {
+        "type": "action",
+        "description": "Start the export"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the export confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC020",
+    "title": "Browse the calendar views",
+    "description": "This verifies that a signed-in user can open the calendar and switch between calendar views to inspect scheduled bookings.",
+    "category": "Calendar View",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /calendar"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the week view"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the day view"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the agenda view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify calendar events are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC021",
+    "title": "Approve a booking from the detail view",
+    "description": "This verifies that a manager or administrator can open a booking and approve it from the booking detail page.",
+    "category": "Booking Detail and Review Actions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings"
+      },
+      {
+        "type": "action",
+        "description": "Open a booking from the list"
+      },
+      {
+        "type": "action",
+        "description": "Approve the booking"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking status is updated to approved"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a notification or success confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC022",
+    "title": "Create a new resource as an administrator",
+    "description": "This test verifies that an administrator can add a new shared resource with its details and see it appear in the resource list.",
+    "category": "Resource Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /resources"
+      },
+      {
+        "type": "action",
+        "description": "Add a new resource"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the resource name field with a unique name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the resource description field with a valid description"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the resource location field with a valid location"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the resource capacity field with a valid capacity"
+      },
+      {
+        "type": "action",
+        "description": "Save the resource"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new resource appears in the resource list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a success confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC023",
+    "title": "Prevent registration with an invalid password",
+    "description": "A visitor sees validation feedback when trying to register with a password that does not meet the required rules.",
+    "category": "User Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill name input field with a valid full name"
+      },
+      {
+        "type": "action",
+        "description": "Fill username input field with a new unique username"
+      },
+      {
+        "type": "action",
+        "description": "Fill password input field with a short invalid password"
+      },
+      {
+        "type": "action",
+        "description": "Fill confirm password field with the same invalid password"
+      },
+      {
+        "type": "action",
+        "description": "Check the terms acceptance checkbox"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a password validation error is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC024",
+    "title": "Generate an agenda while creating a booking",
+    "description": "This verifies that a member can generate an AI agenda in the booking wizard, review it, and continue with the booking.",
+    "category": "New Booking Wizard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings/new"
+      },
+      {
+        "type": "action",
+        "description": "Select a resource"
+      },
+      {
+        "type": "action",
+        "description": "Enter the booking purpose"
+      },
+      {
+        "type": "action",
+        "description": "Click the control to generate an agenda"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify generated agenda content is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Continue with the booking flow"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking wizard continues to the next step"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC025",
+    "title": "Browse another calendar date range",
+    "description": "This test verifies that a logged-in user can move the calendar to another date range and review bookings for the new period.",
+    "category": "Shared Calendar",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /calendar"
+      },
+      {
+        "type": "action",
+        "description": "Move the calendar to another date range"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the calendar updates to the new date range"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify bookings for the selected period are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC026",
+    "title": "Change a user's role and confirm the update",
+    "description": "This test verifies that an administrator can change a user's role and see the updated role reflected in the user list.",
+    "category": "User Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /users"
+      },
+      {
+        "type": "action",
+        "description": "Search for a user to manage"
+      },
+      {
+        "type": "action",
+        "description": "Open the role change dialog for the user"
+      },
+      {
+        "type": "action",
+        "description": "Select a new role"
+      },
+      {
+        "type": "action",
+        "description": "Update the user role"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user list shows the updated role"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC027",
+    "title": "Show login validation for an invalid username format",
+    "description": "A visitor sees validation feedback when the login username is not in a valid format.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill username input field with an invalid username"
+      },
+      {
+        "type": "action",
+        "description": "Fill password input field with a valid password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a username validation error is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC028",
+    "title": "Prevent registration when passwords do not match",
+    "description": "A visitor sees validation feedback when the password confirmation does not match the original password.",
+    "category": "User Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill name input field with a valid full name"
+      },
+      {
+        "type": "action",
+        "description": "Fill username input field with a new unique username"
+      },
+      {
+        "type": "action",
+        "description": "Fill password input field with a valid password"
+      },
+      {
+        "type": "action",
+        "description": "Fill confirm password field with a different password"
+      },
+      {
+        "type": "action",
+        "description": "Check the terms acceptance checkbox"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a password confirmation validation error is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC029",
+    "title": "Cancel a booking from the detail view",
+    "description": "This verifies that a manager or administrator can cancel an existing booking and see the cancellation reflected in the detail view.",
+    "category": "Booking Detail and Review Actions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings"
+      },
+      {
+        "type": "action",
+        "description": "Open a booking from the list"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the booking"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking status is updated to cancelled"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC030",
+    "title": "Require terms acceptance during registration",
+    "description": "A visitor cannot complete registration until the terms checkbox is accepted.",
+    "category": "User Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill name input field with a valid full name"
+      },
+      {
+        "type": "action",
+        "description": "Fill username input field with a new unique username"
+      },
+      {
+        "type": "action",
+        "description": "Fill password input field with a valid password"
+      },
+      {
+        "type": "action",
+        "description": "Fill confirm password field with the same valid password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a terms acceptance validation error is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC031",
+    "title": "View a booking on the calendar",
+    "description": "This verifies that a signed-in user can open a booking from the calendar and reach the booking detail view.",
+    "category": "Calendar View",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /calendar"
+      },
+      {
+        "type": "action",
+        "description": "Open a booking event from the calendar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking detail view is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC032",
+    "title": "Open and close a calendar event detail",
+    "description": "This test verifies that a logged-in user can open a calendar event to review its details and then close the detail dialog.",
+    "category": "Shared Calendar",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /calendar"
+      },
+      {
+        "type": "action",
+        "description": "Open a calendar event"
+      },
+      {
+        "type": "action",
+        "description": "Close the event detail dialog"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the calendar view remains visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the event detail dialog is closed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC033",
+    "title": "Search for a user and review the matching results",
+    "description": "This test verifies that an administrator can search for users and see the results update to match the search term.",
+    "category": "User Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /users"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the user search field with a unique user name"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the matching user results are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC034",
+    "title": "Move through additional booking pages",
+    "description": "This verifies that a signed-in user can paginate through the bookings list to review more records.",
+    "category": "Bookings List and Export",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings"
+      },
+      {
+        "type": "action",
+        "description": "Go to the next page of bookings"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify additional bookings are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC035",
+    "title": "Edit an existing resource as an administrator",
+    "description": "This test verifies that an administrator can update an existing resource and see the saved changes reflected in the resource list.",
+    "category": "Resource Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /resources"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit dialog for an existing resource"
+      },
+      {
+        "type": "action",
+        "description": "Update the resource details"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated resource appears in the resource list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a success confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC036",
+    "title": "Generate admin insights from the dashboard",
+    "description": "This verifies that an administrator can request AI insights from the dashboard and see the insights content appear.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Click the control to generate AI insights"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify AI insights content is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC037",
+    "title": "Manage shared resources as an administrator",
+    "description": "This verifies that an administrator can open the resource management page and create or edit a shared resource.",
+    "category": "Resource Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /resources"
+      },
+      {
+        "type": "action",
+        "description": "Add a new resource"
+      },
+      {
+        "type": "action",
+        "description": "Edit the resource details"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the resource list is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated resource appears in the list"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC038",
+    "title": "Return to the previous page from booking details",
+    "description": "This test verifies that a user can open a booking detail view and return to the previous page without losing navigation context.",
+    "category": "Booking Approval Actions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open a booking from the bookings list"
+      },
+      {
+        "type": "action",
+        "description": "Return to the previous page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the bookings list is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking detail view is closed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC039",
+    "title": "Delete a resource as an administrator",
+    "description": "This test verifies that an administrator can delete an existing resource and see it removed from the resource list.",
+    "category": "Resource Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /resources"
+      },
+      {
+        "type": "action",
+        "description": "Delete an existing resource"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the resource no longer appears in the resource list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a success confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC040",
+    "title": "Search for a user and change their role",
+    "description": "This verifies that an administrator can search for a user in the management table and update their role.",
+    "category": "User Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /users"
+      },
+      {
+        "type": "action",
+        "description": "Search for a user"
+      },
+      {
+        "type": "action",
+        "description": "Open the change role dialog for the user"
+      },
+      {
+        "type": "action",
+        "description": "Select a new role"
+      },
+      {
+        "type": "action",
+        "description": "Save the role change"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated role is displayed for the user"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC041",
+    "title": "Open the password reset form from login",
+    "description": "A visitor can move from login to the password reset flow and reach the reset request page.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Click the password reset option"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the password reset request form is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC042",
+    "title": "See invalid login validation",
+    "description": "This verifies that the login form shows validation feedback when a visitor submits invalid credentials.",
+    "category": "Authentication and Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with an invalid username"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with an invalid password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a login validation error is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC043",
+    "title": "See validation when the end time is before the start time",
+    "description": "This verifies that the booking wizard blocks progression when the end time is not after the start time and shows a validation error.",
+    "category": "New Booking Wizard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings/new"
+      },
+      {
+        "type": "action",
+        "description": "Select a resource"
+      },
+      {
+        "type": "action",
+        "description": "Choose the single-day booking option"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Select a start time"
+      },
+      {
+        "type": "action",
+        "description": "Select an end time that is not after the start time"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to continue"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a time validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC044",
+    "title": "Update the language preference",
+    "description": "This test verifies that a signed-in user can change their UI language preference and see the new selection reflected.",
+    "category": "Profile and Language",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /profile"
+      },
+      {
+        "type": "action",
+        "description": "Select a different language preference"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated language preference is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC045",
+    "title": "Prevent deleting a resource that is in use",
+    "description": "This verifies that an administrator cannot delete a shared resource that still has active bookings and sees the appropriate guard message.",
+    "category": "Resource Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /resources"
+      },
+      {
+        "type": "action",
+        "description": "Select a resource with active bookings"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to delete the resource"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a delete guard message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the resource remains in the list"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC046",
+    "title": "See calendar updates after changing views",
+    "description": "This verifies that a signed-in user can return to the calendar and still see current events after switching views.",
+    "category": "Calendar View",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /calendar"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the month view"
+      },
+      {
+        "type": "action",
+        "description": "Switch to the agenda view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify calendar events are displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC047",
+    "title": "Prevent a non-admin from accessing resource management",
+    "description": "This test verifies that a non-admin user cannot access the resource management page and sees a permission-denied state instead.",
+    "category": "Resource Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /resources"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a permission-denied state is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC048",
+    "title": "Review account details on the profile page",
+    "description": "This test verifies that a signed-in user can view their account details on the profile page.",
+    "category": "Profile and Language",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the account information card is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the language preference control is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC049",
+    "title": "See an empty state when no bookings match",
+    "description": "This verifies that a signed-in user sees an empty state when filters or search return no matching bookings.",
+    "category": "Bookings List and Export",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /bookings"
+      },
+      {
+        "type": "action",
+        "description": "Apply a filter with no matching bookings"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC050",
+    "title": "Filter users to no results and see the empty state",
+    "description": "This test verifies that searching for a term with no matches shows the empty state instead of results.",
+    "category": "User Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /users"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the user search field with a unique nonexistent term"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is displayed"
+      }
+    ],
+    "priority": "Low"
+  }
+]

@@ -20,12 +20,14 @@ export default function LoginPage() {
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [registerForm, setRegisterForm] = useState({ username: '', password: '', confirmPassword: '', name: '', agreedToTerms: false });
   const [loading, setLoading] = useState(false);
+  const [loginUsernameError, setLoginUsernameError] = useState('');
 
   const from = (location.state as { from?: string })?.from || '/dashboard';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setLoginUsernameError('');
+
     if (!loginForm.username || !loginForm.password) {
       toast.error(t('login.enterUsernamePassword'));
       return;
@@ -33,7 +35,11 @@ export default function LoginPage() {
 
     // Validate username format
     if (!/^[a-zA-Z0-9_]+$/.test(loginForm.username)) {
-      toast.error(t('login.usernameFormat'));
+      // Persist an inline error in addition to the toast so the feedback stays
+      // visible in the DOM after submit (TestSprite TC027).
+      const message = t('login.usernameFormat');
+      setLoginUsernameError(message);
+      toast.error(message);
       return;
     }
 
@@ -42,6 +48,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (error) {
+      setLoginUsernameError(t('login.loginFailed').replace('{error.message}', error.message));
       toast.error(t('login.loginFailed').replace('{error.message}', error.message));
     } else {
       toast.success(t('login.loginSuccess'));
@@ -128,9 +135,14 @@ export default function LoginPage() {
                       type="text"
                       placeholder={t('auth.usernameLoginPlaceholder')}
                       value={loginForm.username}
-                      onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
+                      onChange={(e) => { setLoginForm({ ...loginForm, username: e.target.value }); setLoginUsernameError(''); }}
                       disabled={loading}
                     />
+                    {loginUsernameError && (
+                      <p className="text-sm text-destructive font-medium mt-1" role="alert">
+                        {loginUsernameError}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="login-password">{t('auth.password')}</Label>
