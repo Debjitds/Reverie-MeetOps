@@ -40,39 +40,40 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link to open the login page.
+        # -> Click the 'Login' link in the page header to open the login page.
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("link", name="Login").nth(1)
         await elem.click(timeout=10000)
         
-        # -> Fill 'debjitchsarkarofficial2003' into the Username field, fill 'DEBjit737362!' into the Password field, then click the 'Login' button.
+        # -> Fill the 'Username' field with debjitchsarkarofficial2003.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill 'debjitchsarkarofficial2003' into the Username field, fill 'DEBjit737362!' into the Password field, then click the 'Login' button.
+        # -> Fill the 'Username' field with debjitchsarkarofficial2003.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill 'debjitchsarkarofficial2003' into the Username field, fill 'DEBjit737362!' into the Password field, then click the 'Login' button.
+        # -> Fill the 'Username' field with debjitchsarkarofficial2003.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'New Booking' quick action in the Dashboard Quick Actions panel to start creating a new booking.
+        # -> Click the 'NEW BOOKING' quick action in the Dashboard Quick Actions panel to start creating a booking.
         # New Booking link
-        elem = page.get_by_role('link', name='New Booking', exact=True)
+        elem = page.get_by_role("link", name="New Booking")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The booking creation flow is displayed (navigated to /bookings/new).
+        # --> The booking creation flow is displayed with resource selection and a visible 'Next' button.
+        await page.get_by_role("button", name="Next").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: The browser URL contains /bookings/new.
-        await expect(page).to_have_url(re.compile("/bookings/new"), timeout=15000), "The browser URL contains /bookings/new."
+        # Assert: The 'Next' button is visible, indicating the booking creation flow is displayed.
+        await expect(page.get_by_role("button", name="Next").nth(0)).to_be_visible(timeout=15000), "The 'Next' button is visible, indicating the booking creation flow is displayed."
         await asyncio.sleep(5)
 
     finally:

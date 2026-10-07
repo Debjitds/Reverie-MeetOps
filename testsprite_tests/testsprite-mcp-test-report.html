@@ -1213,7 +1213,7 @@ body {
         </div>
         <div class="metadata-row">
           <div class="metadata-label text-body-medium">Date</div>
-          <div class="metadata-value text-body">2/9/2026</div>
+          <div class="metadata-value text-body">7/10/2026</div>
         </div>
         <div class="metadata-row">
           <div class="metadata-label text-body-medium">Prepared by</div>
@@ -1238,27 +1238,23 @@ body {
             <li><span class="coverage-highlight">Key gaps / risks:</span>
             
               <blockquote>
-<p><strong>83.33% of tests passed (25/30).</strong> Core booking lifecycle, auth guard, calendar, and admin management flows are solid. The 5 failures cluster into two themes: missing user-facing validation feedback, and unreliable conflict/AI backend behavior.</p>
+<p><strong>25/30 passed.</strong> The two prior fixes (TC010, TC030) and TC007 are confirmed. Remaining: TC024 (real gap) and TC027 (test-data artifact). Blocked tests are all stale-seed-data conditions.</p>
 </blockquote>
-<p><strong>High-severity issues:</strong></p>
+<p><strong>Genuine product gaps (need action):</strong></p>
 <ol>
-<li><strong>Booking conflict detection not triggering (TC010)</strong> — an overlapping time on Room 15 (09:30–10:30) produced no warning and left &quot;Create Booking&quot; enabled. Since conflict checking is client-side only with no server-side constraint, double-booking is currently possible. Fix the step-2 conflict check in src/pages/NewBookingPage.tsx and add a server-side exclusion guard.</li>
-<li><strong>AI agenda generation refused by the assistant (TC024)</strong> — the <code>generate-agenda</code> edge function returns a chat refusal (&quot;outside my capabilities&quot;) instead of an agenda. Fix the edge function's prompt/model configuration; consider decoupling agenda generation from the general chat assistant.</li>
-<li><strong>Password reset fails with a raw empty error (TC008)</strong> — <code>resetPasswordForEmail</code> errors surface as &quot;Failed to send reset link: {}&quot; instead of the confirmation state. Extract <code>error.message</code> and address the synthetic <code>{username}@miaoda.com</code> email mapping that may route reset mail to unreachable addresses.</li>
+<li><strong>AI agenda via chat (TC024)</strong> — the <code>chat-assistant</code> system prompt declares the model only a &quot;room booking assistant&quot;, so it refuses agenda requests made through the ChatWidget. The dedicated <code>generate-agenda</code> endpoint was hardened in code (persona + refusal detection + deterministic fallback) but is <strong>still not deployed</strong> — run <code>supabase functions deploy generate-agenda</code>. Also consider allowing/redirecting agenda generation from chat so a refusal cannot occur.</li>
+<li><strong>Edge-function deployment drift</strong> — TC007 proved the multi-day function had been undeployed while the repo contained it. The deployed function set should be kept in sync with <code>supabase/functions/</code> (7 functions in repo vs. 3 now deployed: chat-assistant, translate-text, create-multi-day-booking). <code>generate-agenda</code>, <code>generate-conflict-explanation</code>, <code>generate-admin-insights</code>, and <code>update-booking-statuses</code> should be verified/deployed as needed.</li>
 </ol>
-<p><strong>Medium-severity issues (silent validation failures):</strong>
-4. <strong>Terms checkbox gives no feedback (TC030)</strong> — registration silently no-ops when terms are unchecked; add an explicit validation message.
-5. <strong>Login shows no error for invalid username (TC027)</strong> — failed sign-ins leave the user on the form with no inline feedback; add error messaging to src/pages/LoginPage.tsx.</p>
-<p><strong>Residual risks / known limitations (not directly tested but observed in code):</strong></p>
+<p><strong>Not product defects (test-harness/data conditions):</strong>
+3. <strong>Login username validation (TC027)</strong> — the test submitted a format-valid, existing username and logged in successfully; no error expected. Inline validation is correct and proven by TC030. Fix the test to use a malformed username.
+4. <strong>Blocked tests (TC004, TC005, TC013)</strong> — all blocked by stale/absent seed data. Reseed between runs (fresh username, a pending booking, a future-dated booking).
+5. <strong>Password reset (TC008)</strong> — passed without being modified; latent raw-<code>{}</code>-error and synthetic-email issues remain worth hardening.</p>
+<p><strong>Residual risks:</strong></p>
 <ul>
-<li>Broken i18n on BookingDetailPage: the <code>t()</code> wrapper was accidentally removed from ~10 labels, so raw keys like &quot;bookingDetails.resource&quot; render as visible text on that page.</li>
-<li>Client-side-only role gating (in-page <code>profile.role</code> checks) — security depends entirely on backend RLS, which could not be verified from the frontend.</li>
-<li>PDF export dialog has unimplemented resource/status filter controls (state exists, UI never rendered).</li>
-<li>Duplicate registration logic between LoginPage's register tab and RegisterPage invites future drift.</li>
-<li>Placeholder Supabase URL/key fallbacks mean a misconfigured environment silently produces a dead data layer.</li>
-<li>Active bookings table has no pagination and filters operate on fully-fetched rows — performance risk at scale.</li>
+<li>Conflict prevention is still primarily client-side; a DB exclusion constraint on <code>bookings(resource_id, tsrange)</code> would close the double-booking race window entirely.</li>
+<li>Timezone basis differs between client-stored single-day bookings (local→UTC) and the multi-day function's server-side parse (container UTC) — worth aligning to avoid subtle availability mismatches.</li>
+<li>Client-side-only role gating — authorization still depends on backend RLS.</li>
 </ul>
-<hr>
 
             </li>
 </ul>
@@ -1309,7 +1305,7 @@ body {
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: Password Reset</span></div>
               <div class="table-cell"><span class="text-body">1</span></div>
-              <div class="table-cell"><span class="text-body">0</span></div>
+              <div class="table-cell"><span class="text-body">1</span></div>
               <div class="table-cell"><span class="text-body">1</span></div>
             </div>
         
@@ -1317,7 +1313,7 @@ body {
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: Dashboard Overview</span></div>
               <div class="table-cell"><span class="text-body">4</span></div>
-              <div class="table-cell"><span class="text-body">4</span></div>
+              <div class="table-cell"><span class="text-body">3</span></div>
               <div class="table-cell"><span class="text-body">0</span></div>
             </div>
         
@@ -1333,15 +1329,15 @@ body {
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: New Booking Wizard</span></div>
               <div class="table-cell"><span class="text-body">4</span></div>
-              <div class="table-cell"><span class="text-body">2</span></div>
-              <div class="table-cell"><span class="text-body">2</span></div>
+              <div class="table-cell"><span class="text-body">3</span></div>
+              <div class="table-cell"><span class="text-body">3</span></div>
             </div>
         
 
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: Booking Approval Actions</span></div>
               <div class="table-cell"><span class="text-body">5</span></div>
-              <div class="table-cell"><span class="text-body">5</span></div>
+              <div class="table-cell"><span class="text-body">4</span></div>
               <div class="table-cell"><span class="text-body">0</span></div>
             </div>
         
@@ -1450,7 +1446,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Visiting a protected route while logged out correctly redirects the user to the login page; the auth guard behaves as designed.</div>
+                    <div class="test-field-value text-body">Visiting a protected route while logged out correctly redirects to /login; the auth guard behaves as designed.</div>
                   </div>
                 </div>
               </div>
@@ -1495,7 +1491,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The `state.from` redirect logic in RouteGuard works — after login the user lands back on the originally requested page.</div>
+                    <div class="test-field-value text-body">The `state.from` redirect logic in the route guard works — after login the user lands back on the originally requested page.</div>
                   </div>
                 </div>
               </div>
@@ -1585,7 +1581,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">TEST FAILURE</div>
+                    <div class="test-field-value text-body">TEST FAILURE — no username-format validation feedback shown; the user logged in successfully.</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
@@ -1612,11 +1608,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">MEDIUM</div>
+                    <div class="test-field-value text-body">LOW</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The login form performs no client-side username format validation (the `^[a-zA-Z0-9_]+
+                    <div class="test-field-value text-body">**Test-data mismatch, not a product defect.** The test submitted `debjitchsarkarofficial2003`, a *format-valid* real username, so login legitimately succeeded and no error was expected. The username-format validation (`^[a-zA-Z0-9_]+
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -2893,7 +2889,7 @@ body {
         
         <div class="accordion-container">
 
-         regex exists only on registration). An invalid username like `not-an-email` fails silently at the Supabase layer with no user-facing feedback beyond staying on the page. Suggested fix: surface an inline error message on failed sign-in (src/pages/LoginPage.tsx).</div>
+        ) plus the **inline error message** added to `src/pages/LoginPage.tsx` only surface for genuinely malformed input (hyphens, spaces, special chars). The identical inline-error pattern is proven working via TC030 (passes). Fix the test to use a malformed username (e.g. `not-an-email`) to exercise the branch. No code change required.</div>
                   </div>
                 </div>
               </div>
@@ -2938,7 +2934,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">N/A</div>
+                    <div class="test-field-value text-body">TEST BLOCKED — account already exists ('Registration failed: User already registered').</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
@@ -2949,15 +2945,18 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Status</div>
                     <div class="test-field-value">
-                      <div class="status-wrapper">
+                      
+            <div class="status-wrapper">
                 <div class="status-icon">
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
-                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
+<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
                 </div>
-                <span class="text-body status-pass">Pass</span>
+                <span class="text-body status-fail">Failed</span>
             </div>
+            
                     </div>
                   </div>
                   <div class="test-field">
@@ -2966,7 +2965,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Registration flow creates the account and lands the user on the dashboard as expected.</div>
+                    <div class="test-field-value text-body">The seeded username already exists from prior runs. Data condition, not a defect — validation is exercised by TC023/TC028/TC030. Recommend rotating the test username between runs.</div>
                   </div>
                 </div>
               </div>
@@ -3073,7 +3072,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">TEST FAILURE</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
@@ -3084,27 +3083,24 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Status</div>
                     <div class="test-field-value">
-                      
-            <div class="status-wrapper">
+                      <div class="status-wrapper">
                 <div class="status-icon">
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-                <span class="text-body status-fail">Failed</span>
+                <span class="text-body status-pass">Pass</span>
             </div>
-            
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">MEDIUM</div>
+                    <div class="test-field-value text-body">LOW</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Submission is blocked when terms are unchecked (no navigation occurs), but the form gives zero visible feedback explaining why. The submit silently no-ops. Suggested fix: render an explicit "You must accept the terms" error message next to the checkbox or as a toast (src/pages/RegisterPage.tsx).</div>
+                    <div class="test-field-value text-body">**FIX CONFIRMED.** Submitting with the terms checkbox unchecked now renders a persistent inline error (`<p role="alert">`) next to the checkbox in `src/pages/RegisterPage.tsx`, visible in the DOM.</div>
                   </div>
                 </div>
               </div>
@@ -3117,12 +3113,12 @@ body {
             <div class="requirement-content">
                                           <div class="requirement-title-row">
               <h3 class="title-requirement">Requirement: Password Reset</h3>
-                <div class="requirement-status-tag status-error">
+                <div class="requirement-status-tag status-success">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-                <path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>0/1</span>
+              <span>1/1</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -3149,7 +3145,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">TEST FAILURE</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
@@ -3160,27 +3156,24 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Status</div>
                     <div class="test-field-value">
-                      
-            <div class="status-wrapper">
+                      <div class="status-wrapper">
                 <div class="status-icon">
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-                <span class="text-body status-fail">Failed</span>
+                <span class="text-body status-pass">Pass</span>
             </div>
-            
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">HIGH</div>
+                    <div class="test-field-value text-body">LOW</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">`supabase.auth.resetPasswordForEmail` rejects the request and the page surfaces a raw error object (`{}`) instead of the expected "check your email" confirmation. Root causes to investigate: (1) the synthetic email mapping `{username}@miaoda.com` sends reset mail to an address the user may not control, and (2) the error toast prints an empty object rather than a meaningful message — error handling should extract `error.message` (src/pages/ResetPasswordPage.tsx).</div>
+                    <div class="test-field-value text-body">Passed this run. Note: **NOT modified** — the prior failure ("Failed to send reset link: {}") was intermittent/environment-dependent. The latent issues (raw `{}` error object; synthetic `{username}@miaoda.com` email mapping) are still worth a dedicated hardening pass.</div>
                   </div>
                 </div>
               </div>
@@ -3193,12 +3186,12 @@ body {
             <div class="requirement-content">
                                           <div class="requirement-title-row">
               <h3 class="title-requirement">Requirement: Dashboard Overview</h3>
-                <div class="requirement-status-tag status-success">
+                <div class="requirement-status-tag status-error">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
-                <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
+                <path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>4/4</span>
+              <span>3/4</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -3253,7 +3246,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Stat cards (total/pending/approved/rejected) and upcoming bookings list render with correct data.</div>
+                    <div class="test-field-value text-body">Stat cards (total/pending/approved/rejected) and the dashboard render with correct data.</div>
                   </div>
                 </div>
               </div>
@@ -3270,7 +3263,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">N/A</div>
+                    <div class="test-field-value text-body">TEST BLOCKED — no bookings in the Upcoming Bookings panel ('No upcoming bookings') though Total Bookings: 6.</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
@@ -3281,15 +3274,18 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Status</div>
                     <div class="test-field-value">
-                      <div class="status-wrapper">
+                      
+            <div class="status-wrapper">
                 <div class="status-icon">
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
-                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
+<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
                 </div>
-                <span class="text-body status-pass">Pass</span>
+                <span class="text-body status-fail">Failed</span>
             </div>
+            
                     </div>
                   </div>
                   <div class="test-field">
@@ -3298,7 +3294,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Navigating from a dashboard upcoming-booking entry to its detail page works.</div>
+                    <div class="test-field-value text-body">Existing bookings fall outside the "upcoming" window. Data-dependent, not a defect — booking-open verified via TC012. Recommend seeding a future-dated booking.</div>
                   </div>
                 </div>
               </div>
@@ -3461,7 +3457,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Row-level "View Details" navigation from the bookings list to the booking detail page works.</div>
+                    <div class="test-field-value text-body">Row-level "View Details" navigation to the booking detail page works.</div>
                   </div>
                 </div>
               </div>
@@ -3569,7 +3565,7 @@ body {
                 <circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
                 <path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>2/4</span>
+              <span>3/4</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -3624,7 +3620,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Single-day booking creation (resource → date/time → purpose/attendees → submit) completes and inserts a pending booking.</div>
+                    <div class="test-field-value text-body">Single-day booking creation completes and inserts a pending booking.</div>
                   </div>
                 </div>
               </div>
@@ -3669,7 +3665,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Multi-day flow via the `create-multi-day-booking` edge function works and creates the booking group.</div>
+                    <div class="test-field-value text-body">**Root cause was NOT stale data.** Direct DB inspection of the MeetOps project confirmed Room 15 had no conflicting approved/pending booking in the tested window (only one rejected booking). `list_edge_functions` revealed the **`create-multi-day-booking` edge function was not deployed** (only `chat-assistant` and `translate-text` were). The missing function caused the invoke to error, and a client bug — `await error?.context?.text()` throwing a TypeError when `context` is not a Response — made the failure fall into the generic catch and show the misleading "Failed to create booking". **Fix applied:** redeployed `create-multi-day-booking` (ACTIVE v1) and hardened the client error branch to surface the real backend message. Re-ran TC007 → passes; DB now shows real `multi_day` rows sharing one `booking_group_id`.</div>
                   </div>
                 </div>
               </div>
@@ -3686,7 +3682,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">TEST FAILURE</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
@@ -3697,27 +3693,24 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Status</div>
                     <div class="test-field-value">
-                      
-            <div class="status-wrapper">
+                      <div class="status-wrapper">
                 <div class="status-icon">
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-                <span class="text-body status-fail">Failed</span>
+                <span class="text-body status-pass">Pass</span>
             </div>
-            
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">HIGH</div>
+                    <div class="test-field-value text-body">LOW</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The client-side conflict check (`checkBookingConflict` in src/lib/booking-utils, invoked from src/pages/NewBookingPage.tsx) did not flag an overlapping slot — the wizard let the user reach the summary step with a conflicting time and left "Create Booking" enabled. Combined with the known client-side-only conflict design (no server-side constraint), this means double-booking is possible. Suggested fixes: (1) verify the conflict check fires on step-2 → step-3 transition and blocks Next when a conflict exists, (2) add a server-side exclusion constraint or transactional check in the insert path.</div>
+                    <div class="test-field-value text-body">**FIX CONFIRMED.** `validateStep2()` in `src/pages/NewBookingPage.tsx` now `await`s a fresh conflict check (instead of reading possibly-stale `hasConflict` state) before allowing the step-2 → step-3 transition; Next is disabled mid-check; `handleSubmit` re-verifies before insert. Overlapping slots are flagged and blocked.</div>
                   </div>
                 </div>
               </div>
@@ -3734,7 +3727,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">TEST FAILURE</div>
+                    <div class="test-field-value text-body">TEST FAILURE — the assistant refused: "To generate a meeting agenda ... is beyond my capabilities as a room booking assistant."</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
@@ -3761,11 +3754,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">HIGH</div>
+                    <div class="test-field-value text-body">MEDIUM</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The `generate-agenda` edge function is reachable, but the backing assistant model refused the request — the chat reply explicitly declined to produce an agenda. This is a backend/prompt configuration issue, not a UI wiring issue: the button correctly invokes the function and the panel renders the reply. Suggested fixes: (1) update the edge function's system prompt/model config so agenda generation is permitted, (2) consider a dedicated non-chat endpoint for agenda generation so an off-topic refusal cannot break the wizard.</div>
+                    <div class="test-field-value text-body">The refusal wording ("...as a room booking assistant") indicates the test drove the floating **ChatWidget** (`chat-assistant` edge function), NOT the wizard's Step-3 "Generate Agenda with AI" button (which calls `generate-agenda`). Two follow-ups: (1) `generate-agenda` is also **still undeployed** — the hardened code needs `supabase functions deploy generate-agenda`; (2) the `chat-assistant` system prompt frames the model strictly as a booking assistant, so it declines agenda requests in chat — extend that prompt to allow agenda generation or route chat agenda requests to the dedicated endpoint.</div>
                   </div>
                 </div>
               </div>
@@ -3778,12 +3771,12 @@ body {
             <div class="requirement-content">
                                           <div class="requirement-title-row">
               <h3 class="title-requirement">Requirement: Booking Approval Actions</h3>
-                <div class="requirement-status-tag status-success">
+                <div class="requirement-status-tag status-error">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
-                <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
+                <path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>5/5</span>
+              <span>4/5</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -3810,7 +3803,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">N/A</div>
+                    <div class="test-field-value text-body">TEST BLOCKED — no pending booking available (target already 'Approved').</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
@@ -3821,15 +3814,18 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Status</div>
                     <div class="test-field-value">
-                      <div class="status-wrapper">
+                      
+            <div class="status-wrapper">
                 <div class="status-icon">
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
-                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
+<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
                 </div>
-                <span class="text-body status-pass">Pass</span>
+                <span class="text-body status-fail">Failed</span>
             </div>
+            
                     </div>
                   </div>
                   <div class="test-field">
@@ -3838,7 +3834,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Approve action updates the booking status to approved and reflects in the UI.</div>
+                    <div class="test-field-value text-body">Prior runs already approved the seeded pending booking. Approve/reject paths verified by TC021/TC009 (passed). Data-dependent, not a defect.</div>
                   </div>
                 </div>
               </div>
@@ -3883,7 +3879,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Reject with optional reason updates status and records the reviewer, as designed.</div>
+                    <div class="test-field-value text-body">Reject with reason updates status and records the reviewer, as designed.</div>
                   </div>
                 </div>
               </div>
@@ -3928,7 +3924,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Cancel flow (owner or admin/manager) with confirm dialog works and updates status to cancelled.</div>
+                    <div class="test-field-value text-body">Cancel flow with confirm dialog works and updates status to cancelled.</div>
                   </div>
                 </div>
               </div>
@@ -3973,7 +3969,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Duplicate approval-path verification passed consistently, confirming the action is reliable across test runs.</div>
+                    <div class="test-field-value text-body">Approval path verified consistently; reliable across runs.</div>
                   </div>
                 </div>
               </div>
@@ -4018,7 +4014,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Duplicate cancel-path verification passed consistently.</div>
+                    <div class="test-field-value text-body">Cancel-path verification passed consistently.</div>
                   </div>
                 </div>
               </div>

@@ -42,52 +42,54 @@ async def run_test():
         
         # -> Click the 'Login' link to open the login page.
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
+        # -> Fill the username and password fields and click the 'Login' button.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
+        # -> Fill the username and password fields and click the 'Login' button.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
+        # -> Fill the username and password fields and click the 'Login' button.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Bookings' link in the left sidebar to open the bookings list.
-        # Bookings link
-        elem = page.get_by_role('link', name='Bookings', exact=True)
-        await elem.click(timeout=10000)
+        # -> Open the 'Bookings' page (navigate to the Bookings list) so a booking can be selected.
+        await page.goto("http://localhost:5173/bookings")
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=5000)
+        except Exception:
+            pass
         
-        # -> Click the 'VIEW' button for the booking row showing user 'Ash' with status 'Approved' to open its detail view.
+        # -> Open the booking detail for 'Room 15' by user 'Rohan_QC' (first row) by clicking its open link.
         # View link
-        elem = page.locator('a[href="/bookings/a5369402-9cd9-4ff8-b554-69d918aced28"]')
+        elem = page.get_by_role("row", name="Room 15 1st Floor Rohan_QC").get_by_role("link")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Cancel Booking' button in the booking detail view and then observe the UI for status update or confirmation.
+        # -> Click the 'Cancel Booking' button on the booking detail page.
         # Cancel Booking button
-        elem = page.get_by_role('button', name='Cancel Booking', exact=True)
+        elem = page.get_by_role("button", name="Cancel Booking")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Yes, cancel booking' button in the confirmation dialog to confirm cancelling the booking.
+        # -> Click the 'YES, CANCEL BOOKING' button in the confirmation dialog to confirm cancellation.
         # Yes, cancel booking button
-        elem = page.get_by_role('button', name='Yes, cancel booking', exact=True)
+        elem = page.get_by_role("button", name="Yes, cancel booking")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> Booking detail shows the status updated to 'cancelled'.
+        # --> Booking detail shows the status 'cancelled'.
         # Assert-outcome: passed
-        # Assert: Booking status text contains 'cancelled'.
-        await expect(page.locator("xpath=/html/body/div[1]").nth(0)).to_contain_text("cancelled", timeout=15000), "Booking status text contains 'cancelled'."
+        # Assert: Verifies the booking detail contains the text 'cancelled'.
+        await expect(page.locator("#root").nth(0)).to_contain_text("cancelled", timeout=15000), "Verifies the booking detail contains the text 'cancelled'."
         await asyncio.sleep(5)
 
     finally:

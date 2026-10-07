@@ -40,58 +40,68 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link to open the login page.
+        # -> Click the 'Login' link to open the Login page.
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the username and password fields and click the 'LOGIN' button.
+        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the username and password fields and click the 'LOGIN' button.
+        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the username and password fields and click the 'LOGIN' button.
+        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Bookings' link in the left sidebar to open the bookings list.
+        # -> Click the 'Bookings' link in the left navigation to open the Bookings page.
         # Bookings link
-        elem = page.get_by_role('link', name='Bookings', exact=True)
+        elem = page.get_by_role("link", name="Bookings", exact=True)
         await elem.click(timeout=10000)
         
-        # -> Open the 'Status' dropdown (labeled 'Status' / showing 'All Statuses') so its options become visible.
+        # -> Open the 'All Statuses' status filter dropdown so its options appear.
         # All Statuses button
-        elem = page.locator('xpath=/html/body/div/div/main/div/div/main/div/div[2]/div/button')
+        elem = page.get_by_role("combobox").filter(has_text="All Statuses")
         await elem.click(timeout=10000)
         
-        # -> Select the 'Approved' option from the Status dropdown to filter bookings by Approved status.
-        # Approved option
-        elem = page.get_by_role('option', name='Approved', exact=True)
+        # -> Select the 'Pending' option from the 'All Statuses' dropdown to apply the Pending status filter.
+        # Pending option
+        elem = page.get_by_role("option", name="Pending")
         await elem.click(timeout=10000)
         
-        # -> Type 'Room 15' into the Search field labeled 'Search by resource, purpose, or user...' and press Enter to apply the search.
+        # -> Enter 'Team Meeting' into the 'Search by resource, purpose, or user...' field and press Enter to apply the search.
         # Search by resource, purpose, or user... text field
-        elem = page.get_by_placeholder('Search by resource, purpose, or user...', exact=True)
+        elem = page.get_by_role("textbox", name="Search by resource, purpose,")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Room 15")
+        await elem.fill("Team Meeting")
         
         # --> Assertions to verify final state
         
-        # --> Applying the 'Approved' status filter and searching for 'Room 15' shows a matching booking row with resource 'Room 15' and status 'Approved'.
+        # --> The Bookings page is open.
         # Assert-outcome: passed
-        # Assert: The bookings row contains the resource name 'Room 15'.
-        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr").nth(0)).to_contain_text("Room 15", timeout=15000), "The bookings row contains the resource name 'Room 15'."
+        # Assert: The browser is on the bookings page (URL contains /bookings).
+        await expect(page).to_have_url(re.compile("/bookings"), timeout=15000), "The browser is on the bookings page (URL contains /bookings)."
+        
+        # --> The status filter shows 'Pending'.
         # Assert-outcome: passed
-        # Assert: The booking row's Status cell text is 'Approved'.
-        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr/td[8]").nth(0)).to_have_text("Approved", timeout=15000), "The booking row's Status cell text is 'Approved'."
+        # Assert: The status filter control displays 'Pending'.
+        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[2]/div[1]/button").nth(0)).to_have_text("Pending", timeout=15000), "The status filter control displays 'Pending'."
+        
+        # --> An active booking with purpose 'Team Meeting' and status 'Pending' is displayed.
+        # Assert-outcome: passed
+        # Assert: The booking row's Purpose cell contains 'Team Meeting'.
+        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr/td[3]").nth(0)).to_have_text("Team Meeting", timeout=15000), "The booking row's Purpose cell contains 'Team Meeting'."
+        # Assert-outcome: passed
+        # Assert: The booking row's Status cell contains 'Pending'.
+        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr/td[8]").nth(0)).to_have_text("Pending", timeout=15000), "The booking row's Status cell contains 'Pending'."
         await asyncio.sleep(5)
 
     finally:

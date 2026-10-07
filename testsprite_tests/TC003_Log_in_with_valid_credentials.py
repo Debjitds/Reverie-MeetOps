@@ -40,34 +40,34 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link in the header to open the login page.
+        # -> Click the 'Login' link to open the login page
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the 'Username' field with debjitchsarkarofficial2003, fill the 'Password' field with the provided password, and click the 'Login' button.
+        # -> Fill the 'Enter username' field with debjitchsarkarofficial2003.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the 'Username' field with debjitchsarkarofficial2003, fill the 'Password' field with the provided password, and click the 'Login' button.
+        # -> Fill the 'Enter username' field with debjitchsarkarofficial2003.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the 'Username' field with debjitchsarkarofficial2003, fill the 'Password' field with the provided password, and click the 'Login' button.
+        # -> Fill the 'Enter username' field with debjitchsarkarofficial2003.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The user is redirected to the Dashboard page (/dashboard).
+        # --> User landed on the dashboard page.
         # Assert-outcome: passed
-        # Assert: URL contains '/dashboard', showing the dashboard page.
-        await expect(page).to_have_url(re.compile("/dashboard"), timeout=15000), "URL contains '/dashboard', showing the dashboard page."
+        # Assert: Browser URL contains '/dashboard'.
+        await expect(page).to_have_url(re.compile("/dashboard"), timeout=15000), "Browser URL contains '/dashboard'."
         await asyncio.sleep(5)
 
     finally:

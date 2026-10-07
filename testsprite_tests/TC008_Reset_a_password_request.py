@@ -40,30 +40,30 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the 'Reset Password' page by navigating to the URL /reset-password and confirm the reset form or instructions are visible.
+        # -> Open the '/reset-password' page to access the password reset form.
         await page.goto("http://localhost:5173/reset-password")
         try:
             await page.wait_for_load_state("domcontentloaded", timeout=5000)
         except Exception:
             pass
         
-        # -> Fill the 'Username' field with the provided username and click the 'Send Reset Link' button.
+        # -> Fill the 'Username' field with 'debjitchsarkarofficial2003' and click the 'Send Reset Link' button to submit the password reset request.
         # Enter your username text field
-        elem = page.locator('[id="username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the 'Username' field with the provided username and click the 'Send Reset Link' button.
+        # -> Fill the 'Username' field with 'debjitchsarkarofficial2003' and click the 'Send Reset Link' button to submit the password reset request.
         # Send Reset Link button
-        elem = page.get_by_role('button', name='Send Reset Link', exact=True)
+        elem = page.get_by_role("button", name="Send Reset Link")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> No reset confirmation was shown after submitting the password reset form.
-        # Assert-outcome: failed
-        # Assert: Expected notifications region to contain a reset confirmation like 'Check your email'.
-        await expect(page.locator("xpath=/html/body/div/section").nth(0)).to_contain_text("Check your email", timeout=15000), "Expected notifications region to contain a reset confirmation like 'Check your email'."
+        # --> A password reset confirmation is visible saying a reset link has been sent to the user's email.
+        # Assert-outcome: passed
+        # Assert: The confirmation message about the sent reset link is visible.
+        await expect(page.locator("#root").nth(0)).to_contain_text("A password reset link has been sent to your email address. Please check your inbox and follow the instructions.", timeout=15000), "The confirmation message about the sent reset link is visible."
         await asyncio.sleep(5)
 
     finally:

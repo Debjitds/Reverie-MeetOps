@@ -40,79 +40,79 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'LOGIN' button in the top-right of the homepage to open the login page.
+        # -> Click the 'Login' button on the homepage to open the login page.
         # Login link
-        elem = page.get_by_text('Book Rooms.', exact=True).locator("xpath=ancestor-or-self::*[.//a][1]").get_by_role('link', name='Login', exact=True)
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the Username field with 'debjitchsarkarofficial2003', fill the Password field with 'DEBjit737362!', then click the 'Login' button.
+        # -> Fill the Username and Password fields and click the 'Login' button to submit the login form.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the Username field with 'debjitchsarkarofficial2003', fill the Password field with 'DEBjit737362!', then click the 'Login' button.
+        # -> Fill the Username and Password fields and click the 'Login' button to submit the login form.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the Username field with 'debjitchsarkarofficial2003', fill the Password field with 'DEBjit737362!', then click the 'Login' button.
+        # -> Fill the Username and Password fields and click the 'Login' button to submit the login form.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'New Booking' quick action to open the new booking form.
+        # -> Click the 'NEW BOOKING' quick action link to open the New Booking form.
         # New Booking link
-        elem = page.get_by_role('link', name='New Booking', exact=True)
+        elem = page.get_by_role("link", name="New Booking")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Room 15' resource card, then click the 'Next' button to proceed to the booking details step.
+        # -> Select the 'Room 15' resource and click the 'Next' button to continue the booking flow.
         # Room 15 1st Floor Capacity : 10 Meeting
-        elem = page.get_by_text('Room 15 1st Floor Capacity: 10 Meeting', exact=True)
+        elem = page.get_by_text("Room 151st FloorCapacity:")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Room 15' resource card, then click the 'Next' button to proceed to the booking details step.
+        # -> Select the 'Room 15' resource and click the 'Next' button to continue the booking flow.
         # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
+        elem = page.get_by_role("button", name="Next")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Next' button to proceed to the booking details (purpose and attendees) step.
+        # -> Click the 'Next' button to proceed from Step 2 (Select Date & Time) to the booking details step.
         # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
+        elem = page.get_by_role("button", name="Next", exact=True)
         await elem.click(timeout=10000)
         
-        # -> Fill the 'Purpose' field with 'Team Meeting', enter 'Alice, Bob' into the 'Attendees' field, then click the 'Create Booking' button.
+        # -> Fill the 'PURPOSE' field with a valid purpose, enter attendees in the 'ATTENDEES (OPTIONAL)' field, then click the 'Create Booking' button.
         # e.g., Team Meeting, Client Presentation text field
-        elem = page.locator('[id="purpose"]')
+        elem = page.get_by_role("textbox", name="Purpose *")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("Team Meeting")
         
-        # -> Fill the 'Purpose' field with 'Team Meeting', enter 'Alice, Bob' into the 'Attendees' field, then click the 'Create Booking' button.
+        # -> Fill the 'PURPOSE' field with a valid purpose, enter attendees in the 'ATTENDEES (OPTIONAL)' field, then click the 'Create Booking' button.
         # Enter attendee names separated by commas text area
-        elem = page.locator('[id="attendees"]')
+        elem = page.get_by_role("textbox", name="Attendees (optional)")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Alice, Bob")
+        await elem.fill("Alice Johnson, Bob Smith")
         
-        # -> Fill the 'Purpose' field with 'Team Meeting', enter 'Alice, Bob' into the 'Attendees' field, then click the 'Create Booking' button.
+        # -> Fill the 'PURPOSE' field with a valid purpose, enter attendees in the 'ATTENDEES (OPTIONAL)' field, then click the 'Create Booking' button.
         # Create Booking button
-        elem = page.get_by_role('button', name='Create Booking', exact=True)
+        elem = page.get_by_role("button", name="Create Booking")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> A success notification reading 'Booking created successfully!' is visible.
+        # --> A success notification 'Booking created successfully!' is visible.
         # Assert-outcome: passed
-        # Assert: The page displays the success notification 'Booking created successfully!'.
-        await expect(page.locator("xpath=/html/body/div[1]/section/ol/li").nth(0)).to_have_text("Booking created successfully!", timeout=15000), "The page displays the success notification 'Booking created successfully!'."
+        # Assert: Success toast displays 'Booking created successfully!'.
+        await expect(page.get_by_role("listitem").nth(0)).to_have_text("Booking created successfully!", timeout=15000), "Success toast displays 'Booking created successfully!'."
         
-        # --> The new booking appears in Active Bookings for Room 15 with purpose 'Team Meeting' on Sep 2, 2026.
+        # --> The Active Bookings list contains the new booking for Room 15 on Oct 7, 2026 with purpose 'Team Meeting'.
         # Assert-outcome: passed
-        # Assert: The booking row's Purpose column contains 'Team Meeting'.
-        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr[1]/td[3]").nth(0)).to_have_text("Team Meeting", timeout=15000), "The booking row's Purpose column contains 'Team Meeting'."
+        # Assert: Booking row shows purpose 'Team Meeting'.
+        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr[1]/td[3]").nth(0)).to_have_text("Team Meeting", timeout=15000), "Booking row shows purpose 'Team Meeting'."
         # Assert-outcome: passed
-        # Assert: The booking row's Date column contains 'Sep 2, 2026'.
-        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr[1]/td[4]").nth(0)).to_have_text("Sep 2, 2026", timeout=15000), "The booking row's Date column contains 'Sep 2, 2026'."
+        # Assert: Booking row shows date 'Oct 7, 2026'.
+        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr[1]/td[4]").nth(0)).to_have_text("Oct 7, 2026", timeout=15000), "Booking row shows date 'Oct 7, 2026'."
         await asyncio.sleep(5)
 
     finally:

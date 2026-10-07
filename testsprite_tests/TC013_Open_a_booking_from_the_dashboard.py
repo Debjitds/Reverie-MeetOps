@@ -40,72 +40,38 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the Login page by navigating to /login (navigate to http://localhost:5173/login).
-        await page.goto("http://localhost:5173/login")
-        try:
-            await page.wait_for_load_state("domcontentloaded", timeout=5000)
-        except Exception:
-            pass
+        # -> Click the 'Login' link to open the login page.
+        # Login link
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
+        await elem.click(timeout=10000)
         
-        # -> Fill the 'Username' and 'Password' fields with the provided credentials and click the 'LOGIN' button to sign in.
+        # -> Fill the username and password fields with the provided credentials and click the 'Login' button to submit the form.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the 'Username' and 'Password' fields with the provided credentials and click the 'LOGIN' button to sign in.
+        # -> Fill the username and password fields with the provided credentials and click the 'Login' button to submit the form.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the 'Username' and 'Password' fields with the provided credentials and click the 'LOGIN' button to sign in.
+        # -> Fill the username and password fields with the provided credentials and click the 'Login' button to submit the form.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'NEW BOOKING' quick action to open the booking creation form.
-        # New Booking link
-        elem = page.get_by_role('link', name='New Booking', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Select the resource card labeled 'Room 15' on the New Booking form so the booking details step appears.
-        # Room 15 1st Floor Capacity : 10 Meeting
-        elem = page.get_by_text('Room 15 1st Floor Capacity: 10 Meeting', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'NEXT' button on the New Booking form to go to the booking details step.
-        # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'Next' button in the New Booking flow to advance from "STEP 2: SELECT DATE & TIME" to the booking details step.
-        # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Fill the Purpose field with 'Team Meeting' and click the 'Create Booking' button to submit the booking.
-        # e.g., Team Meeting, Client Presentation text field
-        elem = page.locator('[id="purpose"]')
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Team Meeting")
-        
-        # -> Fill the Purpose field with 'Team Meeting' and click the 'Create Booking' button to submit the booking.
-        # Create Booking button
-        elem = page.get_by_role('button', name='Create Booking', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'VIEW' button for the 'Team Meeting' booking in the Active Bookings list to open its booking detail view.
-        # View link
-        elem = page.locator('a[href="/bookings/9e57c8d3-fba8-4b73-a170-8826ff7134c6"]')
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> Booking detail view is displayed showing a 'Cancel Booking' action button.
-        # Assert-outcome: passed
-        # Assert: Booking detail shows a 'Cancel Booking' button.
-        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[2]/div[2]/div[3]/button[3]").nth(0)).to_have_text("Cancel Booking", timeout=15000), "Booking detail shows a 'Cancel Booking' button."
+        # --> The booking detail view should be displayed when opening an upcoming booking.
+        # Assert-outcome: failed
+        # Assert: Expected the URL to contain '/bookings/' to show the booking detail view.
+        await expect(page).to_have_url(re.compile("/bookings/"), timeout=15000), "Expected the URL to contain '/bookings/' to show the booking detail view."
+        
+        # --> Test blocked by environment/access constraints during agent run
+        # Reason: TEST BLOCKED The test could not be run — there are no bookings in the Upcoming Bookings panel to open. Observations: - The dashboard's Upcoming Bookings panel shows the message 'No upcoming bookings'. - The dashboard summary shows Total Bookings: 6, but none are listed as upcoming in the panel required by the test.
+        raise AssertionError("Test blocked during agent run: " + "TEST BLOCKED The test could not be run \u2014 there are no bookings in the Upcoming Bookings panel to open. Observations: - The dashboard's Upcoming Bookings panel shows the message 'No upcoming bookings'. - The dashboard summary shows Total Bookings: 6, but none are listed as upcoming in the panel required by the test." + " — the exported script cannot reproduce a PASS in this environment.")
         await asyncio.sleep(5)
 
     finally:

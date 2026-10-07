@@ -40,40 +40,39 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the 'Users' page by navigating to /users (attempt to access the protected Users page).
+        # -> Navigate to the '/users' page to trigger the protected-page redirect behavior.
         await page.goto("http://localhost:5173/users")
         try:
             await page.wait_for_load_state("domcontentloaded", timeout=5000)
         except Exception:
             pass
         
-        # -> Fill the 'Username' field with the provided username, fill the 'Password' field with the provided password, then click the 'LOGIN' button.
+        # -> Fill the username field with debjitchsarkarofficial2003 and the password field with DEBjit737362!, then click the 'Login' button to submit.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the 'Username' field with the provided username, fill the 'Password' field with the provided password, then click the 'LOGIN' button.
+        # -> Fill the username field with debjitchsarkarofficial2003 and the password field with DEBjit737362!, then click the 'Login' button to submit.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the 'Username' field with the provided username, fill the 'Password' field with the provided password, then click the 'LOGIN' button.
+        # -> Fill the username field with debjitchsarkarofficial2003 and the password field with DEBjit737362!, then click the 'Login' button to submit.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
         # --> After signing in, the user is returned to the originally requested /users page.
         # Assert-outcome: passed
-        # Assert: The browser URL contains /users.
-        await expect(page).to_have_url(re.compile("/users"), timeout=15000), "The browser URL contains /users."
-        await page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div/table/thead/tr").nth(0).scroll_into_view_if_needed()
+        # Assert: Browser is on the /users page.
+        await expect(page).to_have_url(re.compile("/users"), timeout=15000), "Browser is on the /users page."
         # Assert-outcome: passed
-        # Assert: The users table header is visible on the page.
-        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div/table/thead/tr").nth(0)).to_be_visible(timeout=15000), "The users table header is visible on the page."
+        # Assert: Users table header with columns is visible.
+        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div/table/thead/tr").nth(0)).to_have_text("NAME\nEMAIL\nROLE\nJOINED\nACTIONS", timeout=15000), "Users table header with columns is visible."
         await asyncio.sleep(5)
 
     finally:

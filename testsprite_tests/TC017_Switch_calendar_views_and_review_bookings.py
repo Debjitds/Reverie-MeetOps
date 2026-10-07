@@ -40,102 +40,104 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the Login page by navigating to 'http://localhost:5173/login'.
+        # -> Open the Login page (navigate to /login) so the login form is displayed.
         await page.goto("http://localhost:5173/login")
         try:
             await page.wait_for_load_state("domcontentloaded", timeout=5000)
         except Exception:
             pass
         
-        # -> Fill 'debjitchsarkarofficial2003' into the username field, 'DEBjit737362!' into the password field, then click the 'Login' button.
+        # -> Fill the 'Enter username' and 'Enter password' fields with the provided credentials and click the 'Login' button to sign in.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill 'debjitchsarkarofficial2003' into the username field, 'DEBjit737362!' into the password field, then click the 'Login' button.
+        # -> Fill the 'Enter username' and 'Enter password' fields with the provided credentials and click the 'Login' button to sign in.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill 'debjitchsarkarofficial2003' into the username field, 'DEBjit737362!' into the password field, then click the 'Login' button.
+        # -> Fill the 'Enter username' and 'Enter password' fields with the provided credentials and click the 'Login' button to sign in.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Calendar' link in the left navigation to open the calendar page
+        # -> Click the 'Calendar' link in the left sidebar to open the calendar page.
         # Calendar link
-        elem = page.get_by_role('link', name='Calendar', exact=True)
+        elem = page.get_by_role("link", name="Calendar")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Week' button to switch the calendar to Week view.
+        # -> Click the 'Week' button in the calendar header to switch to Week view.
         # Week button
-        elem = page.get_by_text('CalendarView all resource bookings', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Week', exact=True)
+        elem = page.get_by_role("button", name="Week").nth(1)
         await elem.click(timeout=10000)
         
-        # -> Click the 'Day' button to switch the calendar to Day view.
+        # -> Scroll the calendar grid to reveal bookings and search the page for booking text such as 'ROOM' to verify bookings in Week view.
+        await page.mouse.wheel(0, 300)
+        
+        # -> Click the 'DAY' button in the calendar header to switch to Day view and then verify the view is active and whether bookings are displayed.
         # Day button
-        elem = page.get_by_text('CalendarView all resource bookings', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Day', exact=True)
+        elem = page.get_by_role("button", name="Day").nth(2)
         await elem.click(timeout=10000)
         
-        # -> Search the page for the text 'Room 15' to verify the booking in Day view, then click the 'Agenda' button.
+        # -> Click the 'Agenda' button to switch the calendar to Agenda view and check for bookings.
         # Agenda button
-        elem = page.get_by_text('CalendarView all resource bookings', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Agenda', exact=True)
+        elem = page.get_by_role("button", name="Agenda").first
         await elem.click(timeout=10000)
         
-        # -> Click the 'Day' button to switch the calendar to Day view and verify that the booking 'Room 15 - ABC' is visible in Day view.
-        # Day button
-        elem = page.get_by_text('09/02/2026 – 10/02/2026', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Day', exact=True)
+        # -> Click the 'Month' button to switch to Month view and check the main calendar pane for bookings.
+        # Month button
+        elem = page.get_by_role("button", name="Month").first
         await elem.click(timeout=10000)
         
-        # -> Scroll the Day view hourly grid to reveal any bookings and search the page for the text 'Room 15'.
-        await page.mouse.wheel(0, 300)
-        
-        # -> Click the 'Today' button to re-center the Day view and reveal today's bookings.
-        # Today button
-        elem = page.get_by_role('button', name='Today', exact=True)
+        # -> Click the '02' day button in the month grid to open Day view for that date and check that bookings appear.
+        # 02 button
+        elem = page.get_by_role("button", name="02")
         await elem.click(timeout=10000)
         
-        # -> Scroll the Day hourly grid to reveal hidden bookings and check whether 'Room 15 - ABC' is displayed in Day view.
-        await page.mouse.wheel(0, 300)
-        
-        # -> Scroll the Day hourly grid to show the afternoon (4:00 PM) and search the page for the text 'Room 15' to verify the booking in Day view.
-        await page.mouse.wheel(0, 300)
-        
-        # -> Click the 'Agenda' button to open the Agenda view and re-verify that bookings (e.g., 'Room 15 - ABC') are displayed there.
-        # Agenda button
-        elem = page.get_by_text('CalendarView all resource bookings', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Agenda', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'Week' button in the calendar header, then click the 'Day' button to force a re-render and check that 'Room 15' appears in Day view.
+        # -> Click the 'Week' button to switch to Week view and verify bookings are displayed for Oct 02.
         # Week button
-        elem = page.get_by_text('09/02/2026 – 10/02/2026', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Week', exact=True)
+        elem = page.get_by_role("button", name="Week").nth(1)
         await elem.click(timeout=10000)
         
-        # -> Click the 'Week' button in the calendar header, then click the 'Day' button to force a re-render and check that 'Room 15' appears in Day view.
+        # -> Click the 'Day' button to switch the calendar to Day view and then verify bookings are visible.
         # Day button
-        elem = page.get_by_text('August 30 – September 05', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Day', exact=True)
+        elem = page.get_by_role("button", name="Day").first
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Week' button and verify that bookings for Oct 02 are visible in Week view.
+        # Week button
+        elem = page.get_by_role("button", name="Week").first
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Agenda' button to switch to Agenda view and verify that bookings for Oct 02 are listed.
+        # Agenda button
+        elem = page.get_by_role("button", name="Agenda").first
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> Week view was selected (Week view button is present).
-        await page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[1]/div[2]/button[2]").nth(0).scroll_into_view_if_needed()
+        # --> Agenda view shows bookings for Fri Oct 02 (two rows are visible).
+        await page.get_by_role("row", name="Fri Oct 02 4:30 AM – 6:30 AM").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: Week view button is visible on the calendar header.
-        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[1]/div[2]/button[2]").nth(0)).to_be_visible(timeout=15000), "Week view button is visible on the calendar header."
+        # Assert: The first agenda table row (first booking) is visible.
+        await expect(page.get_by_role("row", name="Fri Oct 02 4:30 AM – 6:30 AM").nth(0)).to_be_visible(timeout=15000), "The first agenda table row (first booking) is visible."
+        await page.get_by_role("row", name="5:30 AM – 6:30 AM Automated").nth(0).scroll_into_view_if_needed()
+        # Assert-outcome: passed
+        # Assert: The second agenda table row (second booking) is visible.
+        await expect(page.get_by_role("row", name="5:30 AM – 6:30 AM Automated").nth(0)).to_be_visible(timeout=15000), "The second agenda table row (second booking) is visible."
         
-        # --> Day view is shown (the Day hourly grid is visible).
-        await page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[2]/div/div/div/div[2]/div[2]").nth(0).scroll_into_view_if_needed()
+        # --> The Week and Day view buttons are present in the calendar header.
+        await page.get_by_role("button", name="Week").nth(1).nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: The Day view hourly grid is visible.
-        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[2]/div/div/div/div[2]/div[2]").nth(0)).to_be_visible(timeout=15000), "The Day view hourly grid is visible."
-        
-        # --> Agenda view displays the booking 'Room 15 - ABC'.
+        # Assert: The Week view button is visible in the calendar header.
+        await expect(page.get_by_role("button", name="Week").nth(1).nth(0)).to_be_visible(timeout=15000), "The Week view button is visible in the calendar header."
+        await page.get_by_role("button", name="Day").nth(2).nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: Agenda view contains the booking text 'Room 15 - ABC'.
-        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[2]/div/div/div/div[2]/div[1]/div[2]/div[2]/div[2]").nth(0)).to_contain_text("Room 15 - ABC", timeout=15000), "Agenda view contains the booking text 'Room 15 - ABC'."
+        # Assert: The Day view button is visible in the calendar header.
+        await expect(page.get_by_role("button", name="Day").nth(2).nth(0)).to_be_visible(timeout=15000), "The Day view button is visible in the calendar header."
         await asyncio.sleep(5)
 
     finally:

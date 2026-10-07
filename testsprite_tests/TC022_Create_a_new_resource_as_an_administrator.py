@@ -40,71 +40,78 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link on the homepage to open the login page.
+        # -> Click the 'Login' link in the top navigation to open the login form.
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the 'Username' and 'Password' fields and click the 'Login' button to sign in.
+        # -> Fill the 'Username' and 'Password' fields with admin credentials and click the 'Login' button
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the 'Username' and 'Password' fields and click the 'Login' button to sign in.
+        # -> Fill the 'Username' and 'Password' fields with admin credentials and click the 'Login' button
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the 'Username' and 'Password' fields and click the 'Login' button to sign in.
+        # -> Fill the 'Username' and 'Password' fields with admin credentials and click the 'Login' button
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Resources' link in the left sidebar to open the Resources page.
+        # -> Click the 'RESOURCES' link in the left sidebar to open the Resources page
         # Resources link
-        elem = page.get_by_role('link', name='Resources', exact=True)
+        elem = page.get_by_role("link", name="Resources", exact=True)
         await elem.click(timeout=10000)
         
-        # -> Click the 'ADD RESOURCE' button to open the add-resource form.
+        # -> Click the '+ ADD RESOURCE' button to open the Add Resource form.
         # Add Resource button
-        elem = page.get_by_role('button', name='Add Resource', exact=True)
+        elem = page.get_by_role("button", name="Add Resource")
         await elem.click(timeout=10000)
         
         # -> Fill the 'Name', 'Description', 'Location', and 'Capacity' fields in the 'Add New Resource' dialog and click the 'Create' button.
         # Enter resource name text field
-        elem = page.locator('[id="name"]')
+        elem = page.get_by_role("textbox", name="Name *")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Automated Resource 2026-09-02")
+        await elem.fill("QA Test Resource 2026-10-07")
         
         # -> Fill the 'Name', 'Description', 'Location', and 'Capacity' fields in the 'Add New Resource' dialog and click the 'Create' button.
         # Enter description text area
-        elem = page.locator('[id="description"]')
+        elem = page.get_by_role("textbox", name="Description")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Automation test resource added by admin for QA verification.")
+        await elem.fill("Automated test resource created by admin during QA verification.")
         
         # -> Fill the 'Name', 'Description', 'Location', and 'Capacity' fields in the 'Add New Resource' dialog and click the 'Create' button.
         # Enter location text field
-        elem = page.locator('[id="location"]')
+        elem = page.get_by_role("textbox", name="Location *")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("3rd Floor - Test Wing")
+        await elem.fill("Test Wing - Floor 4")
         
         # -> Fill the 'Name', 'Description', 'Location', and 'Capacity' fields in the 'Add New Resource' dialog and click the 'Create' button.
         # Enter capacity number field
-        elem = page.locator('[id="capacity"]')
+        elem = page.get_by_role("spinbutton", name="Capacity *")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("5")
         
         # -> Fill the 'Name', 'Description', 'Location', and 'Capacity' fields in the 'Add New Resource' dialog and click the 'Create' button.
         # Create button
-        elem = page.get_by_role('button', name='Create', exact=True)
+        elem = page.get_by_role("button", name="Create")
         await elem.click(timeout=10000)
         
-        # --> Test passed — verified by AI agent
-        frame = context.pages[-1]
-        current_url = await frame.evaluate("() => window.location.href")
-        assert current_url is not None, "Test completed successfully"
+        # --> Assertions to verify final state
+        
+        # --> The Resources table shows the new resource named 'QA Test Resource 2026-10-07'.
+        # Assert-outcome: passed
+        # Assert: The resource name appears in the first row of the resources table.
+        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[2]/div/table/tbody/tr[1]/td[1]").nth(0)).to_have_text("QA Test Resource 2026-10-07", timeout=15000), "The resource name appears in the first row of the resources table."
+        
+        # --> A success notification 'Resource created successfully' is visible.
+        # Assert-outcome: passed
+        # Assert: A toast with the text 'Resource created successfully' is visible.
+        await expect(page.get_by_label("Notifications alt+T").nth(0)).to_have_text("Resource created successfully", timeout=15000), "A toast with the text 'Resource created successfully' is visible."
         await asyncio.sleep(5)
 
     finally:

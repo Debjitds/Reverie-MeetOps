@@ -40,65 +40,54 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link in the page header to open the login page.
+        # -> Click the 'Login' link to open the login page.
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the 'Username' and 'Password' fields and click the 'Login' button to submit the form.
+        # -> Fill 'debjitchsarkarofficial2003' into the Username field and 'DEBjit737362!' into the Password field, then click the 'LOGIN' button.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the 'Username' and 'Password' fields and click the 'Login' button to submit the form.
+        # -> Fill 'debjitchsarkarofficial2003' into the Username field and 'DEBjit737362!' into the Password field, then click the 'LOGIN' button.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the 'Username' and 'Password' fields and click the 'Login' button to submit the form.
+        # -> Fill 'debjitchsarkarofficial2003' into the Username field and 'DEBjit737362!' into the Password field, then click the 'LOGIN' button.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'View All Bookings' link in Quick Actions to open the bookings list.
-        # View All Bookings link
-        elem = page.get_by_role('link', name='View All Bookings', exact=True)
+        # -> Click the 'BOOKINGS' link in the left sidebar to open the bookings list.
+        # Bookings link
+        elem = page.get_by_role("link", name="Bookings", exact=True)
         await elem.click(timeout=10000)
         
-        # -> Click the 'View' button for the booking by Ash (status: Approved) in the Active Bookings list.
+        # -> Open the booking for Room 15 by user 'Rohan_QC' dated 'Oct 2, 2026' by clicking its action link to view booking details.
         # View link
-        elem = page.locator('a[href="/bookings/a5369402-9cd9-4ff8-b554-69d918aced28"]')
+        elem = page.get_by_role("row", name="Room 15 1st Floor Rohan_QC").get_by_role("link")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Cancel Booking' button on the booking details page.
+        # -> Click the 'CANCEL BOOKING' button to start the cancellation flow.
         # Cancel Booking button
-        elem = page.get_by_role('button', name='Cancel Booking', exact=True)
+        elem = page.get_by_role("button", name="Cancel Booking")
         await elem.click(timeout=10000)
         
         # -> Click the 'Yes, cancel booking' button in the confirmation dialog to confirm cancellation.
         # Yes, cancel booking button
-        elem = page.get_by_role('button', name='Yes, cancel booking', exact=True)
+        elem = page.get_by_role("button", name="Yes, cancel booking")
         await elem.click(timeout=10000)
         
-        # -> Open the 'Notifications' section and inspect it for a cancellation confirmation message or toast.
-        # Notifications alt+T
-        elem = page.get_by_text('Notifications alt+T', exact=True)
-        await elem.click(timeout=10000)
+        # --> Assertions to verify final state
         
-        # -> Open the 'Notifications' section and check for a cancellation confirmation message or toast.
-        # Notifications alt+T
-        elem = page.get_by_text('Notifications alt+T', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Extract and search the page content for any notification or toast text mentioning 'cancel', 'cancelled', 'canceled', 'cancellation', 'success', or 'successfully' to verify if a separate cancellation confirmation is present.
-        # [internal] extract_content: 
-        
-        # --> Test passed — verified by AI agent
-        frame = context.pages[-1]
-        current_url = await frame.evaluate("() => window.location.href")
-        assert current_url is not None, "Test completed successfully"
+        # --> A 'Booking cancelled successfully' notification was shown after confirming the cancellation.
+        # Assert-outcome: passed
+        # Assert: A 'Booking cancelled successfully' notification is visible in the notifications area.
+        await expect(page.get_by_label("Notifications alt+T").nth(0)).to_contain_text("Booking cancelled successfully", timeout=15000), "A 'Booking cancelled successfully' notification is visible in the notifications area."
         await asyncio.sleep(5)
 
     finally:

@@ -417,9 +417,28 @@ export default function NewBookingPage() {
         });
 
         if (error) {
-          const errorMsg = await error?.context?.text();
-          console.error('Multi-day booking error:', errorMsg || error?.message);
-          toast.error(errorMsg || t('newBooking.multiDayCreateFailed'));
+          // Extract a meaningful message WITHOUT letting the read itself throw.
+          // Previously `await error?.context?.text()` threw a TypeError when the
+          // function was missing/undeployed (context is not a Response), so the
+          // error fell through to the generic catch and showed the misleading
+          // "Failed to create booking" (TestSprite TC007).
+          let errorMsg = '';
+          try {
+            const ctx = (error as unknown as { context?: { text?: () => Promise<string> } })?.context;
+            if (ctx && typeof ctx.text === 'function') {
+              const raw = await ctx.text();
+              try {
+                errorMsg = (JSON.parse(raw) as { error?: string })?.error || raw;
+              } catch {
+                errorMsg = raw;
+              }
+            }
+          } catch {
+            // ignore and fall back to the message below
+          }
+          const message = errorMsg || (error as Error)?.message || t('newBooking.multiDayCreateFailed');
+          console.error('Multi-day booking error:', message);
+          toast.error(message);
           setLoading(false);
           return;
         }

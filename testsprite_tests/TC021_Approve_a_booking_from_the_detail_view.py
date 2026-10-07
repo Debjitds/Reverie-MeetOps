@@ -40,41 +40,56 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link to open the login page
+        # -> Click the 'Login' link to open the login page.
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the username and password fields and click the 'Login' button.
+        # -> Fill the username field ('Enter username') with debjitchsarkarofficial2003, fill the password field ('Enter password') with DEBjit737362!, then click the 'Login' button.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the username and password fields and click the 'Login' button.
+        # -> Fill the username field ('Enter username') with debjitchsarkarofficial2003, fill the password field ('Enter password') with DEBjit737362!, then click the 'Login' button.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the username and password fields and click the 'Login' button.
+        # -> Fill the username field ('Enter username') with debjitchsarkarofficial2003, fill the password field ('Enter password') with DEBjit737362!, then click the 'Login' button.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Bookings' link in the left navigation to open the Bookings page.
+        # -> Click the 'BOOKINGS' link in the left navigation to open the bookings list.
         # Bookings link
-        elem = page.get_by_role('link', name='Bookings', exact=True)
+        elem = page.get_by_role("link", name="Bookings", exact=True)
         await elem.click(timeout=10000)
         
-        # -> Open the pending booking by clicking the 'View' button for the booking whose status reads 'Pending'.
+        # -> Open the booking with status 'Pending' (Sep 2, 2026, user 'Deb') from the bookings list by clicking its details link.
         # View link
-        elem = page.locator('a[href="/bookings/3c2e7941-0a5c-4b58-ab81-c4c97eec9026"]')
+        elem = page.get_by_role("row", name="Room 15 1st Floor Deb Team Meeting Sep 2, 2026 9:00 AM 10:00 AM Pending View").get_by_role("link")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Approve' button on the booking detail page
+        # -> Click the 'Approve' button on the booking detail page.
         # Approve button
-        elem = page.get_by_role('button', name='Approve', exact=True)
+        elem = page.get_by_role("button", name="Approve")
+        await elem.click(timeout=10000)
+        
+        # -> Open the Notifications panel (bell) and check for a success notification confirming the booking approval.
+        # Notifications alt+T
+        elem = page.get_by_role("region", name="Notifications alt+T")
+        await elem.click(timeout=10000)
+        
+        # -> Click the Notifications bell (the bell icon labeled 'Notifications') to open the Notifications panel and reveal any confirmation message.
+        # Notifications alt+T
+        elem = page.get_by_role("region", name="Notifications alt+T")
+        await elem.click(timeout=10000)
+        
+        # -> Open the 'Notifications' panel (bell icon) and look for a notification confirming the booking approval.
+        # Notifications alt+T
+        elem = page.get_by_role("region", name="Notifications alt+T")
         await elem.click(timeout=10000)
         
         # --> Test passed — verified by AI agent

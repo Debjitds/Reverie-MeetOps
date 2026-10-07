@@ -40,41 +40,41 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link to open the login page.
+        # -> Click the 'Login' button to open the login form.
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("link", name="Login").nth(1)
         await elem.click(timeout=10000)
         
-        # -> Fill the username and password fields and click the 'LOGIN' button to submit the form.
+        # -> Fill the username field ('Enter username') with the provided username, fill the password field ('Enter password') with the provided password, then click the 'Login' button.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the username and password fields and click the 'LOGIN' button to submit the form.
+        # -> Fill the username field ('Enter username') with the provided username, fill the password field ('Enter password') with the provided password, then click the 'Login' button.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the username and password fields and click the 'LOGIN' button to submit the form.
+        # -> Fill the username field ('Enter username') with the provided username, fill the password field ('Enter password') with the provided password, then click the 'Login' button.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> Booking summary cards are visible on the Dashboard.
+        # --> The dashboard shows the booking summary cards (summary icons are visible).
         await page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[2]/div[1]/div[1]/svg").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: A booking summary card icon is visible on the Dashboard.
-        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[2]/div[1]/div[1]/svg").nth(0)).to_be_visible(timeout=15000), "A booking summary card icon is visible on the Dashboard."
+        # Assert: A booking summary card icon is visible on the dashboard.
+        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[2]/div[1]/div[1]/svg").nth(0)).to_be_visible(timeout=15000), "A booking summary card icon is visible on the dashboard."
         
-        # --> Upcoming Bookings section is present and displays that there are no upcoming bookings.
-        await page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div[2]/div[2]/a[2]").nth(0).scroll_into_view_if_needed()
+        # --> The Upcoming Bookings panel is present and shows the empty-state message.
+        await page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[4]/div/div[1]/div/svg").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: The bookings controls (View All Bookings link) are visible, indicating the Upcoming Bookings area is present.
-        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div[2]/div[2]/a[2]").nth(0)).to_be_visible(timeout=15000), "The bookings controls (View All Bookings link) are visible, indicating the Upcoming Bookings area is present."
+        # Assert: The Upcoming Bookings panel (empty-state) is visible on the dashboard.
+        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[4]/div/div[1]/div/svg").nth(0)).to_be_visible(timeout=15000), "The Upcoming Bookings panel (empty-state) is visible on the dashboard."
         await asyncio.sleep(5)
 
     finally:

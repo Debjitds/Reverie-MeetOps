@@ -40,74 +40,125 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the Login page by navigating to /login so the login form is visible.
-        await page.goto("http://localhost:5173/login")
-        try:
-            await page.wait_for_load_state("domcontentloaded", timeout=5000)
-        except Exception:
-            pass
+        # -> Click the 'Login' link to open the login page.
+        # Login link
+        elem = page.get_by_role("link", name="Login").nth(1)
+        await elem.click(timeout=10000)
         
-        # -> Fill the username and password fields and click the 'Login' button.
+        # -> Fill the 'Username' and 'Password' fields and click the 'LOGIN' button to submit the login form.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the username and password fields and click the 'Login' button.
+        # -> Fill the 'Username' and 'Password' fields and click the 'LOGIN' button to submit the login form.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the username and password fields and click the 'Login' button.
+        # -> Fill the 'Username' and 'Password' fields and click the 'LOGIN' button to submit the login form.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'New Booking' link in Quick Actions to open the new booking form.
+        # -> Click the 'NEW BOOKING' link in Quick Actions to open the New Booking page.
         # New Booking link
-        elem = page.get_by_role('link', name='New Booking', exact=True)
+        elem = page.get_by_role("link", name="New Booking")
         await elem.click(timeout=10000)
         
-        # -> Select the 'Room 15' resource card, then click the 'NEXT' button to proceed to the time selection step.
-        # Room 15 1st Floor Capacity : 10 Meeting
-        elem = page.get_by_text('Room 15 1st Floor Capacity: 10 Meeting', exact=True)
+        # -> Select the 'Automated Resource 2026-09-02' resource card to choose it for booking.
+        # Automated Resource 2026-09-02 3rd Floor - Test...
+        elem = page.get_by_text("Automated Resource 2026-09-023rd Floor - Test WingCapacity: 5Automation test")
         await elem.click(timeout=10000)
         
-        # -> Select the 'Room 15' resource card, then click the 'NEXT' button to proceed to the time selection step.
+        # -> Click the 'NEXT' button in the booking panel to open Step 2 (date and time selection).
         # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
+        elem = page.get_by_role("button", name="Next")
         await elem.click(timeout=10000)
         
-        # -> Set Start Time to '09:30' and End Time to '10:30', then click the 'Next' button to check for a conflict warning.
+        # -> Set Start Time to 09:30 and End Time to 10:30, then click the 'Next' button to trigger availability validation and observe whether a conflict warning appears.
         # time field
-        elem = page.locator('[id="start-time"]')
+        elem = page.get_by_role("textbox", name="Start Time")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("09:30")
         
-        # -> Set Start Time to '09:30' and End Time to '10:30', then click the 'Next' button to check for a conflict warning.
+        # -> Set Start Time to 09:30 and End Time to 10:30, then click the 'Next' button to trigger availability validation and observe whether a conflict warning appears.
         # time field
-        elem = page.locator('[id="end-time"]')
+        elem = page.get_by_role("textbox", name="End Time")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("10:30")
         
-        # -> Set Start Time to '09:30' and End Time to '10:30', then click the 'Next' button to check for a conflict warning.
+        # -> Set Start Time to 09:30 and End Time to 10:30, then click the 'Next' button to trigger availability validation and observe whether a conflict warning appears.
         # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
+        elem = page.get_by_role("button", name="Next", exact=True)
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Create Booking' button to submit the booking and observe whether a conflict warning appears
+        # Create Booking button
+        elem = page.get_by_role("button", name="Create Booking")
+        await elem.click(timeout=10000)
+        
+        # -> Fill the 'PURPOSE' field with 'Team Meeting' and click the 'Create Booking' button to attempt submission and observe any conflict warning.
+        # e.g., Team Meeting, Client Presentation text field
+        elem = page.get_by_role("textbox", name="Purpose *")
+        await elem.wait_for(state="visible", timeout=10000)
+        await elem.fill("Team Meeting")
+        
+        # -> Fill the 'PURPOSE' field with 'Team Meeting' and click the 'Create Booking' button to attempt submission and observe any conflict warning.
+        # Create Booking button
+        elem = page.get_by_role("button", name="Create Booking")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'NEW BOOKING' button to open the New Booking flow.
+        # New Booking link
+        elem = page.get_by_role("link", name="New Booking")
+        await elem.click(timeout=10000)
+        
+        # -> Select the 'Automated Resource 2026-09-02' card and click the 'Next' button to open Step 2: Select Date & Time.
+        # Automated Resource 2026-09-02 3rd Floor - Test...
+        elem = page.get_by_text("Automated Resource 2026-09-023rd Floor - Test WingCapacity: 5Automation test")
+        await elem.click(timeout=10000)
+        
+        # -> Select the 'Automated Resource 2026-09-02' card and click the 'Next' button to open Step 2: Select Date & Time.
+        # Next button
+        elem = page.get_by_role("button", name="Next")
+        await elem.click(timeout=10000)
+        
+        # -> Set the Start Time to "11:00" and End Time to "12:00", then click the 'Next' button to advance to Booking Details.
+        # time field
+        elem = page.get_by_role("textbox", name="Start Time")
+        await elem.wait_for(state="visible", timeout=10000)
+        await elem.fill("11:00")
+        
+        # -> Set the Start Time to "11:00" and End Time to "12:00", then click the 'Next' button to advance to Booking Details.
+        # time field
+        elem = page.get_by_role("textbox", name="End Time")
+        await elem.wait_for(state="visible", timeout=10000)
+        await elem.fill("12:00")
+        
+        # -> Set the Start Time to "11:00" and End Time to "12:00", then click the 'Next' button to advance to Booking Details.
+        # Next button
+        elem = page.get_by_role("button", name="Next", exact=True)
+        await elem.click(timeout=10000)
+        
+        # -> Fill the 'PURPOSE' field with 'Team Meeting' and click the 'Create Booking' button to submit the booking.
+        # e.g., Team Meeting, Client Presentation text field
+        elem = page.get_by_role("textbox", name="Purpose *")
+        await elem.wait_for(state="visible", timeout=10000)
+        await elem.fill("Team Meeting")
+        
+        # -> Fill the 'PURPOSE' field with 'Team Meeting' and click the 'Create Booking' button to submit the booking.
+        # Create Booking button
+        elem = page.get_by_role("button", name="Create Booking")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> A conflict warning is visible when a selected time overlaps an existing booking.
-        # Assert-outcome: failed
-        # Assert: Expected the page to show a conflict warning (contain the word 'conflict').
-        await expect(page.locator("xpath=/html/body/div").nth(0)).to_contain_text("conflict", timeout=15000), "Expected the page to show a conflict warning (contain the word 'conflict')."
-        
-        # --> The booking request can be submitted via the 'Create Booking' button on the Booking Details page.
-        await page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div[2]/form/div[5]/button[2]").nth(0).scroll_into_view_if_needed()
-        # Assert-outcome: failed
-        # Assert: Expected the 'Create Booking' button to be visible so the booking can be submitted.
-        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div[2]/form/div[5]/button[2]").nth(0)).to_be_visible(timeout=15000), "Expected the 'Create Booking' button to be visible so the booking can be submitted."
+        # --> The booking was submitted successfully and the UI showed a "Booking created successfully!" notification.
+        # Assert-outcome: passed
+        # Assert: A success toast with the exact text 'Booking created successfully!' is visible.
+        await expect(page.get_by_label("Notifications alt+T").nth(0)).to_have_text("Booking created successfully!", timeout=15000), "A success toast with the exact text 'Booking created successfully!' is visible."
         await asyncio.sleep(5)
 
     finally:

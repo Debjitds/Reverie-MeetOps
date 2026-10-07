@@ -40,42 +40,46 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link to open the login page or form.
-        # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
-        await elem.click(timeout=10000)
+        # -> Open the Login page (navigate to /login).
+        await page.goto("http://localhost:5173/login")
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=5000)
+        except Exception:
+            pass
         
-        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
+        # -> Fill 'debjitchsarkarofficial2003' into the 'Enter username' field and the provided password into the 'Enter password' field, then click the 'Login' button.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
+        # -> Fill 'debjitchsarkarofficial2003' into the 'Enter username' field and the provided password into the 'Enter password' field, then click the 'Login' button.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
+        # -> Fill 'debjitchsarkarofficial2003' into the 'Enter username' field and the provided password into the 'Enter password' field, then click the 'Login' button.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Calendar' link in the left navigation to open the Calendar page.
+        # -> Click the 'Calendar' link in the left sidebar to open the Calendar page.
         # Calendar link
-        elem = page.get_by_role('link', name='Calendar', exact=True)
+        elem = page.get_by_role("link", name="Calendar")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Next' button to move the calendar to the next date range.
+        # -> Click the 'Next' button in the calendar controls to move the calendar forward to the next month.
         # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
+        elem = page.get_by_role("button", name="Next")
         await elem.click(timeout=10000)
         
-        # --> Test passed — verified by AI agent
-        frame = context.pages[-1]
-        current_url = await frame.evaluate("() => window.location.href")
-        assert current_url is not None, "Test completed successfully"
+        # --> Assertions to verify final state
+        
+        # --> The calendar header updated to show November 2026 after advancing the calendar.
+        # Assert-outcome: passed
+        # Assert: Calendar header contains 'November 2026'.
+        await expect(page.locator("#root").nth(0)).to_contain_text("November 2026", timeout=15000), "Calendar header contains 'November 2026'."
         await asyncio.sleep(5)
 
     finally:

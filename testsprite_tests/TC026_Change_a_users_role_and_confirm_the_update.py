@@ -40,59 +40,81 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link in the header to open the login page.
-        # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
-        await elem.click(timeout=10000)
+        # -> Open the login page by navigating to '/login' and verify the login form is visible (username, password fields and a submit button).
+        await page.goto("http://localhost:5173/login")
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=5000)
+        except Exception:
+            pass
         
-        # -> Fill the username field with 'debjitchsarkarofficial2003', fill the password field with 'DEBjit737362!', then click the 'Login' button to sign in.
+        # -> Fill the username and password fields with the admin credentials and click the 'Login' button.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the username field with 'debjitchsarkarofficial2003', fill the password field with 'DEBjit737362!', then click the 'Login' button to sign in.
+        # -> Fill the username and password fields with the admin credentials and click the 'Login' button.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the username field with 'debjitchsarkarofficial2003', fill the password field with 'DEBjit737362!', then click the 'Login' button to sign in.
+        # -> Fill the username and password fields with the admin credentials and click the 'Login' button.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Users' link in the left navigation to open the Users page.
+        # -> Click the 'USERS' link in the left navigation to open the users list.
         # Users link
-        elem = page.get_by_role('link', name='Users', exact=True)
+        elem = page.get_by_role("link", name="Users")
         await elem.click(timeout=10000)
         
-        # -> Open the role change dialog for user 'Raj' by clicking the 'Change Role' button in Raj's row.
+        # -> Click the 'CHANGE ROLE' button for the 'Debjit Sarkar' user to open the role-change dialog.
         # Change Role button
-        elem = page.get_by_text('Raj', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Change Role', exact=True)
+        elem = page.get_by_role("row", name="Debjit Sarkar").get_by_role("button")
         await elem.click(timeout=10000)
         
-        # -> Open the 'New Role' dropdown in the 'Change User Role' dialog so the role options become visible.
+        # -> Open the 'New Role' dropdown in the 'Change User Role' dialog so role options appear.
         # User button
-        elem = page.locator('xpath=/html/body/div[3]/div[2]/div[2]/button')
+        elem = page.get_by_role("combobox")
         await elem.click(timeout=10000)
         
-        # -> Select the 'Admin' option in the 'New Role' dropdown and submit the change by pressing Enter to apply the update.
-        # Admin option
-        elem = page.get_by_role('option', name='Admin', exact=True)
+        # -> Select the 'Manager' option in the New Role dropdown and submit the change by activating the 'Update Role' action.
+        # Manager option
+        elem = page.get_by_role("option", name="Manager")
         await elem.click(timeout=10000)
         
-        # -> Click the 'UPDATE ROLE' button in the dialog to apply the Admin role for Raj, then verify Raj's role shows as 'admin' in the users list.
+        # -> Click the 'Update Role' button to submit the role change.
+        # Close button
+        elem = page.locator("button").filter(has_text="Close")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Change Role' button for Debjit Sarkar to reopen the role-change dialog.
+        # Change Role button
+        elem = page.get_by_role("row", name="Debjit Sarkar").get_by_role("button")
+        await elem.click(timeout=10000)
+        
+        # -> Open the 'New Role' dropdown in the 'Change User Role' dialog so the role options appear.
+        # User button
+        elem = page.get_by_role("combobox")
+        await elem.click(timeout=10000)
+        
+        # -> Select the 'Manager' option in the New Role dropdown to choose Manager as the new role.
+        # Manager option
+        elem = page.get_by_role("option", name="Manager")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'UPDATE ROLE' button in the Change User Role dialog to submit the new role.
         # Update Role button
-        elem = page.get_by_role('button', name='Update Role', exact=True)
+        elem = page.get_by_role("button", name="Update Role")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> User 'Raj' displays role 'admin' in the users list.
+        # --> The users list shows Debjit Sarkar's role updated to 'manager'.
         # Assert-outcome: passed
-        # Assert: ROLE cell for Raj shows 'admin'.
-        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div/table/tbody/tr[3]/td[3]").nth(0)).to_have_text("admin", timeout=15000), "ROLE cell for Raj shows 'admin'."
+        # Assert: Debjit Sarkar's role is shown as 'manager' in the users table.
+        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div/table/tbody/tr[2]/td[3]").nth(0)).to_have_text("manager", timeout=15000), "Debjit Sarkar's role is shown as 'manager' in the users table."
         await asyncio.sleep(5)
 
     finally:

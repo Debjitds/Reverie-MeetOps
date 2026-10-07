@@ -42,163 +42,97 @@ async def run_test():
         
         # -> Click the 'Login' link to open the login page.
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the 'Enter username' field with debjitchsarkarofficial2003 and the 'Enter password' field with DEBjit737362!, then click the 'Login' button.
+        # -> Fill the Username field with 'debjitchsarkarofficial2003', fill the Password field with 'DEBjit737362!', then click the 'Login' button to submit.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the 'Enter username' field with debjitchsarkarofficial2003 and the 'Enter password' field with DEBjit737362!, then click the 'Login' button.
+        # -> Fill the Username field with 'debjitchsarkarofficial2003', fill the Password field with 'DEBjit737362!', then click the 'Login' button to submit.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the 'Enter username' field with debjitchsarkarofficial2003 and the 'Enter password' field with DEBjit737362!, then click the 'Login' button.
+        # -> Fill the Username field with 'debjitchsarkarofficial2003', fill the Password field with 'DEBjit737362!', then click the 'Login' button to submit.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'New Booking' quick action (label: 'NEW BOOKING') to open the booking creation page.
+        # -> Click the 'New Booking' link in Quick Actions to open the new booking page.
         # New Booking link
-        elem = page.get_by_role('link', name='New Booking', exact=True)
+        elem = page.get_by_role("link", name="New Booking")
         await elem.click(timeout=10000)
         
-        # -> Select the 'Room 15' card and click the 'NEXT' button to proceed to the date/time step.
+        # -> Select the 'Room 15' resource card and click the 'Next' button to proceed to Step 2
         # Room 15 1st Floor Capacity : 10 Meeting
-        elem = page.get_by_text('Room 15 1st Floor Capacity: 10 Meeting', exact=True)
+        elem = page.get_by_text("Room 151st FloorCapacity:")
         await elem.click(timeout=10000)
         
-        # -> Select the 'Room 15' card and click the 'NEXT' button to proceed to the date/time step.
+        # -> Select the 'Room 15' resource card and click the 'Next' button to proceed to Step 2
         # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
+        elem = page.get_by_role("button", name="Next")
         await elem.click(timeout=10000)
         
-        # -> Select the 'Multi-Day' booking option on the Step 2: Select Date & Time page
+        # -> Select the 'Multi-Day' booking option
         # button
-        elem = page.locator('[id="multi_day"]')
+        elem = page.get_by_role("radio", name="Multi-Day")
         await elem.click(timeout=10000)
         
-        # -> Click the Thursday, September 4th, 2026 End Date button, set End Time to 17:00, then click the 'Next' button to proceed to Step 3.
-        # Friday, September 4th, 2026 button
-        elem = page.locator('xpath=/html/body/div/div/main/div/div/main/div/div[3]/div[2]/div[2]/div/div[2]/div/div/div/table/tbody/tr/td[6]/button')
+        # -> Select an end date of 'October 9, 2026', set the daily end time to '17:00', then click the 'Next' button to advance to Step 3 (Purpose & Attendees).
+        # Friday, October 9th, 2026 button
+        elem = page.get_by_role("button", name="Friday, October 9th,").nth(1)
         await elem.click(timeout=10000)
         
-        # -> Click the Thursday, September 4th, 2026 End Date button, set End Time to 17:00, then click the 'Next' button to proceed to Step 3.
+        # -> Select an end date of 'October 9, 2026', set the daily end time to '17:00', then click the 'Next' button to advance to Step 3 (Purpose & Attendees).
         # time field
-        elem = page.locator('[id="end-time"]')
+        elem = page.get_by_role("textbox", name="End Time")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("17:00")
         
-        # -> Click the Thursday, September 4th, 2026 End Date button, set End Time to 17:00, then click the 'Next' button to proceed to Step 3.
+        # -> Select an end date of 'October 9, 2026', set the daily end time to '17:00', then click the 'Next' button to advance to Step 3 (Purpose & Attendees).
+        await page.mouse.wheel(0, 300)
+        
+        # -> Select an end date of 'October 9, 2026', set the daily end time to '17:00', then click the 'Next' button to advance to Step 3 (Purpose & Attendees).
         # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
+        elem = page.get_by_role("button", name="Next", exact=True)
         await elem.click(timeout=10000)
         
-        # -> Change the start time to 08:00 and end time to 12:00, then click the 'Next' button to retry submitting the booking.
-        # time field
-        elem = page.locator('[id="start-time"]')
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("08:00")
-        
-        # -> Change the start time to 08:00 and end time to 12:00, then click the 'Next' button to retry submitting the booking.
-        # time field
-        elem = page.locator('[id="end-time"]')
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("12:00")
-        
-        # -> Change the start time to 08:00 and end time to 12:00, then click the 'Next' button to retry submitting the booking.
-        # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Choose September 6th as Start Date and September 8th as End Date, set start time to 09:00 and end time to 17:00, then click the 'Next' button.
-        # Sunday, September 6th, 2026 button
-        elem = page.locator('xpath=/html/body/div/div/main/div/div/main/div/div[3]/div[2]/div[2]/div/div/div/div/div/table/tbody/tr[2]/td/button')
-        await elem.click(timeout=10000)
-        
-        # -> Choose September 6th as Start Date and September 8th as End Date, set start time to 09:00 and end time to 17:00, then click the 'Next' button.
-        # Tuesday, September 8th, 2026 button
-        elem = page.locator('xpath=/html/body/div/div/main/div/div/main/div/div[3]/div[2]/div[2]/div/div/div/div/div/table/tbody/tr[2]/td[3]/button')
-        await elem.click(timeout=10000)
-        
-        # -> Choose September 6th as Start Date and September 8th as End Date, set start time to 09:00 and end time to 17:00, then click the 'Next' button.
-        # time field
-        elem = page.locator('[id="start-time"]')
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("09:00")
-        
-        # -> Choose September 6th as Start Date and September 8th as End Date, set start time to 09:00 and end time to 17:00, then click the 'Next' button.
-        # time field
-        elem = page.locator('[id="end-time"]')
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("17:00")
-        
-        # -> Choose September 6th as Start Date and September 8th as End Date, set start time to 09:00 and end time to 17:00, then click the 'Next' button.
-        # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Select 'September 8, 2026' as the End date so the end date is after the start date, then click the 'Next' button to proceed to the booking details page.
-        # Tuesday, September 8th, 2026 button
-        elem = page.locator('xpath=/html/body/div/div/main/div/div/main/div/div[3]/div[2]/div[2]/div/div[2]/div/div/div/table/tbody/tr[2]/td[3]/button')
-        await elem.click(timeout=10000)
-        
-        # -> Select 'September 8, 2026' as the End date so the end date is after the start date, then click the 'Next' button to proceed to the booking details page.
-        # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Fill the PURPOSE field with a meeting purpose, enter attendee names into the ATTENDEES field, then click the 'Create Booking' button to submit the multi-day booking request.
+        # -> Fill the 'PURPOSE' field and the 'ATTENDEES' field, then click the 'Create Booking' button to submit the multi-day booking request.
         # e.g., Team Meeting, Client Presentation text field
-        elem = page.locator('[id="purpose"]')
+        elem = page.get_by_role("textbox", name="Purpose *")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Team meeting: Project planning and roadmap review")
+        await elem.fill("Project kickoff meeting")
         
-        # -> Fill the PURPOSE field with a meeting purpose, enter attendee names into the ATTENDEES field, then click the 'Create Booking' button to submit the multi-day booking request.
+        # -> Fill the 'PURPOSE' field and the 'ATTENDEES' field, then click the 'Create Booking' button to submit the multi-day booking request.
         # Enter attendee names separated by commas text area
-        elem = page.locator('[id="attendees"]')
+        elem = page.get_by_role("textbox", name="Attendees (optional)")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Alice Smith, Bob Lee, Charlie Khan")
+        await elem.fill("alice@example.com, bob@example.com")
         
-        # -> Fill the PURPOSE field with a meeting purpose, enter attendee names into the ATTENDEES field, then click the 'Create Booking' button to submit the multi-day booking request.
+        # -> Fill the 'PURPOSE' field and the 'ATTENDEES' field, then click the 'Create Booking' button to submit the multi-day booking request.
         # Create Booking button
-        elem = page.get_by_role('button', name='Create Booking', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'Create Booking' button to submit the multi-day booking request and verify that a booking confirmation appears.
-        # Create Booking button
-        elem = page.get_by_role('button', name='Create Booking', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'Create Booking' button and verify that a booking confirmation (success message or a new booking entry) appears.
-        # Create Booking button
-        elem = page.get_by_role('button', name='Create Booking', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'Create Booking' button and then verify that a booking confirmation or the new booking entry is visible.
-        # Create Booking button
-        elem = page.get_by_role('button', name='Create Booking', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Open the Notifications panel and then go to the Bookings page to check whether the new booking (Room 15, Sep 6–8, 2026) appears.
-        # Notifications alt+T
-        elem = page.get_by_text('Notifications alt+T', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Open the Notifications panel and then go to the Bookings page to check whether the new booking (Room 15, Sep 6–8, 2026) appears.
-        # Bookings link
-        elem = page.get_by_role('link', name='Bookings', exact=True)
+        elem = page.get_by_role("button", name="Create Booking")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
-        current_url = await page.evaluate("() => window.location.href")
+        
+        # --> A booking success notification is visible.
+        await page.get_by_role("listitem").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: page loaded with a URL (final outcome verified by the AI judge during the run)
-        assert current_url, 'Page should have loaded with a URL'
+        # Assert: Booking success notification is visible.
+        await expect(page.get_by_role("listitem").nth(0)).to_be_visible(timeout=15000), "Booking success notification is visible."
+        
+        # --> The bookings list contains a Room 15 entry with purpose 'Project kickoff meeting' listed as a Multi-Day booking.
+        # Assert-outcome: passed
+        # Assert: The first booking row shows the entered purpose 'Project kickoff meeting'.
+        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr[1]/td[3]").nth(0)).to_have_text("Project kickoff meeting", timeout=15000), "The first booking row shows the entered purpose 'Project kickoff meeting'."
+        # Assert-outcome: passed
+        # Assert: The first booking row is marked as 'Multi-Day'.
+        await expect(page.locator("xpath=/html/body/div/div/main/div/div/main/div/div[3]/div/div/table/tbody/tr[1]/td[7]").nth(0)).to_have_text("Multi-Day", timeout=15000), "The first booking row is marked as 'Multi-Day'."
         await asyncio.sleep(5)
 
     finally:

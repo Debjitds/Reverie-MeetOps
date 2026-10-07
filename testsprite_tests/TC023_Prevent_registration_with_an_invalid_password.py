@@ -40,51 +40,51 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Navigate to the 'Register' page
-        await page.goto("http://localhost:5173/register")
-        try:
-            await page.wait_for_load_state("domcontentloaded", timeout=5000)
-        except Exception:
-            pass
+        # -> Click the 'Get Started' button to open the registration flow.
+        # Get Started link
+        elem = page.get_by_role("navigation").get_by_role("link", name="Get Started")
+        await elem.click(timeout=10000)
         
-        # -> Fill the Full Name, Username, Password, and Confirm Password fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Fill the 'FULL NAME' field with a valid name, the 'USERNAME' field with a unique username, the 'PASSWORD' and 'CONFIRM PASSWORD' fields with a short invalid password, and check the 'I agree to the User Agreement and Privacy Policy' check...
         # Enter your full name text field
-        elem = page.locator('[id="name"]')
+        elem = page.get_by_role("textbox", name="Full Name *")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("Debjit Sarkar")
         
-        # -> Fill the Full Name, Username, Password, and Confirm Password fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Fill the 'FULL NAME' field with a valid name, the 'USERNAME' field with a unique username, the 'PASSWORD' and 'CONFIRM PASSWORD' fields with a short invalid password, and check the 'I agree to the User Agreement and Privacy Policy' check...
         # Letters, numbers, and underscores only text field
-        elem = page.locator('[id="username"]')
+        elem = page.get_by_role("textbox", name="Username *")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("debjitchsarkar_test_xyz")
+        await elem.fill("debjitchsarkarofficial2003_1")
         
-        # -> Fill the Full Name, Username, Password, and Confirm Password fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Fill the 'FULL NAME' field with a valid name, the 'USERNAME' field with a unique username, the 'PASSWORD' and 'CONFIRM PASSWORD' fields with a short invalid password, and check the 'I agree to the User Agreement and Privacy Policy' check...
         # At least 8 characters with letters and numbers password field
-        elem = page.locator('[id="password"]')
+        elem = page.get_by_role("textbox", name="Password *", exact=True)
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Abc123")
+        await elem.fill("Short1")
         
-        # -> Fill the Full Name, Username, Password, and Confirm Password fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Fill the 'FULL NAME' field with a valid name, the 'USERNAME' field with a unique username, the 'PASSWORD' and 'CONFIRM PASSWORD' fields with a short invalid password, and check the 'I agree to the User Agreement and Privacy Policy' check...
         # Re-enter password password field
-        elem = page.locator('[id="confirm-password"]')
+        elem = page.get_by_role("textbox", name="Confirm Password *")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Abc123")
+        await elem.fill("Short1")
         
-        # -> Fill the Full Name, Username, Password, and Confirm Password fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Fill the 'FULL NAME' field with a valid name, the 'USERNAME' field with a unique username, the 'PASSWORD' and 'CONFIRM PASSWORD' fields with a short invalid password, and check the 'I agree to the User Agreement and Privacy Policy' check...
         # button
-        elem = page.locator('[id="terms"]')
+        elem = page.get_by_role("checkbox", name="I agree to the User Agreement")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Register' button to submit the form and check for a password validation error message.
+        # -> Click the 'Register' button to submit the form and trigger password validation feedback.
         # Register button
-        elem = page.get_by_role('button', name='Register', exact=True)
+        elem = page.get_by_role("button", name="Register")
         await elem.click(timeout=10000)
         
-        # --> Test passed — verified by AI agent
-        frame = context.pages[-1]
-        current_url = await frame.evaluate("() => window.location.href")
-        assert current_url is not None, "Test completed successfully"
+        # --> Assertions to verify final state
+        
+        # --> A password validation message reading 'Password must be at least 8 characters' is visible.
+        # Assert-outcome: passed
+        # Assert: Password validation message equals 'Password must be at least 8 characters'.
+        await expect(page.locator("xpath=/html/body/div[1]/section/ol/li").nth(0)).to_have_text("Password must be at least 8 characters", timeout=15000), "Password validation message equals 'Password must be at least 8 characters'."
         await asyncio.sleep(5)
 
     finally:

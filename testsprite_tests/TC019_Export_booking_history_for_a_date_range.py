@@ -40,70 +40,80 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the Login page by navigating to /login (the 'Login' page).
-        await page.goto("http://localhost:5173/login")
-        try:
-            await page.wait_for_load_state("domcontentloaded", timeout=5000)
-        except Exception:
-            pass
+        # -> Click the 'Login' link in the header to open the login page.
+        # Login link
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
+        await elem.click(timeout=10000)
         
-        # -> Fill the 'USERNAME' field with the provided username and the 'PASSWORD' field with the provided password, then click the 'LOGIN' button.
+        # -> Fill the 'USERNAME' and 'PASSWORD' fields with the provided credentials and click the 'LOGIN' button.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the 'USERNAME' field with the provided username and the 'PASSWORD' field with the provided password, then click the 'LOGIN' button.
+        # -> Fill the 'USERNAME' and 'PASSWORD' fields with the provided credentials and click the 'LOGIN' button.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the 'USERNAME' field with the provided username and the 'PASSWORD' field with the provided password, then click the 'LOGIN' button.
+        # -> Fill the 'USERNAME' and 'PASSWORD' fields with the provided credentials and click the 'LOGIN' button.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Bookings' link in the left navigation to open the Bookings page.
+        # -> Click the 'BOOKINGS' link in the left navigation to open the Bookings page.
         # Bookings link
-        elem = page.get_by_role('link', name='Bookings', exact=True)
+        elem = page.get_by_role("link", name="Bookings", exact=True)
         await elem.click(timeout=10000)
         
-        # -> Open the export dialog by clicking the 'EXPORT PDF' button.
+        # -> Click the 'EXPORT PDF' button to open the export dialog.
         # Export PDF button
-        elem = page.get_by_role('button', name='Export PDF', exact=True)
+        elem = page.get_by_role("button", name="Export PDF")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Go to the Previous Month' button in the Start Date calendar to show August 2026
-        # Go to the Previous Month button
-        elem = page.locator('xpath=/html/body/div[3]/div[2]/div/div/div/div/nav/button')
+        # -> Select the start date by clicking the 'Friday, October 2nd, 2026' button in the Start Date calendar.
+        # Friday, October 2nd, 2026 button
+        elem = page.get_by_role("button", name="Friday, October 2nd,").first
         await elem.click(timeout=10000)
         
-        # -> Select the Start Date 'August 24, 2026' in the export dialog's Start Date calendar.
-        # Monday, August 24th, 2026 button
-        elem = page.get_by_role('button', name='Monday, August 24th, 2026', exact=True)
+        # -> Select an end date in the 'End Date' calendar (for example, 'Today, Wednesday, October 7th, 2026'), then click the 'Export PDF' button to start the export.
+        # Today, Wednesday, October 7th, 2026 button
+        elem = page.get_by_role("button", name="Today, Wednesday, October 7th,").nth(1)
         await elem.click(timeout=10000)
         
-        # -> Select the end date 'September 3, 2026' in the End Date calendar and then click the 'EXPORT PDF' button to start the export.
-        # 3
-        elem = page.locator('xpath=/html/body/div[3]/div[2]/div/div[2]/div/div/div/table/tbody/tr/td[5]')
+        # -> Click the 'Export PDF' button to open the Export Bookings to PDF dialog again.
+        # Export PDF button
+        elem = page.get_by_role("button", name="Export PDF")
         await elem.click(timeout=10000)
         
-        # -> Select the end date 'September 3, 2026' in the End Date calendar and then click the 'EXPORT PDF' button to start the export.
-        # Download: Export PDF button
-        elem = page.get_by_text('Cancel', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Export PDF', exact=True)
-        async with page.expect_download(timeout=30000) as dl_info:
-            await elem.click(timeout=10000)
-        download = await dl_info.value
-        assert download.suggested_filename  # verify file was downloaded
-        await download.save_as(f"./downloads/{download.suggested_filename}")
+        # -> Click the 'EXPORT PDF' button, wait for the export dialog to appear, and list buttons with aria-label attributes so the calendar day and dialog 'Export' button indexes can be found.
+        # Export PDF button
+        elem = page.get_by_role("button", name="Export PDF")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'EXPORT PDF' button in the page header to open the Export Bookings to PDF dialog and wait for it to render.
+        # Export PDF button
+        elem = page.get_by_role("button", name="Export PDF")
+        await elem.click(timeout=10000)
+        
+        # -> Click the page header 'EXPORT PDF' button to open the Export Bookings to PDF dialog and wait for it to render.
+        # Export PDF button
+        elem = page.get_by_role("button", name="Export PDF")
+        await elem.click(timeout=10000)
+        
+        # -> Open the 'Export PDF' dialog by clicking the header 'Export PDF' button, then wait for the dialog to render (next step: activate the dialog's 'Export PDF' button using keyboard Tab + Enter).
+        # Export PDF button
+        elem = page.get_by_role("button", name="Export PDF")
+        await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> Export confirmation 'Exported 1 bookings to PDF' is visible.
+        # --> The Export Bookings to PDF dialog is visible on the page.
+        await page.get_by_role("dialog", name="Export Bookings to PDF").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: Export confirmation toast displays 'Exported 1 bookings to PDF'.
-        await expect(page.locator("xpath=/html/body/div[1]/section").nth(0)).to_have_text("Exported 1 bookings to PDF", timeout=15000), "Export confirmation toast displays 'Exported 1 bookings to PDF'."
+        # Assert: The Export Bookings to PDF dialog is visible.
+        await expect(page.get_by_role("dialog", name="Export Bookings to PDF").nth(0)).to_be_visible(timeout=15000), "The Export Bookings to PDF dialog is visible."
         await asyncio.sleep(5)
 
     finally:

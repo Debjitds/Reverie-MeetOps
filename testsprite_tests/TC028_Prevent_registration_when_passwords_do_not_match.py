@@ -40,65 +40,53 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'GET STARTED' button to open the registration page.
-        # Get Started link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a[2]')
-        await elem.click(timeout=10000)
+        # -> Open the 'Register' page (navigate to /register).
+        await page.goto("http://localhost:5173/register")
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=5000)
+        except Exception:
+            pass
         
-        # -> Click the 'Register' button to submit the registration form
+        # -> Fill the 'Full Name', 'Username', 'Password', and 'Confirm Password' fields, check 'I agree to the User Agreement and Privacy Policy', then click the 'Register' button with a mismatched confirmation password.
         # Enter your full name text field
-        elem = page.locator('[id="name"]')
+        elem = page.get_by_role("textbox", name="Full Name *")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("Debjit Sarkar")
         
-        # -> Click the 'Register' button to submit the registration form
+        # -> Fill the 'Full Name', 'Username', 'Password', and 'Confirm Password' fields, check 'I agree to the User Agreement and Privacy Policy', then click the 'Register' button with a mismatched confirmation password.
         # Letters, numbers, and underscores only text field
-        elem = page.locator('[id="username"]')
+        elem = page.get_by_role("textbox", name="Username *")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Click the 'Register' button to submit the registration form
+        # -> Fill the 'Full Name', 'Username', 'Password', and 'Confirm Password' fields, check 'I agree to the User Agreement and Privacy Policy', then click the 'Register' button with a mismatched confirmation password.
         # At least 8 characters with letters and numbers password field
-        elem = page.locator('[id="password"]')
+        elem = page.get_by_role("textbox", name="Password *", exact=True)
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Click the 'Register' button to submit the registration form
+        # -> Fill the 'Full Name', 'Username', 'Password', and 'Confirm Password' fields, check 'I agree to the User Agreement and Privacy Policy', then click the 'Register' button with a mismatched confirmation password.
         # Re-enter password password field
-        elem = page.locator('[id="confirm-password"]')
+        elem = page.get_by_role("textbox", name="Confirm Password *")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("DEBjit737362!DIFF")
+        await elem.fill("Mismatch123!")
         
-        # -> Click the 'Register' button to submit the registration form
+        # -> Fill the 'Full Name', 'Username', 'Password', and 'Confirm Password' fields, check 'I agree to the User Agreement and Privacy Policy', then click the 'Register' button with a mismatched confirmation password.
         # button
-        elem = page.locator('[id="terms"]')
+        elem = page.get_by_role("checkbox", name="I agree to the User Agreement")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Register' button to submit the registration form
+        # -> Click the 'Register' button to submit the registration form and check for a password confirmation validation error.
         # Register button
-        elem = page.get_by_role('button', name='Register', exact=True)
+        elem = page.get_by_role("button", name="Register")
         await elem.click(timeout=10000)
         
-        # -> Click the 'REGISTER' button to submit the registration form again and check the page for a password confirmation error message.
-        # Register button
-        elem = page.get_by_role('button', name='Register', exact=True)
-        await elem.click(timeout=10000)
+        # --> Assertions to verify final state
         
-        # -> Fill the 'Confirm Password' field with a different mismatching password, then click the 'REGISTER' button and check the page for visible validation feedback such as 'match' or alert/error elements.
-        # Re-enter password password field
-        elem = page.locator('[id="confirm-password"]')
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("DIFFERENTpass123")
-        
-        # -> Fill the 'Confirm Password' field with a different mismatching password, then click the 'REGISTER' button and check the page for visible validation feedback such as 'match' or alert/error elements.
-        # Register button
-        elem = page.get_by_role('button', name='Register', exact=True)
-        await elem.click(timeout=10000)
-        
-        # --> Test passed — verified by AI agent
-        frame = context.pages[-1]
-        current_url = await frame.evaluate("() => window.location.href")
-        assert current_url is not None, "Test completed successfully"
+        # --> A password confirmation validation error 'Passwords do not match' is visible.
+        # Assert-outcome: passed
+        # Assert: The validation message 'Passwords do not match' is visible.
+        await expect(page.locator("xpath=/html/body/div[1]/section/ol/li").nth(0)).to_have_text("Passwords do not match", timeout=15000), "The validation message 'Passwords do not match' is visible."
         await asyncio.sleep(5)
 
     finally:

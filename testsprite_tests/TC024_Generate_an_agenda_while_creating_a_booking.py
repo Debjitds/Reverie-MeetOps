@@ -40,96 +40,65 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the 'Login' page
-        await page.goto("http://localhost:5173/login")
-        try:
-            await page.wait_for_load_state("domcontentloaded", timeout=5000)
-        except Exception:
-            pass
+        # -> Fill the username field on the Login page with the test username and the password field with the test password after the Login page opens.
+        # Login link
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
+        await elem.click(timeout=10000)
         
-        # -> Enter the provided username into the 'Username' field
+        # -> Fill the 'Enter username' field with debjitchsarkarofficial2003, fill the 'Enter password' field with the provided password, then click the 'LOGIN' button.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Enter the provided username into the 'Username' field
+        # -> Fill the 'Enter username' field with debjitchsarkarofficial2003, fill the 'Enter password' field with the provided password, then click the 'LOGIN' button.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Enter the provided username into the 'Username' field
+        # -> Fill the 'Enter username' field with debjitchsarkarofficial2003, fill the 'Enter password' field with the provided password, then click the 'LOGIN' button.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'New Booking' link to open the booking wizard.
+        # -> Click the 'New Booking' link in Quick Actions to open the booking wizard.
         # New Booking link
-        elem = page.get_by_role('link', name='New Booking', exact=True)
+        elem = page.get_by_role("link", name="New Booking")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Room 15' resource card to select it, then click the 'Next' button to go to the purpose step.
+        # -> Select the 'Room 15' resource card to choose the resource for the booking.
         # Room 15 1st Floor Capacity : 10 Meeting
-        elem = page.get_by_text('Room 15 1st Floor Capacity: 10 Meeting', exact=True)
+        elem = page.get_by_text("Room 151st FloorCapacity:")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Room 15' resource card to select it, then click the 'Next' button to go to the purpose step.
-        # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Scroll the booking wizard page to reveal the 'Purpose' field and the 'Open AI Assistant' control so the booking purpose can be entered and an agenda generated.
-        await page.mouse.wheel(0, 300)
-        
-        # -> Click the 'Next' button to advance from 'Select Date & Time' to the booking's Purpose step so the purpose field and 'Open AI Assistant' control can be observed.
-        # Next button
-        elem = page.get_by_role('button', name='Next', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Fill the 'Purpose' field with a meeting purpose and click the 'GENERATE AGENDA WITH AI' button to request an AI-generated agenda.
-        # e.g., Team Meeting, Client Presentation text field
-        elem = page.locator('[id="purpose"]')
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Quarterly planning meeting to align roadmap, priorities, and action items")
-        
-        # -> Fill the 'Purpose' field with a meeting purpose and click the 'GENERATE AGENDA WITH AI' button to request an AI-generated agenda.
-        # ✨ GENERATE AGENDA WITH AI button
-        elem = page.get_by_role('button', name='✨ GENERATE AGENDA WITH AI', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Open the 'Open AI Assistant' panel (or locate on-page generated text) to verify that the AI-generated agenda content is displayed.
+        # -> Click the 'Open AI Assistant' button to open the AI assistant panel.
         # Open AI Assistant button
-        elem = page.get_by_role('button', name='Open AI Assistant', exact=True)
+        elem = page.get_by_role("button", name="Open AI Assistant")
         await elem.click(timeout=10000)
         
-        # -> Click the 'GENERATE AGENDA WITH AI' button to request an AI-generated agenda and wait for the UI to display the generated content.
-        # ✨ GENERATE AGENDA WITH AI button
-        elem = page.get_by_role('button', name='✨ GENERATE AGENDA WITH AI', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Use the MeetOps AI Assistant: type a clear agenda-generation request into the assistant input and click the assistant's send button to request an agenda.
+        # -> Type the booking purpose into the 'Type your message...' input and click the send button (paper-plane) to generate an AI agenda.
         # Type your message... text field
-        elem = page.get_by_placeholder('Type your message...', exact=True)
+        elem = page.get_by_role("textbox", name="Type your message...")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Please generate a meeting agenda for the following purpose: \"Quarterly planning meeting to align roadmap, priorities, and action items\". Include: Objectives, timed agenda items, discussion points, and clearly listed action items with owners.")
+        await elem.fill("Project kickoff: discuss roadmap, milestones, deliverables, and action items (60 minutes). Please generate a meeting agenda with timeboxed items and owners.")
         
-        # -> Use the MeetOps AI Assistant: type a clear agenda-generation request into the assistant input and click the assistant's send button to request an agenda.
+        # -> Type the booking purpose into the 'Type your message...' input and click the send button (paper-plane) to generate an AI agenda.
         # button
-        elem = page.locator('xpath=/html/body/div/div/main/div/div[2]/div[3]/div/button')
+        elem = page.get_by_role("button").filter(has_text=re.compile(r"^$")).nth(2)
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> AI-generated agenda was not produced; the assistant refused to generate meeting content.
+        # --> Generated agenda content is not displayed in the AI assistant; the assistant refused to generate an agenda.
         # Assert-outcome: failed
-        # Assert: Expected generated agenda content to be displayed in the assistant panel.
-        await expect(page.locator("xpath=/html/body/div").nth(0)).to_contain_text("Unfortunately, generating a meeting agenda, including objectives, discussion points, and action items, is outside my capabilities.", timeout=15000), "Expected generated agenda content to be displayed in the assistant panel."
+        # Assert: Expected generated agenda content to be displayed.
+        await expect(page.locator("#root").nth(0)).to_contain_text("Agenda", timeout=15000), "Expected generated agenda content to be displayed."
         
-        # --> The booking wizard did not advance; it remains on Step 3 (Booking Details).
+        # --> The booking wizard did not advance to the next step and remained on Step 1 (Select Resource).
         # Assert-outcome: failed
-        # Assert: Expected the booking wizard to continue to the next step.
-        await expect(page.locator("xpath=/html/body/div").nth(0)).to_contain_text("Step 3: Booking Details", timeout=15000), "Expected the booking wizard to continue to the next step."
+        # Assert: Expected the booking wizard to advance to the next step.
+        await expect(page.locator("xpath=/html/body/div/div/main/div/div[1]/main/div/div[2]/div[1]/div[1]").nth(0)).not_to_be_visible(timeout=15000), "Expected the booking wizard to advance to the next step."
         await asyncio.sleep(5)
 
     finally:

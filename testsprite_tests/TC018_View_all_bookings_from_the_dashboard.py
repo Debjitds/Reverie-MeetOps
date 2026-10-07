@@ -42,38 +42,38 @@ async def run_test():
         
         # -> Click the 'Login' link to open the login page.
         # Login link
-        elem = page.locator('xpath=/html/body/div/div/main/div/nav/div/div/div[2]/a')
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
+        # -> Fill the username and password fields with the test account credentials and click the 'Login' button.
         # Enter username text field
-        elem = page.locator('[id="login-username"]')
+        elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
+        # -> Fill the username and password fields with the test account credentials and click the 'Login' button.
         # Enter password password field
-        elem = page.locator('[id="login-password"]')
+        elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the username and password fields and click the 'Login' button to submit the login form.
+        # -> Fill the username and password fields with the test account credentials and click the 'Login' button.
         # Login button
-        elem = page.get_by_text('Username', exact=True).locator("xpath=ancestor-or-self::*[.//button][1]").get_by_role('button', name='Login', exact=True)
+        elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'View All Bookings' quick action to open the bookings list.
+        # -> Click the 'View All Bookings' quick action in the Quick Actions panel to open the bookings list.
         # View All Bookings link
-        elem = page.get_by_role('link', name='View All Bookings', exact=True)
+        elem = page.get_by_role("link", name="View All Bookings")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The bookings list is displayed with table headers for Resource, User, Purpose, Date, Start Time, End Time, Type, Status, and Actions.
-        await page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div/div/table/thead/tr").nth(0).scroll_into_view_if_needed()
+        # --> The Bookings list is displayed and shows active bookings on the Bookings page.
+        await page.get_by_role("row", name="Room 15 1st Floor Rohan_QC").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: Bookings table header row is visible.
-        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/main/div/div[3]/div/div/table/thead/tr").nth(0)).to_be_visible(timeout=15000), "Bookings table header row is visible."
+        # Assert: A booking row is visible in the bookings table.
+        await expect(page.get_by_role("row", name="Room 15 1st Floor Rohan_QC").nth(0)).to_be_visible(timeout=15000), "A booking row is visible in the bookings table."
         await asyncio.sleep(5)
 
     finally:

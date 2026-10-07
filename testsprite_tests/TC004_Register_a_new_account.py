@@ -40,78 +40,58 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the 'Register' page
-        await page.goto("http://localhost:5173/register")
-        try:
-            await page.wait_for_load_state("domcontentloaded", timeout=5000)
-        except Exception:
-            pass
+        # -> Click the 'Get Started' button to open the registration page.
+        # Get Started link
+        elem = page.get_by_role("navigation").get_by_role("link", name="Get Started")
+        await elem.click(timeout=10000)
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check 'I agree to the User Agreement and Privacy Policy'.
+        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
         # Enter your full name text field
-        elem = page.locator('[id="name"]')
+        elem = page.get_by_role("textbox", name="Full Name *")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("Debjit Sarkar")
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check 'I agree to the User Agreement and Privacy Policy'.
+        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
         # Letters, numbers, and underscores only text field
-        elem = page.locator('[id="username"]')
+        elem = page.get_by_role("textbox", name="Username *")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check 'I agree to the User Agreement and Privacy Policy'.
+        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
         # At least 8 characters with letters and numbers password field
-        elem = page.locator('[id="password"]')
+        elem = page.get_by_role("textbox", name="Password *", exact=True)
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check 'I agree to the User Agreement and Privacy Policy'.
+        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
         # Re-enter password password field
-        elem = page.locator('[id="confirm-password"]')
+        elem = page.get_by_role("textbox", name="Confirm Password *")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check 'I agree to the User Agreement and Privacy Policy'.
+        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
         # button
-        elem = page.locator('[id="terms"]')
+        elem = page.get_by_role("checkbox", name="I agree to the User Agreement")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Register' button to submit the registration form and reach the authenticated app.
+        # -> Click the 'Register' button to submit the registration form.
         # Register button
-        elem = page.get_by_role('button', name='Register', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'Register' button to submit the form and verify the authenticated app (dashboard/welcome or a 'Logout' link) appears.
-        # Register button
-        elem = page.get_by_role('button', name='Register', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Search the registration page for visible validation or error messages (look for 'already', 'error', 'username', 'taken') and if none clearly blocks submission, click the 'Register' button one final time.
-        # Register button
-        elem = page.get_by_role('button', name='Register', exact=True)
-        await elem.click(timeout=10000)
-        
-        # -> Replace the Username field with a new unique value and click the 'Register' button to attempt account creation with a different username.
-        # Letters, numbers, and underscores only text field
-        elem = page.locator('[id="username"]')
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("debjitchsarkarofficial2003_1")
-        
-        # -> Replace the Username field with a new unique value and click the 'Register' button to attempt account creation with a different username.
-        # Register button
-        elem = page.get_by_role('button', name='Register', exact=True)
+        elem = page.get_by_role("button", name="Register")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The authenticated dashboard is displayed and a Logout control is present indicating an authenticated session.
-        await page.locator("xpath=/html/body/div[1]/div/main/div/aside/div/nav/a[1]").nth(0).scroll_into_view_if_needed()
-        # Assert-outcome: passed
-        # Assert: Dashboard navigation link is visible.
-        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/aside/div/nav/a[1]").nth(0)).to_be_visible(timeout=15000), "Dashboard navigation link is visible."
-        # Assert-outcome: passed
-        # Assert: A Logout button (session control) with title 'Logout' is present.
-        await expect(page.locator("xpath=/html/body/div[1]/div/main/div/div/header/div/div[3]/div/button").nth(0)).to_have_attribute("title", "Logout", timeout=15000), "A Logout button (session control) with title 'Logout' is present."
+        # --> Registration failed and the authenticated app was not reached because the account already exists.
+        # Assert-outcome: failed
+        # Assert: Expected the page to not show "Registration failed: User already registered" after submitting the registration form.
+        await expect(page.locator("xpath=/html/body/div[1]/section/ol/li").nth(0)).to_have_text("Registration failed: User already registered", timeout=15000), "Expected the page to not show \"Registration failed: User already registered\" after submitting the registration form."
+        # Assert-outcome: failed
+        # Assert: Expected the URL to change to the authenticated app after successful registration.
+        await expect(page).to_have_url(re.compile("/register"), timeout=15000), "Expected the URL to change to the authenticated app after successful registration."
+        
+        # --> Test blocked by environment/access constraints during agent run
+        # Reason: TEST BLOCKED The registration flow could not be verified because the account already exists and a new account could not be created through the UI. Observations: - After submitting the registration form the UI displayed: 'Registration failed: User already registered'. - The page remained on the registration screen (/register) and no authenticated dashboard or redirect was shown. - The provided u...
+        raise AssertionError("Test blocked during agent run: " + "TEST BLOCKED The registration flow could not be verified because the account already exists and a new account could not be created through the UI. Observations: - After submitting the registration form the UI displayed: 'Registration failed: User already registered'. - The page remained on the registration screen (/register) and no authenticated dashboard or redirect was shown. - The provided u..." + " — the exported script cannot reproduce a PASS in this environment.")
         await asyncio.sleep(5)
 
     finally:

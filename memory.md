@@ -240,3 +240,25 @@
 - Note: this supersedes the earlier entry's remark that these three unused imports were "left untouched."
 
 ---
+
+## 2026-10-07 — Re-test + TC007 multi-day booking fix (undeployed edge function + error handling)
+
+**Instruction:** Re-ran the full TestSprite suite via MCP (24 passed / 3 failed / 3 blocked — up from 25/30; TC010 & TC030 fixes confirmed passing). Then, per the report, fix **TC007 (Create a multi-day booking — 'Failed to create booking')**.
+
+**Investigation (did NOT assume stale data):** Queried the live MeetOps Supabase project (`cazqwpknzkqyytokotny`):
+- Room 15 had NO conflicting approved/pending booking in the tested window (only one REJECTED single booking on Oct 7) → NOT a stale-data conflict.
+- `booking_type` enum contains both `single` and `multi_day` → schema fine.
+- `list_edge_functions` returned ONLY `chat-assistant` and `translate-text`. **The `create-multi-day-booking` edge function was NOT deployed** (same reason `generate-agenda` was missing → TC024 via wizard). This is the true root cause of TC007 (it passed on 2026-09-02 when the function was deployed, then the project's functions were reduced to 2).
+- Compounding client bug: in `NewBookingPage.handleSubmit`, the multi-day error branch did `await error?.context?.text()`. When the function is missing, `error` is a relay/404 error whose `context` is not a Response, so `.text()` threw a TypeError → fell through to the outer `catch` → generic `newBooking.generalCreateFailed` = "Failed to create booking" (exactly the observed message), masking the real cause.
+
+**Changes:**
+1. **Deployed the edge function** `create-multi-day-booking` to project `cazqwpknzkqyytokotny` via the Supabase MCP `deploy_edge_function` (source = repo `supabase/functions/create-multi-day-booking/index.ts`, `verify_jwt: true`, ACTIVE v1). This restores the multi-day create path.
+2. `src/pages/NewBookingPage.tsx` — hardened the multi-day error branch: read `error.context.text()` defensively (typeof-check + try/catch), parse the JSON body to surface the backend `error` message (e.g. a 409 conflict), and fall back to `error.message`/`multiDayCreateFailed` — so a backend failure now shows a real message instead of throwing into the generic catch. No behavior change on the success path.
+
+**Verification:**
+- `npm run build` (`tsc && vite build`) → exit 0.
+- Re-ran ONLY TC007 via TestSprite MCP → **1/1 passed, 0 failed**.
+- DB confirms real multi_day rows created: Room 15, `booking_type='multi_day'`, `status='pending'`, sharing one `booking_group_id` (3e51f4e4-…).
+- Note: because the fix required a Supabase deployment, TC007 depends on the `create-multi-day-booking` function remaining deployed. `generate-agenda` is STILL undeployed (relates to TC024) — deploy it when addressing TC024.
+
+---
