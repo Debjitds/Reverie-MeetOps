@@ -1213,7 +1213,7 @@ body {
         </div>
         <div class="metadata-row">
           <div class="metadata-label text-body-medium">Date</div>
-          <div class="metadata-value text-body">7/10/2026</div>
+          <div class="metadata-value text-body">8/10/2026</div>
         </div>
         <div class="metadata-row">
           <div class="metadata-label text-body-medium">Prepared by</div>
@@ -1234,26 +1234,22 @@ body {
         
         <div class="coverage-summary">
           <ul class="coverage-list text-body">
-            <li><span class="coverage-highlight">27/30</span> of tests passed</li>
+            <li><span class="coverage-highlight">30/30</span> of tests passed</li>
             <li><span class="coverage-highlight">Key gaps / risks:</span>
             
               <blockquote>
-<p><strong>All product-level failures are resolved (0 failed).</strong> The only remaining items are 3 tests <strong>blocked by stale seed data</strong> — a test-environment concern, not a product defect.</p>
+<p><strong>All 30 tests pass.</strong> Every original failure and every previously-blocked test is resolved. No open defects from this suite.</p>
 </blockquote>
-<p><strong>Remaining blocked tests (seed-data conditions, not defects):</strong></p>
+<p><strong>Fixes applied across the effort:</strong></p>
 <ul>
-<li><strong>TC004</strong> registration — username already exists (rotate the seeded account).</li>
-<li><strong>TC005</strong> approve — no pending booking left to approve.</li>
-<li><strong>TC013</strong> dashboard booking — no upcoming bookings in the panel window.
-Recommended: reset/reseed DB fixtures between runs (a fresh username, one pending booking, one future-dated upcoming booking) so these can execute and pass.</li>
+<li><strong>App code:</strong> <code>NewBookingPage</code> (conflict-check race TC010 + multi-day error handling TC007 + agenda refusal fallback TC024), <code>LoginPage</code> &amp; <code>RegisterPage</code> inline validation (TC027/TC030), and <code>DashboardPage</code> clickable Upcoming cards (TC013).</li>
+<li><strong>Supabase deployments:</strong> <code>create-multi-day-booking</code>, <code>generate-agenda</code> deployed; <code>chat-assistant</code> updated (agenda capability) &amp; redeployed.</li>
+<li><strong>Test data/instructions (no app change):</strong> TC004 (unique username) and TC027 (malformed username) made self-contained.</li>
 </ul>
-<p><strong>Deployment-integrity note (important):</strong></p>
+<p><strong>Latent / residual risks (non-blocking, not tested):</strong></p>
 <ul>
-<li>Both TC007 and TC024 were ultimately caused by <strong>edge functions present in the repo but not deployed</strong> to the Supabase project. <code>create-multi-day-booking</code>, <code>generate-agenda</code>, and the updated <code>chat-assistant</code> are now deployed. The remaining repo functions (<code>generate-conflict-explanation</code>, <code>generate-admin-insights</code>, <code>update-booking-statuses</code>) should be verified/deployed so the deployed set stays in sync with <code>supabase/functions/</code>.</li>
-</ul>
-<p><strong>Latent / residual risks (not blocking):</strong></p>
-<ul>
-<li><strong>Password reset (TC008)</strong> passed only intermittently — harden the raw <code>{}</code> error and revisit the synthetic <code>{username}@miaoda.com</code> email mapping.</li>
+<li><strong>Edge-function deployment drift:</strong> still verify/deploy <code>generate-conflict-explanation</code>, <code>generate-admin-insights</code>, <code>update-booking-statuses</code> so the deployed set matches <code>supabase/functions/</code>.</li>
+<li><strong>Password reset (TC008)</strong> passed only intermittently — harden the raw <code>{}</code> error and the synthetic <code>{username}@miaoda.com</code> email mapping.</li>
 <li>Conflict prevention is still primarily client-side; a DB exclusion constraint on <code>bookings(resource_id, tsrange)</code> would fully close the double-booking race window.</li>
 <li>Timezone basis differs between client-stored single-day bookings (local→UTC) and the multi-day function's server-side parse (container UTC) — worth aligning.</li>
 <li>Client-side-only role gating — authorization still depends on backend RLS.</li>
@@ -1300,7 +1296,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: User Registration</span></div>
               <div class="table-cell"><span class="text-body">4</span></div>
-              <div class="table-cell"><span class="text-body">3</span></div>
+              <div class="table-cell"><span class="text-body">4</span></div>
               <div class="table-cell"><span class="text-body">1</span></div>
             </div>
         
@@ -1316,7 +1312,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: Dashboard Overview</span></div>
               <div class="table-cell"><span class="text-body">4</span></div>
-              <div class="table-cell"><span class="text-body">3</span></div>
+              <div class="table-cell"><span class="text-body">4</span></div>
               <div class="table-cell"><span class="text-body">0</span></div>
             </div>
         
@@ -1340,7 +1336,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: Booking Approval Actions</span></div>
               <div class="table-cell"><span class="text-body">5</span></div>
-              <div class="table-cell"><span class="text-body">4</span></div>
+              <div class="table-cell"><span class="text-body">5</span></div>
               <div class="table-cell"><span class="text-body">0</span></div>
             </div>
         
@@ -1416,7 +1412,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC001_Access_a_protected_page_from_the_public_site.py" class="text-link">TC001_Access_a_protected_page_from_the_public_site.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1426,7 +1422,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/02826dec-09e2-4683-8991-553b7bb38d6d" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1445,11 +1441,11 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Visiting a protected route while logged out correctly redirects to /login; the auth guard behaves as designed.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -1461,7 +1457,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC006_Remember_the_requested_protected_page_after_signing_in.py" class="text-link">TC006_Remember_the_requested_protected_page_after_signing_in.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1471,7 +1467,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/59ddaca6-5138-4583-aab4-bc4570a1b94f" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1490,11 +1486,11 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The `state.from` redirect logic in the route guard works — after login the user lands back on the originally requested page.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -1534,7 +1530,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC003_Log_in_with_valid_credentials.py" class="text-link">TC003_Log_in_with_valid_credentials.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1544,7 +1540,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/3454ca69-938e-46db-a46f-d396e4278e08" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1563,11 +1559,11 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Valid username/password pair authenticates successfully and navigates to the dashboard.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -1579,7 +1575,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC027_Show_login_validation_for_an_invalid_username_format.py" class="text-link">TC027_Show_login_validation_for_an_invalid_username_format.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1589,7 +1585,7 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/17683a81-d512-4e8a-a7ad-53b35b6fd520" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1608,1288 +1604,11 @@ Recommended: reset/reseed DB fixtures between runs (a fresh username, one pendin
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The prior "failure" was a **test-data bug**: the test filled a *format-valid* real username (`debjitchsarkarofficial2003`), so the app correctly logged in and no validation error was expected. **Fix:** the test (both the test plan step and the Playwright script) now fills a genuinely malformed username `not-an-email` (hyphens violate `^[a-zA-Z0-9_]+
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TestSprite AI Project Test Report</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjUiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NSA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzI0N181MzEpIj4KPHBhdGggZD0iTTMxLjA3MDcgMjguNzMzNEwxNi43Mjg5IDM3LjA5NjVDMTUuODc5NiAzNy41OTE4IDE1LjQzNzcgMzguNDQwMiAxNS40MDQ5IDM5LjMwMzFMOS43MDMyOCAzNS43OTM3QzkuMjg3ODQgMzUuNTM3NiA5LjAzNTE4IDM1LjA4NDMgOS4wMzUwMSAzNC41OTYyVjM0LjQ4NjFDOS44ODU5MSAzMi45MTUgMTEuMTczNSAzMS41MzAyIDEyLjg5NzkgMzAuNTI0OEwyMy41MTk4IDI0LjMzMDdMMzEuMDcwNyAyOC43MzM0WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTQ5LjAzOTggOS40NTE4NUM1NS44OTM4IDUuNDU1OTMgNjQuNDk4NyAxMC4zOTk4IDY0LjQ5OSAxOC4zMzM2TDY0LjUgMzQuNTk2MkM2NC41IDM1LjE2MjggNjQuNDUyNiAzNS43MjI4IDY0LjM2MTkgMzYuMjcxN0M2NC4zMTc4IDM2LjE5NDEgNjQuMjcxNSAzNi4xMTcgNjQuMjIyOCAzNi4wNDA5QzYyLjcxMzEgMzMuNjgyNiA1OS41NzcyIDMyLjk5NDMgNTcuMjE4NSAzNC41MDM1TDU3LjA4OTEgMzQuNTg1NkM1Ny4wMjYxIDM0LjQ0NzMgNTYuOTYxNyAzNC4zMDk0IDU2Ljg5MyAzNC4xNzMyVjE4LjMzNDVDNTYuODkzIDE2LjI3MDUgNTQuNjU0OSAxNC45ODQzIDUyLjg3MTggMTYuMDIzNkw0MS4xMzkzIDIyLjg2MzdMMzMuNTg3NCAxOC40NjFMNDkuMDM5OCA5LjQ1MTg1WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTAuNSAxOC45NjY4QzAuNTAwMDA2IDExLjA5NTYgOC45ODM4IDYuMTQzMjcgMTUuODM3NSAxMC4wMTM2TDUyLjYyNDYgMzAuNzlDNTQuNDMxOSAzMS44MTA3IDU1Ljc3MDEgMzMuMjQzNyA1Ni42NCAzNC44NzRMNTAuMTQ2NSAzOS4wMjk1QzQ5Ljk3MDIgMzguMzgxMiA0OS41NDk3IDM3Ljc4OTIgNDguODgzNCAzNy40MTI5TDEyLjA5NzMgMTYuNjM3NEMxMC4zMTQyIDE1LjYzMDQgOC4xMDY5NSAxNi45MTg5IDguMTA2OTUgMTguOTY2OFYzNC43MTI4QzguMTA3MDIgMzUuNjQxNSA4LjU4ODg5IDM2LjUwNDEgOS4zNzk3NyAzNi45OTA5TDE1LjA2NTkgNDAuNDkwNkMxMy41ODE5IDQwLjY3MzggMTIuMTkzMyA0MS41MDg2IDExLjM1NDcgNDIuODg0N0MxMC42MTQyIDQ0LjA5OTggMTAuNDQ2MyA0NS41MDI2IDEwLjc3MzMgNDYuNzgwNEw1LjM5MjMyIDQzLjQ2ODlDMi4zNTIyMyA0MS41OTc2IDAuNTAwMDQ4IDM4LjI4MjYgMC41IDM0LjcxMjhWMTguOTY2OFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xNS44MDcxIDQ1LjQzNjFMMjcuNDEzNSA1Mi41MDg3QzMwLjg4MiA1NC42MjI0IDM1LjI1MiA1NC41NzQzIDM4LjY3MzIgNTIuMzg0N0w2MC4wNzQyIDM4LjY4OCIgc3Ryb2tlPSIjMTlDMzc5IiBzdHJva2Utd2lkdGg9IjcuNDg3NyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMjQ3XzUzMSI+CjxyZWN0IHg9IjAuNSIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTIiIGZpbGw9IndoaXRlIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==">
-  <style>
-@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
-
-/* Custom CSS Variables for Design System */
-:root {
-  --fg-highlighted: #19c379;
-  --fg-default: #f7f7f8;
-  --fg-muted: #e4e4e4;
-  --fg-secondary: #959597;
-  --fg-primary: #f7f7f8;
-  --fg-success: #19c379;
-  --fg-error: #ef4146;
-  
-  --bg-default: #000000;
-  --bg-default-rgb: 9, 9, 9;
-  --bg-lifted: #101011;
-  --bg-elevated: #17181A;
-  --bg-success: #10a36333;
-  --bg-error: #c2353933;
-  
-  --border-default: #17181A;
-  --border-elevated: #212224;
-  --border-primary: #10a363;
-  
-  --interactive-bg-default: #212224;
-  --interactive-bg-primary: #1a7f53;
-  --interactive-fg-primary: #ffffff;
-  
-  --logo-icon-color: #19c379;
-  --logo-text-color: #f7f7f8;
-  
-  /* Status tag colors */
-  --status-success-bg: rgba(16, 163, 99, 0.2);
-  --status-success-border: rgba(16, 163, 99, 0.2);
-  --status-success-text: #93E6C2;
-  --status-warning-bg: rgba(183, 112, 28, 0.2);
-  --status-warning-border: rgba(183, 112, 28, 0.2);
-  --status-warning-text: #F4C47D;
-  --status-error-bg: rgba(194, 53, 57, 0.2);
-  --status-error-border: rgba(194, 53, 57, 0.2);
-  --status-error-text: #FFB3B3;
-  
-  --border-radius-medium: 6px;
-  --border-radius-large: 8px;
-}
-
-/* Light Theme Variables */
-[data-theme="light"] {
-  --fg-highlighted: #10a363;
-  --fg-default: #090909;
-  --fg-muted: #6b6b6d;
-  --fg-secondary: #88888B;
-  --fg-primary: #f7f7f8;
-  --fg-success: #10a363;
-  --fg-error: #c23539;
-  
-  --bg-default: #ffffff;
-  --bg-default-rgb: 255, 255, 255;
-  --bg-lifted: #FAFAFA;
-  --bg-elevated: #ffffff;
-  --bg-success: #10a36333;
-  --bg-error: #c2353933;
-  
-  --border-default: #eeeeef;
-  --border-elevated: #eaeaeb;
-  --border-primary: #1a7f53;
-  
-  --interactive-bg-default: #ffffff;
-  --interactive-bg-primary: #10a363;
-  --interactive-fg-primary: #ffffff;
-  
-  --logo-icon-color: #10a363;
-  --logo-text-color: #090909;
-  
-  /* Status tag colors */
-  --status-success-bg: rgba(16, 163, 99, 0.1);
-  --status-success-border: rgba(16, 163, 99, 0.15);
-  --status-success-text: #10A363;
-  --status-warning-bg: rgba(183, 112, 28, 0.1);
-  --status-warning-border: rgba(183, 112, 28, 0.15);
-  --status-warning-text: #B7701C;
-  --status-error-bg: rgba(194, 53, 57, 0.1);
-  --status-error-border: rgba(194, 53, 57, 0.15);
-  --status-error-text: #C23539;
-}
-
-/* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Geist', sans-serif;
-  background-color: var(--bg-default);
-  color: var(--fg-default);
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
-  padding-top: 72px; /* Account for fixed header height */
-}
-
-/* Layout Components */
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background-color: rgba(var(--bg-default-rgb), 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-default);
-}
-
-.header-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 12px 60px;
-  width: 100%;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
-
-.logo-image {
-  width: 120px;
-}
-
-.logo-link {
-  display: inline-block;
-  text-decoration: none;
-  position: relative;
-}
-
-.logo-light,
-.logo-dark {
-  transition: opacity 0.3s ease;
-}
-
-.logo-light {
-  display: none;
-}
-
-.logo-dark {
-  display: block;
-}
-
-[data-theme="light"] .logo-light {
-  display: block;
-}
-
-[data-theme="light"] .logo-dark {
-  display: none;
-}
-
-.logo-divider {
-  width: 1px;
-  height: 24px;
-  background-color: var(--border-elevated);
-  margin: 0 8px;
-}
-
-.logo-text {
-  font-size: 20px;
-  font-weight: 550;
-  letter-spacing: -0.02em;
-}
-
-.logo-text-test {
-  color: var(--fg-default);
-}
-
-.logo-text-report {
-  color: var(--fg-highlighted);
-}
-
-/* Theme Toggle Button */
-.theme-toggle {
-  background: var(--bg-lifted);
-  border: 1px solid var(--border-default);
-  border-radius: var(--border-radius-medium);
-  padding: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.theme-toggle:hover {
-  background: var(--border-default);
-  border-color: var(--border-elevated);
-}
-
-.theme-icon {
-  transition: all 0.2s ease;
-  position: absolute;
-}
-
-.sun-icon {
-  opacity: 0;
-  transform: rotate(180deg);
-}
-
-.moon-icon {
-  opacity: 1;
-  transform: rotate(0deg);
-}
-
-/* Light theme toggle states */
-[data-theme="light"] .sun-icon {
-  opacity: 1;
-  transform: rotate(0deg);
-}
-
-[data-theme="light"] .moon-icon {
-  opacity: 0;
-  transform: rotate(-180deg);
-}
-
-.main-content {
-  padding: 90px 60px;
-  display: flex;
-  justify-content: center;
-  gap: 120px;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.content-section {
-  flex: 1;
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.sidebar {
-  position: sticky;
-  top: 120px; /* Stick below the fixed header with additional spacing when scrolling */
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 260px;
-  height: fit-content;
-  max-height: calc(100vh - 92px); /* Don't exceed viewport height minus header and spacing */
-  overflow-y: auto; /* Allow scrolling if content is too long */
-}
-
-/* Typography */
-.title-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.title-main {
-  font-family: 'Geist', sans-serif;
-  font-weight: 550;
-  font-size: 36px;
-  line-height: 42px;
-  letter-spacing: -0.4px;
-  color: var(--fg-default);
-  margin: 0;
-}
-
-.title-subtitle {
-  font-family: 'Geist', sans-serif;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 26px;
-  letter-spacing: -0.18px;
-  color: var(--fg-secondary);
-  margin: 0;
-}
-
-.section-subtitle {
-  font-family: 'Geist', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: -0.16px;
-  color: var(--fg-secondary);
-  margin: 0;
-}
-
-.title-section {
-  font-family: 'Geist', sans-serif;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 32px;
-  letter-spacing: -0.3px;
-  color: var(--fg-default);
-  margin: 0;
-}
-
-.title-requirement {
-  font-family: 'Geist', sans-serif;
-  font-weight:480;
-  font-size: 18px;
-  line-height: 24px;
-  letter-spacing: -0.2px;
-  color: var(--fg-default);
-  margin: 0;
-}
-
-.title-requirement::before {
-  counter-increment: accordion-counter;
-  content: counter(accordion-counter) ". ";
-  color: var(--fg-secondary);
-  margin-right: 4px;
-}
-
-.text-body {
-  font-family: 'Geist', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: -0.16px;
-  color: var(--fg-default);
-  margin: 0;
-}
-
-.text-body-medium {
-  font-family: 'Geist', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: -0.16px;
-  color: var(--fg-secondary);
-  margin: 0;
-}
-
-.text-link {
-  color: var(--fg-default);
-  text-decoration: underline;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  word-break: break-all;
-  transition: color 0.2s ease;
-}
-
-.text-link:hover {
-  color: var(--fg-secondary);
-}
-
-/* Metadata Section */
-.metadata-section {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.metadata-container {
-  padding: 0px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.metadata-row {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.metadata-label {
-  width: 200px;
-  flex-shrink: 0;
-}
-
-.metadata-value {
-  flex: 1;
-}
-
-/* Divider */
-.divider {
-  height: 1px;
-  background-color: var(--border-default);
-  width: 100%;
-}
-
-/* Requirements Section */
-.requirements-section {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.requirement-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.requirement-description {
-  color: var(--fg-secondary);
-}
-
-/* Accordion Styles */
-.accordion-container {
-  border: 1px solid var(--border-default);
-  border-radius: var(--border-radius-large);
-  overflow: hidden;
-  counter-reset: accordion-counter;
-}
-
-.accordion-item {
-  border: none;
-  border-radius: 0;
-  overflow: hidden;
-}
-
-.accordion-item:not(:last-child) {
-  border-bottom: 1px solid var(--border-default);
-}
-
-.accordion-header {
-  padding: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  background-color: var(--bg-lifted);
-  transition: background-color 0.2s ease;
-}
-
-.requirement-content {
-  flex: 1;
-}
-
-.requirement-title-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 4px;
-}
-
-.requirement-status-tag {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 4px 2px 2px;
-  border-radius: var(--border-radius-medium);
-  font-family: 'Geist', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
-  letter-spacing: -0.24px;
-  flex-shrink: 0;
-}
-
-.requirement-description {
-  margin: 0;
-}
-
-.requirement-status-tag.status-success {
-  background-color: var(--status-success-bg);
-  border: 1px solid var(--status-success-border);
-  color: var(--status-success-text);
-}
-
-.requirement-status-tag.status-warning {
-  background-color: var(--status-warning-bg);
-  border: 1px solid var(--status-warning-border);
-  color: var(--status-warning-text);
-}
-
-.requirement-status-tag.status-error {
-  background-color: var(--status-error-bg);
-  border: 1px solid var(--status-error-border);
-  color: var(--status-error-text);
-}
-
-.accordion-header:hover {
-  background-color: var(--bg-elevated);
-}
-
-/* Light mode specific hover - darker than bg-lifted */
-[data-theme="light"] .accordion-header:hover {
-  background-color: #F0F0F0;
-}
-
-.accordion-icon {
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
-  margin-top: 2px;
-}
-
-.accordion-item.active .accordion-icon {
-  transform: rotate(180deg);
-}
-
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-  background-color: var(--bg-lifted);
-}
-
-.accordion-item.active .accordion-content {
-  max-height: 100%; /* Arbitrary large value to allow full expansion */
-  transition: max-height 0.5s ease-in;
-}
-
-.accordion-content .test-wrapper {
-  padding: 16px;
-  gap: 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Test Cards */
-.test-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.test-card {
-  background-color: var(--bg-lifted);
-  border: 1px solid var(--border-elevated);
-  border-radius: var(--border-radius-large);
-  overflow: hidden;
-}
-
-.test-header {
-  background-color: var(--bg-elevated);
-  border-bottom: 1px solid var(--border-elevated);
-  padding: 10px 16px;
-}
-
-.test-content {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.test-field {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.test-field-label {
-  width: 200px;
-  flex-shrink: 0;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.test-field-value {
-  flex: 1;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  min-width: 0;
-}
-
-/* Status Components */
-.status-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.status-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.status-pass {
-  color: var(--fg-success);
-}
-
-.status-fail {
-  color: var(--fg-error);
-}
-
-/* Coverage Metrics */
-.coverage-section {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.coverage-summary {
-  background-color: var(--bg-lifted);
-  border: 1px solid var(--border-default);
-  border-radius: var(--border-radius-large);
-  padding: 16px;
-}
-
-.coverage-list {
-  list-style: disc;
-  list-style-position: outside;
-  margin-left: 21px;
-  color: var(--fg-secondary);
-}
-
-.coverage-list li {
-  padding-left: 12px;
-  margin-bottom: 12px;
-}
-
-.coverage-list li:last-child {
-  margin-bottom: 0;
-}
-
-.coverage-highlight {
-  color: var(--fg-default);
-  font-weight: 500;
-}
-
-/* Data Table */
-.data-table {
-  border-radius: var(--border-radius-large);
-  overflow: hidden;
-}
-
-.table-header {
-  background-color: var(--bg-default);
-  display: flex;
-  border-bottom: 1px solid var(--border-elevated);
-}
-
-.table-header-cell {
-  padding: 8px 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex: 1;
-  min-width: 100px;
-  color: var(--fg-default);
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: -0.14px;
-}
-
-.table-header-cell:first-child {
-  flex: 3;
-}
-
-.table-rows {
-  display: flex;
-  flex-direction: column;
-}
-
-.table-row {
-  display: flex;
-  border-bottom: 1px solid var(--border-default);
-  transition: background-color 0.2s ease;
-}
-
-.table-row:last-child {
-  border-bottom: none;
-}
-
-.table-row:hover {
-  background-color: var(--bg-lifted);
-}
-
-.table-cell {
-  padding: 8px 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex: 1;
-  min-width: 100px;
-  background-color: var(--bg-default);
-  color: var(--fg-secondary);
-}
-
-.table-cell:first-child {
-  flex: 3;
-  color: var(--fg-default);
-  font-weight: 500;
-}
-
-.table-cell .text-body {
-  color: var(--fg-secondary);
-}
-
-.table-cell:first-child .text-body {
-  color: var(--fg-default);
-  font-weight: 500;
-}
-
-.table-header-cell .text-body-medium {
-  color: var(--fg-default);
-  font-weight: 500;
-}
-
-/* Footer */
-.footer {
-  background-color: var(--bg-default);
-  border-top: 1px solid var(--border-default);
-  margin-top: 80px;
-}
-
-.footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 60px 60px 60px 60px;
-  width: 100%;
-}
-
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  gap: 80px;
-}
-
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  flex-shrink: 0;
-  align-items: flex-start;
-}
-
-.footer-logo {
-  width: auto;
-  margin-left: -8px;
-}
-
-.footer-copyright {
-  font-family: 'Geist', sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--fg-secondary);
-  margin: 0;
-  margin-left: -8px;
-}
-
-.footer-links {
-  display: flex;
-  gap: 60px;
-}
-
-.footer-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 140px;
-}
-
-.footer-column-title {
-  font-family: 'Geist', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--fg-default);
-  margin: 0;
-}
-
-.footer-link-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.footer-link {
-  font-family: 'Geist', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--fg-secondary);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.footer-link:hover {
-  color: var(--fg-default);
-}
-
-/* Footer responsive adjustments for larger screens */
-@media (max-width: 1200px) {
-  .footer-content {
-    flex-direction: column;
-    gap: 40px;
-  }
-  
-  .footer-links {
-    gap: 40px;
-  }
-}
-
-@media (max-width: 900px) {
-  .footer-content {
-    flex-direction: column;
-    gap: 30px;
-  }
-  
-  .footer-links {
-    gap: 30px;
-  }
-  
-  .footer-column {
-    min-width: 130px;
-  }
-}
-
-/* References Section */
-.references-section {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-/* Sidebar */
-.sidebar-title {
-  padding: 0;
-  color: var(--fg-muted);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: -0.14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sidebar-title-icon {
-  color: var(--fg-secondary);
-  flex-shrink: 0;
-}
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  position: relative;
-}
-
-.sidebar-nav::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background-color: var(--border-default);
-  z-index: 0;
-}
-
-.sidebar-nav-item {
-  padding: 6px 16px;
-  color: var(--fg-secondary);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: -0.14px;
-  text-decoration: none;
-  display: block;
-  cursor: pointer;
-  position: relative;
-  border-left: 2px solid transparent;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1;
-}
-
-.sidebar-nav-item.active {
-  color: var(--fg-highlighted);
-  border-left: 2px solid var(--fg-highlighted);
-  background-color: transparent;
-  font-size: 14.5px;
-  font-weight: 400;
-}
-
-.sidebar-nav-item:hover:not(.active) {
-  color: var(--fg-default);
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .main-content {
-    flex-direction: column;
-    gap: 30px;
-    padding: 40px 20px;
-    align-items: center;
-  }
-  
-  .content-section {
-    width: 100%;
-    max-width: 800px;
-  }
-  
-  .sidebar {
-    order: -1;
-    width: 100%;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-  
-  .sidebar-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  
-  .sidebar-nav-item {
-    flex: 1;
-    min-width: 200px;
-    text-align: center;
-  }
-}
-
-@media (max-width: 1200px) {
-  .sidebar {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .header-container {
-    padding: 12px 20px;
-  }
-  
-  .main-content {
-    padding: 30px 20px;
-  }
-  
-  .title-main {
-    font-size: 30px;
-    line-height: 36px;
-  }
-  
-  .title-section {
-    font-size: 20px;
-    line-height: 28px;
-  }
-  
-  .metadata-row {
-    flex-direction: column;
-    gap: 4px;
-  }
-  
-  .metadata-label {
-    width: auto;
-  }
-  
-  .test-field {
-    flex-direction: column;
-    gap: 4px;
-  }
-  
-  .test-field-label {
-    width: auto;
-  }
-  
-  .table-header-cell,
-  .table-cell {
-    padding: 8px 4px;
-    font-size: 14px;
-    min-width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  .table-header-cell:first-child,
-  .table-cell:first-child {
-    flex: 2;
-    padding-right: 8px;
-    white-space: normal;
-    overflow: visible;
-  }
-  
-  .table-header-cell:not(:first-child),
-  .table-cell:not(:first-child) {
-    flex: 1;
-    text-align: center;
-  }
-  
-  .footer-container {
-    padding: 40px 20px;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .footer-content {
-    flex-direction: column;
-    gap: 30px;
-  }
-  
-  .footer-links {
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: flex-start;
-  }
-  
-  .footer-column {
-    min-width: 120px;
-    max-width: 150px;
-    flex: 0 0 auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-content {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
-  }
-  
-  .logo-section {
-    justify-content: center;
-  }
-  
-  .theme-toggle {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-  }
-  
-  .open-app-btn {
-    align-self: center;
-  }
-  
-  .sidebar-nav {
-    flex-direction: column;
-  }
-  
-  .sidebar-nav-item {
-    min-width: auto;
-    text-align: left;
-  }
-}
-  </style>
-    </head>
-    <body>
-  <!-- Header Section -->
-  <header class="header">
-    <div class="header-container">
-      <div class="header-content">
-    <div class="logo-section">
-          <a href="https://www.testsprite.com/" target="_blank" class="logo-link">
-                  <svg class="logo-dark" width="128" height="28" viewBox="0 0 293 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_273_308)">
-                      <g clip-path="url(#clip1_273_308)">
-                        <path
-                          d="M30.5707 28.7334L16.2289 37.0965C15.3796 37.5918 14.9377 38.4402 14.9049 39.3031L9.20328 35.7937C8.78784 35.5376 8.53518 35.0843 8.53501 34.5962V34.4861C9.38591 32.915 10.6735 31.5302 12.3979 30.5248L23.0198 24.3307L30.5707 28.7334Z"
-                          fill="#F7F7F8" />
-                        <path
-                          d="M48.5398 9.45185C55.3938 5.45593 63.9987 10.3998 63.999 18.3336L64 34.5962C64 35.1628 63.9526 35.7228 63.8619 36.2717C63.8178 36.1941 63.7715 36.117 63.7228 36.0409C62.2131 33.6826 59.0772 32.9943 56.7185 34.5035L56.5891 34.5856C56.5261 34.4473 56.4617 34.3094 56.393 34.1732V18.3345C56.393 16.2705 54.1549 14.9843 52.3718 16.0236L40.6393 22.8637L33.0874 18.461L48.5398 9.45185Z"
-                          fill="#F7F7F8" />
-                        <path
-                          d="M0 18.9668C6.14031e-06 11.0956 8.4838 6.14327 15.3375 10.0136L52.1246 30.79C53.9319 31.8107 55.2701 33.2437 56.14 34.874L49.6465 39.0295C49.4702 38.3812 49.0497 37.7892 48.3834 37.4129L11.5973 16.6374C9.8142 15.6304 7.60696 16.9189 7.60695 18.9668V34.7128C7.60702 35.6415 8.08889 36.5041 8.87977 36.9909L14.5659 40.4906C13.0819 40.6738 11.6933 41.5086 10.8547 42.8847C10.1142 44.0998 9.94632 45.5026 10.2733 46.7804L4.89232 43.4689C1.85223 41.5976 4.83587e-05 38.2826 0 34.7128V18.9668Z"
-                          fill="#F7F7F8" />
-                        <path d="M15.3071 45.4361L26.9135 52.5087C30.382 54.6224 34.752 54.5743 38.1732 52.3847L59.5742 38.688"
-                          stroke="#19C379" stroke-width="7.4877" stroke-linecap="round" />
-                      </g>
-                      <path
-                        d="M208.882 49L214.482 20.2001H222.882V22.1702C222.882 22.1825 222.896 22.1895 222.906 22.1822L223.781 21.5263C224.246 21.177 224.756 20.8906 225.297 20.6743C226.08 20.361 226.916 20.2001 227.759 20.2001H245.282V14.6001L253.282 12.2001V20.2001H258.082L256.082 27.4001H250.882L248.952 38.5951C248.906 38.8646 248.882 39.1375 248.882 39.411V40.5515C248.882 41.0948 249.098 41.6159 249.482 42C249.866 42.3842 250.388 42.6001 250.931 42.6001H254.082L252.482 49H246.691C245.032 49 243.452 48.2906 242.349 47.0506C241.404 45.9873 240.882 44.6143 240.882 43.1917V42.6001L242.882 27.4001H238.882L235.282 49H226.482L230.082 27.4001H227.562C226.052 27.4001 224.552 27.6435 223.12 28.1209C222.963 28.1733 222.816 28.253 222.687 28.3564L220.882 29.8001L217.682 49H208.882Z"
-                        fill="#F7F7F8" />
-                      <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M180.483 59L187.282 20.6H203.171C205.035 20.6 206.823 21.3406 208.141 22.6589C209.624 24.1415 210.367 26.2086 210.169 28.2959L209.909 31.0176C209.759 32.5923 209.32 34.1257 208.612 35.5405L207.909 36.9474C206.708 39.3494 204.964 41.4389 202.815 43.0502C201.797 43.8144 200.696 44.4637 199.535 44.9863L196.645 46.2866C194.409 47.2929 192.076 48.068 189.682 48.6L188.082 59H180.483ZM194.083 27.4L192.083 41.7999L194.066 40.9734C195.92 40.2011 197.576 39.0205 198.91 37.5196L199.229 37.1601C199.796 36.5228 200.276 35.8136 200.657 35.0509L201.098 34.1689C201.483 33.4002 201.683 32.5525 201.683 31.6931V30.8142C201.683 29.9087 201.323 29.0402 200.683 28.4C200.042 27.7597 199.174 27.4 198.268 27.4H194.083Z"
-                        fill="#F7F7F8" />
-                      <path d="M78.084 17.8L78.884 9.40002H111.284L109.684 18.2H98.4839L92.8839 49.4H81.684L88.4839 17.8H78.084Z"
-                        fill="#F7F7F8" />
-                      <path
-                        d="M242.484 11C242.484 14.3137 238.998 17 235.684 17C232.37 17 230.484 14.3137 230.484 11C230.484 7.68629 233.57 5 236.884 5C240.198 5 242.484 7.68629 242.484 11Z"
-                        fill="#F7F7F8" />
-                      <path
-                        d="M292.884 44.6001C292.884 47.9138 289.398 50.6001 286.085 50.6001C282.771 50.6001 280.885 47.9138 280.885 44.6001C280.885 41.2864 283.971 38.6001 287.284 38.6001C290.598 38.6001 292.884 41.2864 292.884 44.6001Z"
-                        fill="#F7F7F8" />
-                      <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M111.842 42.0801L117.346 37.9521C118.895 36.7903 120.266 35.408 121.415 33.8491L124.15 30.1366C124.886 29.1385 125.282 27.9312 125.282 26.6913C125.282 25.5867 124.967 24.5051 124.374 23.5732L124.286 23.4349C123.157 21.6608 121.226 20.5582 119.124 20.4881L113.95 20.3156C111.671 20.2397 109.407 20.7093 107.347 21.6853C104.454 23.0555 102.104 25.3558 100.673 28.2185L100.617 28.3314C99.2296 31.1056 98.757 34.2481 99.267 37.3076L99.4266 38.2652C99.8531 40.8243 101.069 43.1862 102.903 45.0207C104.206 46.324 105.783 47.3216 107.518 47.9415L108.046 48.1298C109.658 48.7056 111.358 49 113.07 49H130.618C132.605 49 134.536 48.3432 136.111 47.1318C137.894 45.7604 139.099 43.7718 139.49 41.5568L139.508 41.4564C139.879 39.3504 139.511 37.1808 138.467 35.3149L134.509 28.2477C134.497 28.2264 134.512 28.2 134.537 28.2H145.124C145.206 28.2 145.268 28.2746 145.252 28.355L143.052 39.7218C142.939 40.3059 142.882 40.8996 142.882 41.4946V43.074C142.882 44.3156 143.333 45.5151 144.151 46.4495C145.124 47.5619 146.53 48.2 148.008 48.2H171.584C173.737 48.2 175.845 47.5809 177.657 46.4164L178.544 45.8462C179.808 45.0332 180.807 43.868 181.418 42.4942C181.856 41.5091 182.082 40.443 182.082 39.3649V38.8937C182.082 36.8791 181.469 34.9121 180.324 33.2542L170.553 19.1022C170.523 19.059 170.554 19 170.606 19H184.209C184.598 19 184.931 18.7203 184.997 18.3371L186.473 9.85462C186.478 9.82613 186.456 9.80005 186.427 9.80005H171.986C169.477 9.80005 167.062 10.752 165.228 12.4636C163.222 14.3366 162.082 16.9586 162.082 19.7037V20.6754C162.082 22.9776 162.737 25.2324 163.97 27.1767L172.417 40.4979C172.445 40.5422 172.414 40.6 172.361 40.6H152.631C152.135 40.6 151.759 40.1536 151.842 39.6649L153.968 27.2649C154.034 26.8808 154.367 26.6 154.757 26.6H158.176C158.579 26.6 158.92 26.2996 158.97 25.8993L159.57 21.0993C159.629 20.6218 159.257 20.2 158.776 20.2H156.082C155.64 20.2 155.282 19.8419 155.282 19.4V13.0133C155.282 12.4389 154.695 12.0517 154.167 12.278L147.367 15.1922C147.073 15.3183 146.882 15.6075 146.882 15.9276V20.1577C146.882 20.1811 146.863 20.2 146.84 20.2H133.255C131.471 20.2 129.751 20.8652 128.43 22.0655C126.935 23.425 126.082 25.3522 126.082 27.3732V29.4108C126.082 30.9876 126.399 32.5483 127.013 34.0004L130.45 42.1231C130.465 42.1596 130.438 42.2 130.399 42.2H111.882C111.818 42.2 111.791 42.1185 111.842 42.0801ZM106.883 36.1998L111.787 33.7481C112.249 33.5168 112.682 33.2297 113.074 32.8931L113.845 32.2325C114.758 31.4501 115.283 30.3079 115.283 29.1057V28.2484C115.283 27.7051 115.067 27.184 114.683 26.7999C114.299 26.4157 113.778 26.1999 113.235 26.1999H111.535C110.843 26.1999 110.161 26.3609 109.543 26.6701C108.6 27.1413 107.855 27.9312 107.44 28.8996L107.314 29.1943C107.03 29.8578 106.883 30.572 106.883 31.2938V36.1998Z"
-                        fill="#F7F7F8" />
-                      <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M278.481 42.5998L276.881 48.1998H270.585C267.897 48.1998 265.257 47.4861 262.936 46.1317L262.692 45.9898C262.02 45.5974 261.386 45.1416 260.8 44.6287L259.976 43.908C258.995 43.0493 258.241 41.9607 257.783 40.7398C257.451 39.8537 257.281 38.9151 257.281 37.9688V32.5021C257.281 30.4658 257.786 28.4613 258.752 26.6684C259.627 25.0435 260.856 23.6362 262.348 22.5508L262.848 22.1874C263.927 21.403 265.146 20.8336 266.44 20.5101C267.264 20.304 268.111 20.1998 268.96 20.1998H276.759C277.625 20.1998 278.477 20.426 279.229 20.8559C280.293 21.4638 281.095 22.4424 281.483 23.6047L281.723 24.3266C281.96 25.0374 282.081 25.7818 282.081 26.5311V26.7865C282.081 27.9821 281.83 29.1643 281.344 30.2569L281.282 30.3964C280.754 31.5854 279.981 32.6496 279.014 33.52L277.497 34.8854C276.82 35.4942 276.101 36.0532 275.344 36.5581L269.291 40.5934C269.286 40.5966 269.285 40.6035 269.29 40.6072C270.835 41.8947 272.782 42.5998 274.793 42.5998H278.481ZM264.08 36.5997L268.983 34.148C269.446 33.9167 269.878 33.6296 270.271 33.293L271.042 32.6324C271.954 31.85 272.48 30.7078 272.48 29.5056V28.6483C272.48 28.105 272.264 27.5839 271.88 27.1997C271.496 26.8156 270.974 26.5997 270.431 26.5997H268.731C268.04 26.5997 267.358 26.7608 266.739 27.07C265.797 27.5412 265.052 28.3311 264.637 29.2995L264.511 29.5942C264.226 30.2577 264.08 30.9719 264.08 31.6937V36.5997Z"
-                        fill="#F7F7F8" />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_273_308">
-                        <rect width="292.885" height="64" fill="white" />
-                      </clipPath>
-                      <clipPath id="clip1_273_308">
-                        <rect x="7.62939e-06" width="64" height="64" rx="12" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-
-                  <svg class="logo-light" width="128" height="28" viewBox="0 0 293 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_273_288)">
-                      <g clip-path="url(#clip1_273_288)">
-                        <path
-                          d="M30.5707 28.7334L16.2289 37.0965C15.3796 37.5918 14.9377 38.4402 14.9049 39.3031L9.20328 35.7937C8.78784 35.5376 8.53518 35.0843 8.53501 34.5962V34.4861C9.38591 32.915 10.6735 31.5302 12.3979 30.5248L23.0198 24.3307L30.5707 28.7334Z"
-                          fill="#090909" />
-                        <path
-                          d="M48.5398 9.45185C55.3938 5.45593 63.9987 10.3998 63.999 18.3336L64 34.5962C64 35.1628 63.9526 35.7228 63.8619 36.2717C63.8178 36.1941 63.7715 36.117 63.7228 36.0409C62.2131 33.6826 59.0772 32.9943 56.7185 34.5035L56.5891 34.5856C56.5261 34.4473 56.4617 34.3094 56.393 34.1732V18.3345C56.393 16.2705 54.1549 14.9843 52.3718 16.0236L40.6393 22.8637L33.0874 18.461L48.5398 9.45185Z"
-                          fill="#090909" />
-                        <path
-                          d="M0 18.9668C6.14031e-06 11.0956 8.4838 6.14327 15.3375 10.0136L52.1246 30.79C53.9319 31.8107 55.2701 33.2437 56.14 34.874L49.6465 39.0295C49.4702 38.3812 49.0497 37.7892 48.3834 37.4129L11.5973 16.6374C9.8142 15.6304 7.60695 16.9189 7.60695 18.9668V34.7128C7.60702 35.6415 8.08889 36.5041 8.87977 36.9909L14.5659 40.4906C13.0819 40.6738 11.6933 41.5086 10.8547 42.8847C10.1142 44.0998 9.94632 45.5026 10.2733 46.7804L4.89232 43.4689C1.85223 41.5976 4.83587e-05 38.2826 0 34.7128V18.9668Z"
-                          fill="#090909" />
-                        <path d="M15.3071 45.4361L26.9135 52.5087C30.382 54.6224 34.752 54.5743 38.1732 52.3847L59.5742 38.688"
-                          stroke="#19C379" stroke-width="7.4877" stroke-linecap="round" />
-                      </g>
-                      <path
-                        d="M208.882 49L214.482 20.2001H222.882V22.1702C222.882 22.1825 222.896 22.1895 222.906 22.1822L223.781 21.5263C224.247 21.177 224.756 20.8906 225.297 20.6743C226.08 20.361 226.916 20.2001 227.759 20.2001H245.282V14.6001L253.282 12.2001V20.2001H258.082L256.082 27.4001H250.882L248.952 38.5951C248.906 38.8646 248.882 39.1375 248.882 39.411V40.5515C248.882 41.0948 249.098 41.6159 249.482 42C249.867 42.3842 250.388 42.6001 250.931 42.6001H254.082L252.482 49H246.691C245.032 49 243.452 48.2906 242.349 47.0506C241.404 45.9873 240.882 44.6143 240.882 43.1917V42.6001L242.882 27.4001H238.882L235.282 49H226.482L230.082 27.4001H227.562C226.052 27.4001 224.552 27.6435 223.12 28.1209C222.963 28.1733 222.816 28.253 222.687 28.3564L220.882 29.8001L217.682 49H208.882Z"
-                        fill="#090909" />
-                      <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M180.483 59L187.282 20.6H203.171C205.035 20.6 206.823 21.3406 208.141 22.6589C209.624 24.1415 210.367 26.2086 210.169 28.2959L209.909 31.0176C209.759 32.5923 209.32 34.1257 208.612 35.5405L207.909 36.9474C206.708 39.3494 204.964 41.4389 202.815 43.0502C201.797 43.8144 200.696 44.4637 199.535 44.9863L196.645 46.2866C194.409 47.2929 192.076 48.068 189.682 48.6L188.082 59H180.483ZM194.083 27.4L192.083 41.7999L194.066 40.9734C195.92 40.2011 197.576 39.0205 198.91 37.5196L199.229 37.1601C199.796 36.5228 200.276 35.8136 200.657 35.0509L201.098 34.1689C201.483 33.4002 201.683 32.5525 201.683 31.6931V30.8142C201.683 29.9087 201.323 29.0402 200.683 28.4C200.042 27.7597 199.174 27.4 198.268 27.4H194.083Z"
-                        fill="#090909" />
-                      <path d="M78.084 17.8L78.884 9.40002H111.284L109.684 18.2H98.4839L92.884 49.4H81.684L88.484 17.8H78.084Z"
-                        fill="#090909" />
-                      <path
-                        d="M242.484 11C242.484 14.3137 238.998 17 235.684 17C232.37 17 230.484 14.3137 230.484 11C230.484 7.68629 233.57 5 236.884 5C240.198 5 242.484 7.68629 242.484 11Z"
-                        fill="#090909" />
-                      <path
-                        d="M292.884 44.6001C292.884 47.9138 289.398 50.6001 286.085 50.6001C282.771 50.6001 280.885 47.9138 280.885 44.6001C280.885 41.2864 283.971 38.6001 287.284 38.6001C290.598 38.6001 292.884 41.2864 292.884 44.6001Z"
-                        fill="#090909" />
-                      <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M111.842 42.0801L117.346 37.9521C118.895 36.7903 120.266 35.408 121.415 33.8491L124.15 30.1366C124.886 29.1385 125.282 27.9312 125.282 26.6913C125.282 25.5867 124.967 24.5051 124.374 23.5732L124.286 23.4349C123.157 21.6608 121.226 20.5582 119.124 20.4881L113.95 20.3156C111.671 20.2397 109.407 20.7093 107.347 21.6853C104.454 23.0555 102.104 25.3558 100.673 28.2185L100.617 28.3314C99.2296 31.1056 98.757 34.2481 99.267 37.3076L99.4266 38.2652C99.8531 40.8243 101.069 43.1862 102.903 45.0207C104.206 46.324 105.783 47.3216 107.518 47.9415L108.046 48.1298C109.658 48.7056 111.358 49 113.07 49H130.618C132.605 49 134.536 48.3432 136.111 47.1318C137.894 45.7604 139.099 43.7718 139.49 41.5568L139.508 41.4564C139.879 39.3504 139.511 37.1808 138.467 35.3149L134.509 28.2477C134.497 28.2264 134.512 28.2 134.537 28.2H145.124C145.206 28.2 145.268 28.2746 145.252 28.355L143.052 39.7218C142.939 40.3059 142.882 40.8996 142.882 41.4946V43.074C142.882 44.3156 143.333 45.5151 144.151 46.4495C145.124 47.5619 146.53 48.2 148.008 48.2H171.584C173.737 48.2 175.845 47.5809 177.657 46.4164L178.544 45.8462C179.808 45.0332 180.807 43.868 181.418 42.4942C181.856 41.5091 182.082 40.443 182.082 39.3649V38.8937C182.082 36.8791 181.469 34.9121 180.324 33.2542L170.553 19.1022C170.523 19.059 170.554 19 170.606 19H184.209C184.598 19 184.931 18.7203 184.997 18.3371L186.473 9.85462C186.478 9.82613 186.456 9.80005 186.427 9.80005H171.986C169.477 9.80005 167.062 10.752 165.228 12.4636C163.222 14.3366 162.082 16.9586 162.082 19.7037V20.6754C162.082 22.9776 162.737 25.2324 163.97 27.1767L172.417 40.4979C172.445 40.5422 172.414 40.6 172.361 40.6H152.631C152.135 40.6 151.759 40.1536 151.842 39.6649L153.968 27.2649C154.034 26.8808 154.367 26.6 154.757 26.6H158.176C158.579 26.6 158.92 26.2996 158.97 25.8993L159.57 21.0993C159.629 20.6218 159.257 20.2 158.776 20.2H156.082C155.64 20.2 155.282 19.8419 155.282 19.4V13.0133C155.282 12.4389 154.695 12.0517 154.167 12.278L147.367 15.1922C147.073 15.3183 146.882 15.6075 146.882 15.9276V20.1577C146.882 20.1811 146.863 20.2 146.84 20.2H133.255C131.471 20.2 129.751 20.8652 128.43 22.0655C126.935 23.425 126.082 25.3522 126.082 27.3732V29.4108C126.082 30.9876 126.399 32.5483 127.013 34.0004L130.45 42.1231C130.465 42.1596 130.438 42.2 130.399 42.2H111.882C111.818 42.2 111.791 42.1185 111.842 42.0801ZM106.883 36.1998L111.787 33.7481C112.249 33.5168 112.682 33.2297 113.074 32.8931L113.845 32.2325C114.758 31.4501 115.283 30.3079 115.283 29.1057V28.2484C115.283 27.7051 115.067 27.184 114.683 26.7999C114.299 26.4157 113.778 26.1999 113.235 26.1999H111.535C110.843 26.1999 110.161 26.3609 109.543 26.6701C108.6 27.1413 107.855 27.9312 107.44 28.8996L107.314 29.1943C107.03 29.8578 106.883 30.572 106.883 31.2938V36.1998Z"
-                        fill="#090909" />
-                      <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M278.481 42.5998L276.881 48.1998H270.585C267.897 48.1998 265.257 47.4861 262.936 46.1317L262.692 45.9898C262.02 45.5974 261.386 45.1416 260.8 44.6287L259.976 43.908C258.995 43.0493 258.241 41.9607 257.783 40.7398C257.451 39.8537 257.281 38.9151 257.281 37.9688V32.5021C257.281 30.4658 257.786 28.4613 258.752 26.6684C259.627 25.0435 260.856 23.6362 262.348 22.5508L262.848 22.1874C263.927 21.403 265.146 20.8336 266.44 20.5101C267.264 20.304 268.111 20.1998 268.96 20.1998H276.759C277.625 20.1998 278.477 20.426 279.229 20.8559C280.293 21.4638 281.095 22.4424 281.483 23.6047L281.723 24.3266C281.96 25.0374 282.081 25.7818 282.081 26.5311V26.7865C282.081 27.9821 281.83 29.1643 281.344 30.2569L281.282 30.3964C280.754 31.5854 279.981 32.6496 279.014 33.52L277.497 34.8854C276.82 35.4942 276.101 36.0532 275.344 36.5581L269.291 40.5934C269.286 40.5966 269.285 40.6035 269.29 40.6072C270.835 41.8947 272.782 42.5998 274.793 42.5998H278.481ZM264.08 36.5997L268.983 34.148C269.446 33.9167 269.878 33.6296 270.271 33.293L271.042 32.6324C271.954 31.85 272.48 30.7078 272.48 29.5056V28.6483C272.48 28.105 272.264 27.5839 271.88 27.1997C271.496 26.8156 270.974 26.5997 270.431 26.5997H268.731C268.04 26.5997 267.358 26.7608 266.739 27.07C265.797 27.5412 265.052 28.3311 264.637 29.2995L264.511 29.5942C264.226 30.2577 264.08 30.9719 264.08 31.6937V36.5997Z"
-                        fill="#090909" />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_273_288">
-                        <rect width="292.885" height="64" fill="white" />
-                      </clipPath>
-                      <clipPath id="clip1_273_288">
-                        <rect x="7.62939e-06" width="64" height="64" rx="12" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-
-          </a>
-          <div class="logo-divider"></div>
-          <span class="logo-text">
-            <span class="logo-text-test">Test</span>
-            <span class="logo-text-report">Report</span>
-          </span>
-    </div>
-    
-    <!-- Theme Toggle Button -->
-    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-          <svg class="theme-icon sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#clip0_sun)">
-              <path d="M8 12C8 13.0609 8.42143 14.0783 9.17157 14.8284C9.92172 15.5786 10.9391 16 12 16C13.0609 16 14.0783 15.5786 14.8284 14.8284C15.5786 14.0783 16 13.0609 16 12C16 10.9391 15.5786 9.92172 14.8284 9.17157C14.0783 8.42143 13.0609 8 12 8C10.9391 8 9.92172 8.42143 9.17157 9.17157C8.42143 9.92172 8 10.9391 8 12Z" stroke="var(--fg-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M3 12H4M12 3V4M20 12H21M12 20V21M5.6 5.6L6.3 6.3M18.4 5.6L17.7 6.3M17.7 17.7L18.4 18.4M6.3 17.7L5.6 18.4" stroke="var(--fg-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </g>
-            <defs>
-              <clipPath id="clip0_sun">
-                <rect width="24" height="24" fill="white"/>
-              </clipPath>
-            </defs>
-      </svg>
-          <svg class="theme-icon moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#clip0_moon)">
-              <path d="M11.9998 2.99994C12.1318 2.99994 12.2628 2.99994 12.3928 2.99994C11.1081 4.19365 10.2824 5.79979 10.0591 7.53916C9.83577 9.27854 10.229 11.0412 11.1705 12.5207C12.112 14.0002 13.5422 15.103 15.2124 15.6374C16.8826 16.1718 18.6873 16.1041 20.3128 15.4459C19.6875 16.9504 18.6656 18.257 17.356 19.2262C16.0464 20.1954 14.4982 20.791 12.8767 20.9493C11.2552 21.1077 9.62104 20.8229 8.14867 20.1253C6.6763 19.4278 5.42089 18.3436 4.51637 16.9885C3.61185 15.6334 3.09213 14.0582 3.01267 12.4309C2.9332 10.8036 3.29696 9.18524 4.06515 7.74846C4.83334 6.31167 5.97714 5.11037 7.37454 4.27268C8.77195 3.43499 10.3705 2.99234 11.9998 2.99194V2.99994Z" stroke="var(--fg-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </g>
-            <defs>
-              <clipPath id="clip0_moon">
-                <rect width="24" height="24" fill="white"/>
-              </clipPath>
-            </defs>
-      </svg>
-    </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    <div class="content-section">
-      <!-- Metadata Section -->
-      <div id="metadata" class="metadata-section">
-        <!-- Title -->
-        <div class="title-group">
-          <h1 class="title-main">TestSprite AI Test Report</h1>
-          <p class="title-subtitle">Generated automatically by TestSprite AI Agent – providing detailed test results.</p>
-        </div>
-        <div class="metadata-container">
-        <div class="metadata-row">
-          <div class="metadata-label text-body-medium">Project Name</div>
-          <div class="metadata-value text-body">{{PROJECT_NAME}}</div>
-        </div>
-        <div class="metadata-row">
-          <div class="metadata-label text-body-medium">Date</div>
-          <div class="metadata-value text-body">{{DATE}}</div>
-        </div>
-        <div class="metadata-row">
-          <div class="metadata-label text-body-medium">Prepared by</div>
-            <div class="metadata-value text-body">TestSprite AI Agent</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Divider -->
-      <div class="divider"></div>
-      
-      <!-- Coverage & Matching Metrics -->
-      <div id="coverage" class="coverage-section">
-        <div class="title-group">
-          <h2 class="title-section">Coverage & Matching Metrics</h2>
-          <p class="section-subtitle">High-level overview of test outcomes and requirement validation results.</p>
-        </div>
-        
-        <div class="coverage-summary">
-          <ul class="coverage-list text-body">
-            <li><span class="coverage-highlight">{{TEST_PASS_RATE}}</span> of tests passed</li>
-            <li><span class="coverage-highlight">Key gaps / risks:</span>
-            
-              {{CRITICAL_ISSUES}}
-            </li>
-</ul>
-        </div>
-        
-        <!-- Data Table -->
-        <div class="data-table">
-          <div class="table-header">
-            <div class="table-header-cell">
-              <span class="text-body-medium">Requirement</span>
-            </div>
-            <div class="table-header-cell">
-              <span class="text-body-medium">Total Tests</span>
-            </div>
-            <div class="table-header-cell">
-              <span class="text-body-medium">Passed</span>
-            </div>
-            <div class="table-header-cell">
-              <span class="text-body-medium">Failed</span>
-            </div>
-          </div>
-          <div class="table-rows">
-            {{REQUIREMENTS_TABLE}}
-          </div>
-        </div>
-      </div>
-      
-      <!-- Divider -->
-      <div class="divider"></div>
-      <!-- Requirements Section -->
-      <div id="requirements" class="requirements-section">
-        <div class="title-group">
-          <h2 class="title-section">Requirement Validation Summary</h2>
-          <p class="section-subtitle">Detailed test results and validation status for each functional requirement.</p>
-        </div>
-        
-        <div class="accordion-container">
-
-        ) and asserts the inline error "Username can only contain letters, numbers, and underscores" is visible and the app stays on `/login`. Both now pass — confirming the inline validation feature added earlier works. No app change was required.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -2902,12 +1621,12 @@ body {
             <div class="requirement-content">
                                           <div class="requirement-title-row">
               <h3 class="title-requirement">Requirement: User Registration</h3>
-                <div class="requirement-status-tag status-error">
+                <div class="requirement-status-tag status-success">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-                <path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>3/4</span>
+              <span>4/4</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -2929,43 +1648,40 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC004_Register_a_new_account.py" class="text-link">TC004_Register_a_new_account.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">TEST BLOCKED — account already exists ('Registration failed: User already registered').</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/91832de0-b200-4bea-b986-bb448e4fb624" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Status</div>
                     <div class="test-field-value">
-                      
-            <div class="status-wrapper">
+                      <div class="status-wrapper">
                 <div class="status-icon">
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-                <span class="text-body status-fail">Failed</span>
+                <span class="text-body status-pass">Pass</span>
             </div>
-            
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The seeded username already exists from prior runs. Data condition, not a defect — validation is exercised by TC023/TC028/TC030. Recommend rotating the test username between runs.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -2977,7 +1693,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC023_Prevent_registration_with_an_invalid_password.py" class="text-link">TC023_Prevent_registration_with_an_invalid_password.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -2987,7 +1703,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/e0d76a96-0e84-4788-8ebb-e83bc56971a9" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3006,11 +1722,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Password policy (min 8 chars with letter + digit) is enforced with a visible validation message.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3022,7 +1738,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC028_Prevent_registration_when_passwords_do_not_match.py" class="text-link">TC028_Prevent_registration_when_passwords_do_not_match.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3032,7 +1748,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/a3d5ef4e-ab6d-4406-9c9a-f543f0aa47cd" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3051,11 +1767,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Mismatched confirm-password correctly blocks submission with feedback.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3067,7 +1783,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC030_Require_terms_acceptance_during_registration.py" class="text-link">TC030_Require_terms_acceptance_during_registration.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3077,7 +1793,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/aa61f79b-36d1-4b28-a3bf-6b4a76ed9778" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3096,11 +1812,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">**FIX CONFIRMED.** Submitting with the terms checkbox unchecked now renders a persistent inline error (`<p role="alert">`) next to the checkbox in `src/pages/RegisterPage.tsx`, visible in the DOM.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3140,7 +1856,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC008_Reset_a_password_request.py" class="text-link">TC008_Reset_a_password_request.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3150,7 +1866,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/0abb75d8-56e7-4235-a202-2d67f82a5367" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3169,11 +1885,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Passed. Note: **NOT modified** — the prior failure ("Failed to send reset link: {}") was intermittent/environment-dependent. The latent issues (raw `{}` error object; synthetic `{username}@miaoda.com` email mapping) are still worth a dedicated hardening pass.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3186,12 +1902,12 @@ body {
             <div class="requirement-content">
                                           <div class="requirement-title-row">
               <h3 class="title-requirement">Requirement: Dashboard Overview</h3>
-                <div class="requirement-status-tag status-error">
+                <div class="requirement-status-tag status-success">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-                <path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>3/4</span>
+              <span>4/4</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -3213,7 +1929,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC011_Review_dashboard_booking_summaries.py" class="text-link">TC011_Review_dashboard_booking_summaries.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3223,7 +1939,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/723e3aa4-e6d1-422a-8d79-19267009c91d" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3242,11 +1958,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Stat cards (total/pending/approved/rejected) and the dashboard render with correct data.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3258,43 +1974,40 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC013_Open_a_booking_from_the_dashboard.py" class="text-link">TC013_Open_a_booking_from_the_dashboard.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">TEST BLOCKED — no bookings in the Upcoming Bookings panel ('No upcoming bookings').</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/757e27c5-b25d-4400-a716-b2bec0026059" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Status</div>
                     <div class="test-field-value">
-                      
-            <div class="status-wrapper">
+                      <div class="status-wrapper">
                 <div class="status-icon">
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-                <span class="text-body status-fail">Failed</span>
+                <span class="text-body status-pass">Pass</span>
             </div>
-            
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Existing bookings fall outside the "upcoming" window. Data-dependent, not a defect — booking-open verified via TC012. Recommend seeding a future-dated booking.</div>
+                    <div class="test-field-value text-body">Real root cause was **not** missing data or a load failure — the Upcoming panel rendered the approved future bookings, but each entry was a plain non-interactive `<div>`, so the agent had nothing to click and wandered to "View All Bookings" before timing out. **Fix (Option A):** in `src/pages/DashboardPage.tsx`, each upcoming entry is now wrapped in `<Link to={`/bookings/${booking.id}`}>` (with a hover affordance), making it directly clickable to the detail page. The TC013 test step was also clarified to click the upcoming card directly. Re-ran → passes.</div>
                   </div>
                 </div>
               </div>
@@ -3306,7 +2019,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC016_Start_a_new_booking_from_the_dashboard.py" class="text-link">TC016_Start_a_new_booking_from_the_dashboard.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3316,7 +2029,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/9331feab-735f-4851-9c90-64bc10b73ba8" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3335,11 +2048,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The "New Booking" quick action navigates to the 3-step wizard correctly.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3351,7 +2064,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC018_View_all_bookings_from_the_dashboard.py" class="text-link">TC018_View_all_bookings_from_the_dashboard.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3361,7 +2074,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/85ce91d9-e7eb-41ed-b8de-5e8541f9b975" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3380,11 +2093,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The "View All" quick action navigates to the bookings list correctly.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3424,7 +2137,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC012_Open_a_booking_from_the_bookings_list.py" class="text-link">TC012_Open_a_booking_from_the_bookings_list.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3434,7 +2147,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/0cfcb9c3-ad95-43df-ae03-2d1c3aba3951" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3453,11 +2166,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Row-level "View Details" navigation to the booking detail page works.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3469,7 +2182,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC015_Browse_and_filter_bookings.py" class="text-link">TC015_Browse_and_filter_bookings.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3479,7 +2192,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/e26410ed-3da8-4d81-929b-3808b2099bb9" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3498,11 +2211,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Status/user/text filters on the bookings tables apply correctly.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3514,7 +2227,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC019_Export_booking_history_for_a_date_range.py" class="text-link">TC019_Export_booking_history_for_a_date_range.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3524,7 +2237,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/d689c8d7-a1dc-447a-a524-b2bfc1aa3522" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3543,11 +2256,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The PDF export dialog with start/end date pickers generates a PDF (jspdf) successfully.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3587,7 +2300,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC002_Create_a_single_day_booking_request.py" class="text-link">TC002_Create_a_single_day_booking_request.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3597,7 +2310,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/e628d927-0ef1-462f-afe4-d465edc10b9e" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3616,11 +2329,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Single-day booking creation completes and inserts a pending booking.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3632,7 +2345,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC007_Create_a_multi_day_booking_request.py" class="text-link">TC007_Create_a_multi_day_booking_request.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3642,7 +2355,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/22110960-da81-4ac0-9e36-40dee9955696" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3661,11 +2374,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Root cause was **not** stale data: the `create-multi-day-booking` edge function was undeployed, and a client bug (`await error?.context?.text()` throwing when `context` isn't a Response) masked it as the generic "Failed to create booking". Fixed by redeploying the function (ACTIVE v1) and hardening the client error branch. DB now shows real `multi_day` rows sharing one `booking_group_id`.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3677,7 +2390,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC010_Resolve_a_booking_conflict_before_submitting.py" class="text-link">TC010_Resolve_a_booking_conflict_before_submitting.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3687,7 +2400,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/7af1f272-dc0a-4b11-80b6-8419ab65a607" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3706,11 +2419,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">**FIX CONFIRMED.** `validateStep2()` now `await`s a fresh conflict check before allowing the step-2 → step-3 transition; Next is disabled mid-check; `handleSubmit` re-verifies before insert. Overlapping slots are flagged and blocked.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3722,7 +2435,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC024_Generate_an_agenda_while_creating_a_booking.py" class="text-link">TC024_Generate_an_agenda_while_creating_a_booking.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3732,7 +2445,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/cf39998b-08aa-4539-962a-067c84cff6c3" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3751,11 +2464,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Two fixes: (1) **deployed the `generate-agenda` edge function** (it had been undeployed) with a firm agenda-generator persona + refusal detection + deterministic fallback; (2) **updated & redeployed `chat-assistant`** so its system prompt explicitly supports meeting-agenda generation and never refuses it (it previously framed itself only as a "room booking assistant", so chat-based agenda requests were declined). A client-side refusal fallback in `NewBookingPage` also substitutes a local agenda if the backend ever returns empty/refusal. Re-ran TC024 → agenda is produced; passes.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3768,12 +2481,12 @@ body {
             <div class="requirement-content">
                                           <div class="requirement-title-row">
               <h3 class="title-requirement">Requirement: Booking Approval Actions</h3>
-                <div class="requirement-status-tag status-error">
+                <div class="requirement-status-tag status-success">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-                <path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>4/5</span>
+              <span>5/5</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -3795,43 +2508,40 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC005_Approve_a_pending_booking_from_its_detail_page.py" class="text-link">TC005_Approve_a_pending_booking_from_its_detail_page.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">TEST BLOCKED — no pending booking available (target already 'Approved').</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/715a885c-aa0e-473c-b4c8-48e3e9446f17" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Status</div>
                     <div class="test-field-value">
-                      
-            <div class="status-wrapper">
+                      <div class="status-wrapper">
                 <div class="status-icon">
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-                <span class="text-body status-fail">Failed</span>
+                <span class="text-body status-pass">Pass</span>
             </div>
-            
                     </div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Prior runs already approved the seeded pending booking. Approve/reject paths verified by TC021/TC009 (passed). Data-dependent, not a defect.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3843,7 +2553,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC009_Reject_a_pending_booking_with_a_reason.py" class="text-link">TC009_Reject_a_pending_booking_with_a_reason.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3853,7 +2563,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/1c5b0854-dc5a-4939-a309-7dc07776030b" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3872,11 +2582,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Reject with reason updates status and records the reviewer, as designed.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3888,7 +2598,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC014_Cancel_a_booking_from_its_detail_page.py" class="text-link">TC014_Cancel_a_booking_from_its_detail_page.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3898,7 +2608,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/5f42c69c-b7c8-4c47-a70c-d6e88d72026f" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3917,11 +2627,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Cancel flow with confirm dialog works and updates status to cancelled.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3933,7 +2643,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC021_Approve_a_booking_from_the_detail_view.py" class="text-link">TC021_Approve_a_booking_from_the_detail_view.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3943,7 +2653,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/396cf603-78af-4f82-9854-ee641c3bfe06" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3962,11 +2672,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Approval path verified consistently; reliable across runs.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -3978,7 +2688,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC029_Cancel_a_booking_from_the_detail_view.py" class="text-link">TC029_Cancel_a_booking_from_the_detail_view.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -3988,7 +2698,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/b495a743-d871-405f-9fde-23ed5b7172f9" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4007,11 +2717,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Cancel-path verification passed consistently.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -4051,7 +2761,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC017_Switch_calendar_views_and_review_bookings.py" class="text-link">TC017_Switch_calendar_views_and_review_bookings.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4061,7 +2771,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/5dbb24c1-8c83-40e6-9e01-a90ff1a5ba70" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4080,11 +2790,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Month/week/day/agenda view toggles render events correctly.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -4096,7 +2806,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC020_Browse_the_calendar_views.py" class="text-link">TC020_Browse_the_calendar_views.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4106,7 +2816,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/eae07709-ad8e-470f-9d4f-b80b0cebef18" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4125,11 +2835,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Calendar navigation (prev/next/today) works across views.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -4141,7 +2851,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC025_Browse_another_calendar_date_range.py" class="text-link">TC025_Browse_another_calendar_date_range.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4151,7 +2861,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/248166ff-9d99-4310-8c82-514514aac737" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4170,11 +2880,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Navigating to a different date range loads and displays that range's bookings.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -4214,7 +2924,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC022_Create_a_new_resource_as_an_administrator.py" class="text-link">TC022_Create_a_new_resource_as_an_administrator.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4224,7 +2934,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/60c4b137-0a4c-4ddb-8bca-dd6b30ca5fc4" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4243,11 +2953,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Add Resource dialog creates a new resource that appears in the table.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>
@@ -4287,7 +2997,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Code</div>
                     <div class="test-field-value text-body">
-                      <a href="./TC026_Change_a_users_role_and_confirm_the_update.py" class="text-link">TC026_Change_a_users_role_and_confirm_the_update.py</a>
+                      <a href="./null" class="text-link">null</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4297,7 +3007,7 @@ body {
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="https://www.testsprite.com/dashboard/mcp/tests/8296271c-af05-5198-8447-7e712c1bf93e/test/71e0d649-e9de-4bf9-81b5-9c74cae0f3a8" class="text-link">View Results</a>
+                      <a href="null" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -4316,11 +3026,11 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">LOW</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Change Role dialog updates the user's role in the profiles table and the table reflects the new value.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                 </div>
               </div>

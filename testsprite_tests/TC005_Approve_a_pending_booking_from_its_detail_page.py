@@ -40,54 +40,89 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link in the page header to open the login page.
+        # -> Click the 'Login' link in the top navigation to open the login page.
         # Login link
         elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill 'debjitchsarkarofficial2003' into the Username field, fill the password, and click the 'Login' button to submit the form.
+        # -> Fill the 'Enter username' field with the reviewer username, fill the 'Enter password' field with the reviewer password, then click the 'LOGIN' button.
         # Enter username text field
         elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill 'debjitchsarkarofficial2003' into the Username field, fill the password, and click the 'Login' button to submit the form.
+        # -> Fill the 'Enter username' field with the reviewer username, fill the 'Enter password' field with the reviewer password, then click the 'LOGIN' button.
         # Enter password password field
         elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill 'debjitchsarkarofficial2003' into the Username field, fill the password, and click the 'Login' button to submit the form.
+        # -> Fill the 'Enter username' field with the reviewer username, fill the 'Enter password' field with the reviewer password, then click the 'LOGIN' button.
         # Login button
         elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Click the 'View All Bookings' link to open the bookings list.
+        # -> Click the 'View All Bookings' link to open the full bookings list.
         # View All Bookings link
         elem = page.get_by_role("link", name="View All Bookings")
         await elem.click(timeout=10000)
         
-        # -> Open the pending booking (the row for user 'Deb' dated Sep 2, 2026 with status 'Pending') by clicking its action link to view details.
+        # -> Open the 'All Statuses' dropdown to look for a 'Pending' status option.
+        # All Statuses button
+        elem = page.get_by_role("combobox").filter(has_text="All Statuses")
+        await elem.click(timeout=10000)
+        
+        # -> Select the 'Pending' option from the 'All Statuses' dropdown to filter the bookings list to pending bookings.
+        # Pending option
+        elem = page.get_by_role("option", name="Pending")
+        await elem.click(timeout=10000)
+        
+        # -> Open the first pending booking row labeled 'Room 15 — Project kickoff meeting' to view its details.
+        # Room 15 1st Floor Deb Project kickoff meeting Oct...
+        elem = page.get_by_role("row", name="Room 15 1st Floor Deb Project kickoff meeting Oct 7, 2026 - Oct 7, 2026 9:00 AM")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Room 15 — Project kickoff meeting' row to open its booking detail.
+        # Room 15 1st Floor Deb Project kickoff meeting Oct...
+        elem = page.get_by_role("row", name="Room 15 1st Floor Deb Project kickoff meeting Oct 7, 2026 - Oct 7, 2026 9:00 AM")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Room 15' cell for the first pending booking (Project kickoff meeting) to open its booking details.
+        # Room 15 1st Floor
+        elem = page.get_by_role("cell", name="Room 15 1st Floor").first
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Project kickoff meeting' cell for the first pending booking to open its booking detail.
+        # Project kickoff meeting
+        elem = page.get_by_role("cell", name="Project kickoff meeting").first
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Pending' status cell in the first booking row to try to open the booking detail or context menu.
+        # Pending
+        elem = page.get_by_role("cell", name="Pending").first
+        await elem.click(timeout=10000)
+        
+        # -> Click the action link at the end (rightmost cell) of the first pending booking row to open its booking details.
         # View link
-        elem = page.get_by_role("row", name="Room 15 1st Floor Deb Team Meeting Sep 2, 2026 9:00 AM 10:00 AM Pending View").get_by_role("link")
+        elem = page.get_by_role("row", name="Room 15 1st Floor Deb Project kickoff meeting Oct 7, 2026 - Oct 7, 2026 9:00 AM").get_by_role("link")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Approve' button to approve the booking.
+        # Approve button
+        elem = page.get_by_role("button", name="Approve")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The booking details page already shows the booking as approved, so the approval flow could not be exercised.
-        # Assert-outcome: failed
-        # Assert: Expected the booking details to show status 'approved'.
-        await expect(page.locator("#root").nth(0)).to_contain_text("approved", timeout=15000), "Expected the booking details to show status 'approved'."
+        # --> The booking details show the status as 'Approved'.
+        # Assert-outcome: passed
+        # Assert: The booking details page contains the text 'Approved' indicating the booking status.
+        await expect(page.locator("#root").nth(0)).to_contain_text("approved", timeout=15000), "The booking details page contains the text 'Approved' indicating the booking status."
         
-        # --> No approval success confirmation was shown after attempting the flow (no Approve control was available).
-        await page.get_by_role("button", name="Cancel Booking").nth(0).scroll_into_view_if_needed()
-        # Assert-outcome: failed
-        # Assert: Expected a success confirmation to be visible after approval, but none was shown.
-        await expect(page.get_by_role("button", name="Cancel Booking").nth(0)).to_be_visible(timeout=15000), "Expected a success confirmation to be visible after approval, but none was shown."
-        
-        # --> Test blocked by environment/access constraints during agent run
-        # Reason: TEST BLOCKED The test could not be run — there is no pending booking available to approve, so the approval flow could not be exercised. Observations: - The booking details page displays an 'Approved' badge. - The booking shows a reviewed timestamp (Oct 7, 2026, 01:25 PM), indicating it was already reviewed. - No actionable 'Approve' button or control is visible; only a 'Cancel Booking' button i...
-        raise AssertionError("Test blocked during agent run: " + "TEST BLOCKED The test could not be run \u2014 there is no pending booking available to approve, so the approval flow could not be exercised. Observations: - The booking details page displays an 'Approved' badge. - The booking shows a reviewed timestamp (Oct 7, 2026, 01:25 PM), indicating it was already reviewed. - No actionable 'Approve' button or control is visible; only a 'Cancel Booking' button i..." + " — the exported script cannot reproduce a PASS in this environment.")
+        # --> A success confirmation toast 'Booking approved successfully' is visible.
+        # Assert-outcome: passed
+        # Assert: A visible success toast reads 'Booking approved successfully'.
+        await expect(page.locator("xpath=/html/body/div[1]/section/ol/li").nth(0)).to_have_text("Booking approved successfully", timeout=15000), "A visible success toast reads 'Booking approved successfully'."
         await asyncio.sleep(5)
 
     finally:

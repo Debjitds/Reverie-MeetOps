@@ -40,38 +40,45 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Login' link to open the login page.
+        # -> Click the 'Login' button (top-right) to open the login page.
         # Login link
         elem = page.get_by_role("navigation").get_by_role("link", name="Login")
         await elem.click(timeout=10000)
         
-        # -> Fill the username and password fields with the provided credentials and click the 'Login' button to submit the form.
+        # -> Fill the 'Username' field with the provided username, fill the 'Password' field with the provided password, then click the 'Login' button.
         # Enter username text field
         elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("debjitchsarkarofficial2003")
         
-        # -> Fill the username and password fields with the provided credentials and click the 'Login' button to submit the form.
+        # -> Fill the 'Username' field with the provided username, fill the 'Password' field with the provided password, then click the 'Login' button.
         # Enter password password field
         elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("DEBjit737362!")
         
-        # -> Fill the username and password fields with the provided credentials and click the 'Login' button to submit the form.
+        # -> Fill the 'Username' field with the provided username, fill the 'Password' field with the provided password, then click the 'Login' button.
         # Login button
         elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
+        # -> Click the first upcoming booking card labeled 'Room 15 — Project kickoff meeting, Oct 8, 2026, 09:00 AM' to open its booking detail view.
+        # Room 15 Project kickoff meeting Oct 8, 2026... link
+        elem = page.get_by_role("link", name="Room 15 Project kickoff meeting Oct 8, 2026, 09:00 AM Approved")
+        await elem.click(timeout=10000)
+        
         # --> Assertions to verify final state
         
-        # --> The booking detail view should be displayed when opening an upcoming booking.
-        # Assert-outcome: failed
-        # Assert: Expected the URL to contain '/bookings/' to show the booking detail view.
-        await expect(page).to_have_url(re.compile("/bookings/"), timeout=15000), "Expected the URL to contain '/bookings/' to show the booking detail view."
+        # --> The browser navigated to a booking detail URL under /bookings/.
+        # Assert-outcome: passed
+        # Assert: URL contains '/bookings/' indicating a booking detail page.
+        await expect(page).to_have_url(re.compile("/bookings/"), timeout=15000), "URL contains '/bookings/' indicating a booking detail page."
         
-        # --> Test blocked by environment/access constraints during agent run
-        # Reason: TEST BLOCKED The test could not be run — there are no bookings in the Upcoming Bookings panel to open. Observations: - The dashboard's Upcoming Bookings panel shows the message 'No upcoming bookings'. - The dashboard summary shows Total Bookings: 6, but none are listed as upcoming in the panel required by the test.
-        raise AssertionError("Test blocked during agent run: " + "TEST BLOCKED The test could not be run \u2014 there are no bookings in the Upcoming Bookings panel to open. Observations: - The dashboard's Upcoming Bookings panel shows the message 'No upcoming bookings'. - The dashboard summary shows Total Bookings: 6, but none are listed as upcoming in the panel required by the test." + " — the exported script cannot reproduce a PASS in this environment.")
+        # --> The booking detail page shows a 'Cancel Booking' button.
+        await page.get_by_role("button", name="Cancel Booking").nth(0).scroll_into_view_if_needed()
+        # Assert-outcome: passed
+        # Assert: A 'Cancel Booking' button is visible on the booking detail page.
+        await expect(page.get_by_role("button", name="Cancel Booking").nth(0)).to_be_visible(timeout=15000), "A 'Cancel Booking' button is visible on the booking detail page."
         await asyncio.sleep(5)
 
     finally:

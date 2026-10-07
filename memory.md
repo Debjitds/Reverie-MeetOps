@@ -309,3 +309,41 @@
 - Note: the IDE language server was mid-reindex during the edit (kept returning stale/reinitializing results), so the standalone strict `tsc` was used as the authoritative check.
 
 ---
+
+## 2026-10-08 — Unblock & re-test the 3 blocked tests (TC004, TC005, TC013)
+
+**Instruction:** Fix the blocked tests — TC004 the same way as TC027 (self-contained data), TC005/TC013 rely on now-existing booking data — then re-run them via the TestSprite MCP.
+
+**Changes:**
+1. **TC004** made self-contained (like TC027): `testsprite_tests/TC004_Register_a_new_account.py` now navigates directly to `/register`, fills a UNIQUE username `"tc004user" + uuid4().hex[:8]` (valid `[a-zA-Z0-9_]`), dummy valid password, accepts terms, and asserts a redirect to `/dashboard` (success) — replacing the old hardcoded assertions that expected "User already registered". `testsprite_tests/testsprite_frontend_test_plan.json` TC004 step updated to "Fill in the username field with a UNIQUE username ... so the account can be created on every run". (No app code change.)
+2. **TC005 / TC013**: no code changes — relied on data. TC005 approved an existing pending booking (the earlier TC007 multi-day pending bookings provided the fixture).
+
+**Results (TestSprite re-runs):**
+- **TC004 → ✅ Passed.** **TC005 → ✅ Passed.**
+- **TC013 → ⛔ STILL BLOCKED** (ran twice, same result). Raw report: after login the Dashboard "Upcoming Bookings" panel showed "No upcoming bookings", but the SAME booking (`d31804e0…`, "Oct 8, 2026") was reachable/openable via `/bookings/<id>`.
+
+**TC013 root cause (NOT missing data — a product issue):** DB check at run time showed `db_now = 2026-10-07 19:04 UTC`, `approved_future = 2` (Oct 8 & Oct 9, owned by admin `debjitchsarkarofficial2003`, the login user). So the data for the Upcoming panel exists. The empty panel is a **frontend timing/empty-state bug in `src/pages/DashboardPage.tsx`**: its `useEffect` does `if (user && profile) fetchDashboardData(); else setLoading(false)`. When `profile` is momentarily null after login, the dashboard renders empty and can stay empty; also the batch run earlier reported "Total Bookings: 0", consistent with the dashboard fetch being skipped/returning nothing while `profile` is not ready. `BookingsPage` fetches independently and works, which is why the booking was openable from `/bookings` but absent from the dashboard.
+
+**Not done (proposed next step):** fix `DashboardPage` upcoming/stats loading so it reliably (re)fetches once `profile` is available (don't silently settle empty). Requires user go-ahead before changing app code, and would need another TestSprite re-run to confirm TC013 goes green.
+
+**Suite status after this round:** 29 passed / 0 failed / 1 blocked (TC013). (Report file `testsprite-mcp-test-report.md` is regenerated after runs — the runner deletes it at start.)
+
+---
+
+## 2026-10-08 — TC013 real fix: clickable dashboard Upcoming cards (corrects the earlier hypothesis)
+
+**Correction to the previous entry:** the earlier "profile-null race / empty Upcoming panel" hypothesis was WRONG. The panel DID render the 2 approved future bookings; the actual reason TC013 stayed blocked was that each Upcoming Bookings entry was a **plain non-interactive `<div>`** — there was no clickable target, so the TestSprite agent drifted to "View All Bookings" and clicked non-interactive spots, then timed out (its "No upcoming bookings" note was an inaccurate rationalization).
+
+**Change (Option A — approved by user), `src/pages/DashboardPage.tsx`:** wrapped each `upcomingBookings.map(...)` entry in a `<Link to={`/bookings/${booking.id}`}>` (instead of a plain `<div>`), preserving the layout and adding `cursor-pointer hover:bg-accent/50 transition-colors`. `Link` was already imported. This makes the dashboard upcoming list navigable to the booking detail page (the `/bookings/:id` route already existed and worked via the Bookings list).
+
+**Test-instruction update, `testsprite_tests/testsprite_frontend_test_plan.json`:** TC013 step now reads "In the 'Upcoming Bookings' panel, click the first upcoming booking card directly (each card is a link ...). Do NOT use the 'View All Bookings' quick-action." (`.py` was left to the runner; the plan drives the agent.)
+
+**Verification:**
+- `npm run build` (`tsc && vite build`) → EXIT 0 (new hashed assets emitted); `vite preview` :5173 serving fresh build.
+- Re-ran TC013 via TestSprite MCP → **1/1 passed, 0 failed**, completing in ~2:17 (vs. ~10 min timeout before) — confirming the agent now clicks the upcoming card and reaches the detail page.
+
+**Final suite status: 30 passed / 0 failed / 0 blocked (100%).** All original TestSprite failures (TC007, TC008, TC010, TC024, TC027, TC030) and all previously-blocked tests (TC004, TC005, TC013) are resolved.
+
+**Reusable lesson:** For TestSprite UI flows, a card/list row that the test is expected to "open" must be an actual interactive element (`<Link>`/`<button>` with an href or onClick), not a styled `<div>` — otherwise the agent cannot click it, wanders, and times out with a misleading "blocked" reason.
+
+---

@@ -161,7 +161,11 @@ export default function DashboardPage() {
               ) : (
                 <div className="space-y-4">
                   {upcomingBookings.map((booking) => (
-                    <div key={booking.id} className="flex flex-col sm:flex-row sm:items-start justify-between border-l-thick border-primary pl-4 gap-2">
+                    <Link
+                      key={booking.id}
+                      to={`/bookings/${booking.id}`}
+                      className="flex flex-col sm:flex-row sm:items-start justify-between border-l-thick border-primary pl-4 gap-2 cursor-pointer hover:bg-accent/50 transition-colors"
+                    >
                       <div>
                         <p className="font-medium">{booking.resource?.name}</p>
                         <p className="text-sm text-muted-foreground">{booking.purpose}</p>
@@ -172,7 +176,7 @@ export default function DashboardPage() {
                       <div className="flex-shrink-0 self-start sm:self-auto">
                         {getStatusBadge(booking.status)}
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               )}

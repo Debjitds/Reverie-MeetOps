@@ -40,58 +40,56 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Get Started' button to open the registration page.
-        # Get Started link
-        elem = page.get_by_role("navigation").get_by_role("link", name="Get Started")
-        await elem.click(timeout=10000)
+        # -> Navigate to /register to open the registration page.
+        await page.goto("http://localhost:5173/register")
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=5000)
+        except Exception:
+            pass
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Click the 'Register' button to submit the form and reach the authenticated dashboard.
         # Enter your full name text field
         elem = page.get_by_role("textbox", name="Full Name *")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("Debjit Sarkar")
+        await elem.fill("MeetOps Test User")
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Click the 'Register' button to submit the form and reach the authenticated dashboard.
         # Letters, numbers, and underscores only text field
         elem = page.get_by_role("textbox", name="Username *")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("debjitchsarkarofficial2003")
+        await elem.fill("tc004user_20261007g9h3")
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Click the 'Register' button to submit the form and reach the authenticated dashboard.
         # At least 8 characters with letters and numbers password field
         elem = page.get_by_role("textbox", name="Password *", exact=True)
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("DEBjit737362!")
+        await elem.fill("Testpass123")
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Click the 'Register' button to submit the form and reach the authenticated dashboard.
         # Re-enter password password field
         elem = page.get_by_role("textbox", name="Confirm Password *")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("DEBjit737362!")
+        await elem.fill("Testpass123")
         
-        # -> Fill the 'FULL NAME', 'USERNAME', 'PASSWORD', and 'CONFIRM PASSWORD' fields and check the 'I agree to the User Agreement and Privacy Policy' checkbox.
+        # -> Click the 'Register' button to submit the form and reach the authenticated dashboard.
         # button
         elem = page.get_by_role("checkbox", name="I agree to the User Agreement")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Register' button to submit the registration form.
+        # -> Click the 'Register' button to submit the registration form and reach the authenticated dashboard.
         # Register button
         elem = page.get_by_role("button", name="Register")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> Registration failed and the authenticated app was not reached because the account already exists.
-        # Assert-outcome: failed
-        # Assert: Expected the page to not show "Registration failed: User already registered" after submitting the registration form.
-        await expect(page.locator("xpath=/html/body/div[1]/section/ol/li").nth(0)).to_have_text("Registration failed: User already registered", timeout=15000), "Expected the page to not show \"Registration failed: User already registered\" after submitting the registration form."
-        # Assert-outcome: failed
-        # Assert: Expected the URL to change to the authenticated app after successful registration.
-        await expect(page).to_have_url(re.compile("/register"), timeout=15000), "Expected the URL to change to the authenticated app after successful registration."
-        
-        # --> Test blocked by environment/access constraints during agent run
-        # Reason: TEST BLOCKED The registration flow could not be verified because the account already exists and a new account could not be created through the UI. Observations: - After submitting the registration form the UI displayed: 'Registration failed: User already registered'. - The page remained on the registration screen (/register) and no authenticated dashboard or redirect was shown. - The provided u...
-        raise AssertionError("Test blocked during agent run: " + "TEST BLOCKED The registration flow could not be verified because the account already exists and a new account could not be created through the UI. Observations: - After submitting the registration form the UI displayed: 'Registration failed: User already registered'. - The page remained on the registration screen (/register) and no authenticated dashboard or redirect was shown. - The provided u..." + " — the exported script cannot reproduce a PASS in this environment.")
+        # --> The app navigated to the authenticated Dashboard and shows a welcome message with the user's name.
+        # Assert-outcome: passed
+        # Assert: Browser navigated to the /dashboard URL.
+        await expect(page).to_have_url(re.compile("/dashboard"), timeout=15000), "Browser navigated to the /dashboard URL."
+        # Assert-outcome: passed
+        # Assert: The dashboard displays a welcome message for the signed-in user.
+        await expect(page.locator("#root").nth(0)).to_contain_text("Welcome back", timeout=15000), "The dashboard displays a welcome message for the signed-in user."
         await asyncio.sleep(5)
 
     finally:

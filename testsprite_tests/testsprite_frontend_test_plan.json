@@ -146,7 +146,7 @@
       },
       {
         "type": "action",
-        "description": "Fill in the username field"
+        "description": "Fill in the username field with a UNIQUE username that is not already registered (letters, numbers and underscores only), e.g. 'tc004user' followed by a random alphanumeric suffix, so the account can be created on every run"
       },
       {
         "type": "action",
@@ -539,7 +539,7 @@
       },
       {
         "type": "action",
-        "description": "Open a booking from the upcoming bookings list"
+        "description": "In the 'Upcoming Bookings' panel, click the first upcoming booking card directly (each card is a link to its detail page). Do NOT use the 'View All Bookings' quick-action; click the upcoming booking entry itself."
       },
       {
         "type": "assertion",
