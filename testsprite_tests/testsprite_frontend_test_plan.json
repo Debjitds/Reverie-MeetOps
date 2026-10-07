@@ -1153,11 +1153,11 @@
       },
       {
         "type": "action",
-        "description": "Fill username input field with an invalid username"
+        "description": "Fill the username input field with the malformed value 'not-an-email' (it contains hyphens, which are invalid). Do NOT use the real account username."
       },
       {
         "type": "action",
-        "description": "Fill password input field with a valid password"
+        "description": "Fill password input field with any non-empty password"
       },
       {
         "type": "action",
@@ -1165,7 +1165,7 @@
       },
       {
         "type": "assertion",
-        "description": "Verify a username validation error is visible"
+        "description": "Verify a username-format validation error is visible (mentioning letters, numbers and underscores) and that the app did NOT navigate to the dashboard"
       }
     ],
     "priority": "Medium"

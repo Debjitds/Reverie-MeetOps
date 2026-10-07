@@ -40,37 +40,37 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the Login page by navigating to the '/login' URL so the login form can be tested.
-        await page.goto("http://localhost:5173/login")
-        try:
-            await page.wait_for_load_state("domcontentloaded", timeout=5000)
-        except Exception:
-            pass
+        # -> Click the 'Login' link in the page header to open the login page.
+        # Login link
+        elem = page.get_by_role("navigation").get_by_role("link", name="Login")
+        await elem.click(timeout=10000)
         
-        # -> Fill the 'Enter username' field with an invalid username and the 'Enter password' field with a valid password, then click the 'Login' button.
+        # -> Fill 'not-an-email' into the Username field, enter a non-empty password, and click the 'Login' button.
         # Enter username text field
         elem = page.get_by_role("textbox", name="Username")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("debjitchsarkarofficial2003")
+        await elem.fill("not-an-email")
         
-        # -> Fill the 'Enter username' field with an invalid username and the 'Enter password' field with a valid password, then click the 'Login' button.
+        # -> Fill 'not-an-email' into the Username field, enter a non-empty password, and click the 'Login' button.
         # Enter password password field
         elem = page.get_by_role("textbox", name="Password")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("DEBjit737362!")
+        await elem.fill("Password123!")
         
-        # -> Fill the 'Enter username' field with an invalid username and the 'Enter password' field with a valid password, then click the 'Login' button.
+        # -> Fill 'not-an-email' into the Username field, enter a non-empty password, and click the 'Login' button.
         # Login button
         elem = page.get_by_role("button", name="Login")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> No username-format validation error was shown after submitting an invalid username; the app navigated to the dashboard instead.
-        await page.locator("header").get_by_text("DebAdmin").nth(0).scroll_into_view_if_needed()
-        # Assert-outcome: failed
-        # Assert: Expected a username validation error to be visible after submitting an invalid username.
-        await expect(page.locator("header").get_by_text("DebAdmin").nth(0)).to_be_visible(timeout=15000), "Expected a username validation error to be visible after submitting an invalid username."
+        # --> A username-format validation message is shown and the app remained on the login page.
+        # Assert-outcome: passed
+        # Assert: The username-format validation message is visible on the page.
+        await expect(page.locator("xpath=/html/body/div[1]/section/ol/li").nth(0)).to_have_text("Username can only contain letters, numbers and underscores", timeout=15000), "The username-format validation message is visible on the page."
+        # Assert-outcome: passed
+        # Assert: The browser remained on the login page (URL contains "/login").
+        await expect(page).to_have_url(re.compile("/login"), timeout=15000), "The browser remained on the login page (URL contains \"/login\")."
         await asyncio.sleep(5)
 
     finally:

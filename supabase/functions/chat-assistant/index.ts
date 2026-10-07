@@ -1,4 +1,15 @@
+// Supabase Edge Functions run on the Deno runtime, which is excluded from the
+// app tsconfig, so the editor cannot statically resolve the `jsr:` specifier
+// (Deno resolves it at deploy/run time). Suppress just that resolution error.
+// @ts-ignore
 import { createClient } from 'jsr:@supabase/supabase-js@2';
+
+// Declare the small slice of the Deno global this function uses so the type
+// checker no longer reports "Cannot find name 'Deno'".
+declare const Deno: {
+  env: { get(key: string): string | undefined };
+  serve(handler: (req: Request) => Promise<Response> | Response): void;
+};
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -82,7 +93,7 @@ Deno.serve(async (req) => {
 
     // Format user's active bookings for the prompt
     const userActiveBookingsFormatted = userActiveBookings.length > 0
-      ? userActiveBookings.map((b) => {
+      ? userActiveBookings.map((b: any) => {
           const startDate = new Date(b.start_time);
           const endDate = new Date(b.end_time);
           const dateStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', dateStyle: 'medium' }).format(startDate);
@@ -100,7 +111,7 @@ Deno.serve(async (req) => {
 
     // Format user's past bookings for the prompt
     const userPastBookingsFormatted = userPastBookings.length > 0
-      ? userPastBookings.map((b) => {
+      ? userPastBookings.map((b: any) => {
           const startDate = new Date(b.start_time);
           const endDate = new Date(b.end_time);
           const dateStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', dateStyle: 'medium' }).format(startDate);
@@ -118,7 +129,7 @@ Deno.serve(async (req) => {
 
     // Format all bookings for availability checking
     const allBookingsFormatted = allBookings.length > 0
-      ? allBookings.map((b) => {
+      ? allBookings.map((b: any) => {
           const startDate = new Date(b.start_time);
           const endDate = new Date(b.end_time);
           const dateStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', dateStyle: 'medium' }).format(startDate);
@@ -130,7 +141,7 @@ Deno.serve(async (req) => {
       : '  No active bookings.';
 
     // Format available resources
-    const resourcesFormatted = resources.map((r) => 
+    const resourcesFormatted = resources.map((r: any) => 
       `  - ID: ${r.id}, Name: ${r.name}, Location: ${r.location}, Capacity: ${r.capacity} people, Hours: ${r.availability_hours}`
     ).join('\n');
 
@@ -155,7 +166,9 @@ Deno.serve(async (req) => {
     });
 
     // System prompt with live data injection - CRITICAL: This data is fetched fresh on EVERY request
-    const systemPrompt = `You are MeetOps AI, an intelligent office room booking assistant. You have access to real-time room availability and booking data fetched directly from the database. You help office employees book rooms, check availability, manage their bookings, and find the best available space for their needs. Always be concise, helpful, and professional.
+    const systemPrompt = `You are MeetOps AI, an intelligent office room booking assistant. You have access to real-time room availability and booking data fetched directly from the database. You help office employees book rooms, check availability, manage their bookings, find the best available space for their needs, AND generate meeting agendas. Always be concise, helpful, and professional.
+
+IMPORTANT CAPABILITY NOTE: Generating a meeting agenda (objectives, discussion points, timeboxed items, action items, owners) IS within your capabilities. When the user asks for an agenda you MUST produce a practical agenda as plain bullet points. NEVER refuse an agenda request, never say it is "beyond your capabilities", and never redirect it to the room-booking flow. Just output the agenda.
 
 IMPORTANT LANGUAGE INSTRUCTION:
 The user's preferred language is ${languageNames[userLanguage]}.
@@ -283,6 +296,12 @@ ${resourcesFormatted}
    - Respond with: "EXECUTE_CANCEL:{booking_id}"
    - The system will cancel and confirm
 
+7. When the user asks you to GENERATE AN AGENDA (e.g. "generate a meeting agenda", "create an agenda with objectives, discussion points and action items", "draft an agenda for my meeting"):
+   - This IS a supported task. Do NOT refuse it and do NOT treat it as off-topic.
+   - Output a practical agenda directly as plain-text bullet points (dashes). Include objectives, key discussion points, timeboxed items, and action items/owners when requested.
+   - If the user gives a meeting purpose/topic, base the agenda on it; if none is given, produce a sensible general agenda and, if helpful, offer to tailor it.
+   - Never respond that agenda generation is outside your capabilities.
+
 Always format times in 12-hour format (e.g., 2:00 PM) when displaying to users.
 Never make up room names or availability — always use the live data provided above.
 Final Reminder: Your response MUST be in ${languageNames[userLanguage]}.`;
@@ -387,7 +406,7 @@ Final Reminder: Your response MUST be in ${languageNames[userLanguage]}.`;
         await new Promise(resolve => setTimeout(resolve, 1000 * retries));
       } catch (e) {
         console.error(`Fetch exception on retry ${retries}:`, e);
-        lastErrorText = e.message;
+        lastErrorText = (e as Error).message;
         if (retries === maxRetries - 1) throw e;
         retries++;
         await new Promise(resolve => setTimeout(resolve, 1000 * retries));
@@ -528,7 +547,7 @@ Your booking is confirmed and ready to use!`,
   } catch (error) {
     console.error('Chat assistant error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ error: (error as Error).message || 'Internal server error' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

@@ -262,3 +262,50 @@
 - Note: because the fix required a Supabase deployment, TC007 depends on the `create-multi-day-booking` function remaining deployed. `generate-agenda` is STILL undeployed (relates to TC024) — deploy it when addressing TC024.
 
 ---
+
+## 2026-10-07 — TC024 (AI agenda) + TC027 (login validation) fix
+
+**Instruction:** Fix TC024 first, and for TC027 use a genuinely malformed username; then re-test both via the TestSprite MCP.
+
+**TC024 — root cause (two layers):**
+- The `generate-agenda` edge function (hardened earlier in code) was **still not deployed** to the MeetOps project (`cazqwpknzkqyytokotny`), and the test's refusal wording ("...as a room booking assistant") showed it was actually driving the floating **ChatWidget** → the `chat-assistant` system prompt framed the model ONLY as a booking assistant, so it declined agenda requests.
+
+**TC024 — changes:**
+1. Deployed `generate-agenda` via Supabase MCP `deploy_edge_function` (repo source: firm agenda-generator persona + `looksLikeRefusal()` + deterministic fallback agenda; `verify_jwt: true`; ACTIVE v1).
+2. Edited `supabase/functions/chat-assistant/index.ts`: added agenda-generation to the assistant persona and an explicit capability note + a new instruction (#7) requiring it to ALWAYS produce an agenda and never refuse. Redeployed `chat-assistant` via MCP (ACTIVE v6, `verify_jwt: true`). Client-side refusal fallback in `NewBookingPage.generateAgenda()` also remains (substitutes a local agenda if the backend ever returns empty/refusal).
+
+**TC027 — root cause:** test-data bug, NOT an app defect — the test filled a *format-valid* existing username (`debjitchsarkarofficial2003`), so login legitimately succeeded and no validation error appeared. The inline username-format validation in `src/pages/LoginPage.tsx` is correct.
+
+**TC027 — changes (test only, no app code):**
+- `testsprite_tests/testsprite_frontend_test_plan.json`: TC027 steps now explicitly fill `not-an-email` (hyphens violate `^[a-zA-Z0-9_]+$`) and assert the format error is visible and the app stays on `/login`.
+- `testsprite_tests/TC027_Show_login_validation_for_an_invalid_username_format.py`: fill changed to `not-an-email`, dummy password; assertion now checks the inline error text "Username can only contain" is visible and `page.url` still contains `/login`.
+
+**Verification:**
+- Supabase MCP `deploy_edge_function` confirmed both `generate-agenda` (v1) and `chat-assistant` (v6) ACTIVE on the project.
+- Rebuilt (`npm run build` → exit 0) and served via `vite preview` :5173.
+- Re-ran ONLY TC024 + TC027 via TestSprite MCP → **2/2 completed, 2 passed, 0 failed**.
+- Combined with earlier TC007/TC010/TC030 fixes, the full suite is now **27 passed / 0 failed / 3 blocked** (blocked = TC004/TC005/TC013, stale seed data only).
+
+**Durable lesson:** Several "UI failures" here were actually **deployment drift** — edge functions present in `supabase/functions/` but not deployed to the live project. When a Supabase-backed feature misbehaves, verify the function is DEPLOYED (`list_edge_functions`) before assuming a code bug. Remaining repo functions (`generate-conflict-explanation`, `generate-admin-insights`, `update-booking-statuses`) may also need deployment.
+
+---
+
+## 2026-10-07 — chat-assistant/index.ts type-checker errors fixed
+
+**Instruction:** Fix the editor errors in `supabase/functions/chat-assistant/index.ts`.
+
+**Problems (7, all type-checker only):** `Cannot find module 'jsr:@supabase/supabase-js@2'`; `Parameter 'b' implicitly has an 'any' type` (×3) and `'r'` (×1) on the `.map()` callbacks; `'e' is of type 'unknown'` and `'error' is of type 'unknown'` in the two `catch` blocks.
+
+**Root cause:** Edge functions run on the **Deno** runtime and are excluded from the app `tsconfig`; the editor type-checks the file against DOM lib only, so `jsr:` specifiers and untyped Deno callback/catch params are flagged. Purely compile-time noise — the function runs fine on Deno.
+
+**Changes (type declarations only — NO runtime/logic change; `chat-assistant` v6 already deployed & unaffected):**
+1. First tried a local `declare module 'jsr:@supabase/supabase-js@2' { ... }` augmentation — this FAILED with "Invalid module name in augmentation, module cannot be found" (augmentation needs the base module to exist). **Correct approach:** removed the augmentation and put `// @ts-ignore` directly above the `import { createClient } from 'jsr:@supabase/supabase-js@2';` line (Deno resolves `jsr:` at run time).
+2. Added `declare const Deno: { env: { get(key: string): string | undefined }; serve(handler: (req: Request) => Promise<Response> | Response): void };` (same pattern as `generate-agenda/index.ts`) to clear `Cannot find name 'Deno'` and give the `req` parameter contextual typing.
+3. Typed the booking/resource callbacks: `.map((b: any) =>` (×3) and `.map((r: any) =>`.
+4. Cast the catch variables: `lastErrorText = (e as Error).message;` and `JSON.stringify({ error: (error as Error).message || ... })`.
+
+**Verification:**
+- `npx tsc --noEmit --skipLibCheck --strict --target es2022 --module esnext --moduleResolution bundler --lib "es2022,dom" supabase/functions/chat-assistant/index.ts` → **EXIT 0, zero errors**.
+- Note: the IDE language server was mid-reindex during the edit (kept returning stale/reinitializing results), so the standalone strict `tsc` was used as the authoritative check.
+
+---
